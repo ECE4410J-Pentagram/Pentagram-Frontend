@@ -43,7 +43,6 @@ fun NavBackBar(navController: NavHostController) {
     TopAppBar (
         title = {
             BarImgComponent()
-
         },
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
