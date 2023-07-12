@@ -24,9 +24,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 
 @Composable
-fun HomeViewBtn(text: String) {
+fun HomeViewBtn(text: String, navController: NavHostController, targetActivity: String) {
     Button(
-        onClick = { /* Do something */ },
+        onClick = {
+                  navController.navigate(targetActivity)
+                  },
         modifier = Modifier.padding(1.dp)
         // Assign reference "button" to the Button composable
         // and constrain it to the top of the ConstraintLayout
@@ -36,7 +38,7 @@ fun HomeViewBtn(text: String) {
 }
 
 @Composable
-fun ConstraintLayoutContent(paddingValues: PaddingValues) {
+fun ConstraintLayoutContent(paddingValues: PaddingValues, navController: NavHostController) {
     ConstraintLayout (
         modifier = Modifier
             .padding(paddingValues)
@@ -61,9 +63,9 @@ fun ConstraintLayoutContent(paddingValues: PaddingValues) {
                 contentScale = ContentScale.Fit,
                 modifier = imageModifier.padding(10.dp)
             )
-            HomeViewBtn(text = "Send")
-            HomeViewBtn(text = "Receive")
-            HomeViewBtn(text = "Keys")
+            HomeViewBtn(text = "Send", navController, "")
+            HomeViewBtn(text = "Receive", navController, "")
+            HomeViewBtn(text = "Keys", navController, "")
         }
 
 
@@ -75,18 +77,9 @@ fun ConstraintLayoutContent(paddingValues: PaddingValues) {
 fun HomeView(context: Context, navController: NavHostController) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                Image(
-                    painter = painterResource(id = R.drawable.cryptex),
-                    contentDescription = stringResource(id = R.string.logo_name),
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.padding(10.dp).size(100.dp)
-                )
-            }
-            )
+            BaseTopBar()
         },
-        content = { padding -> ConstraintLayoutContent(padding)
+        content = { padding -> ConstraintLayoutContent(padding, navController = navController)
         }
     )
 }
