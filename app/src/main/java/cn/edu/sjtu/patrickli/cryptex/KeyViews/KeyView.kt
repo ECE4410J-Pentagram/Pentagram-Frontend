@@ -138,6 +138,7 @@ fun AddKeyDialog(
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done
                     ),
+                    singleLine = true,
                     maxLines = 1
                 )
                 Button(
