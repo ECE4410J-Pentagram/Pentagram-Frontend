@@ -15,4 +15,5 @@
     <string name="encryptReceiverTitle">Following contact can decrypt your message:</string>
     <string name="encryptNoReceiverTitle">No receiver is selected. Anyone can decrypt your message.</string>
     <string name="inputTextPlaceHolder">Text you want to encrypt</string>
+    <string name="done">Done</string>
 </resources>

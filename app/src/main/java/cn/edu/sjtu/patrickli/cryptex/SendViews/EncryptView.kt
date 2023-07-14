@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.ContactViews.ContactItem
-import cn.edu.sjtu.patrickli.cryptex.NavBackBar
+import cn.edu.sjtu.patrickli.cryptex.NavBackBarWithDone
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.ContactViewModel
 
@@ -32,7 +32,7 @@ fun EncryptView(context: Context, navController: NavHostController, contactViewM
     var inputText by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
-            NavBackBar(navController = navController)
+            NavBackBarWithDone(navController = navController)
         },
         content = { paddingValues ->
             ConstraintLayout (

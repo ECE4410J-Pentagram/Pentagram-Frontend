@@ -3,6 +3,9 @@ package cn.edu.sjtu.patrickli.cryptex
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,8 +50,34 @@ fun NavBackBar(navController: NavHostController) {
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
-                    painter = painterResource(com.google.android.material.R.drawable.abc_ic_ab_back_material),
+                    Icons.Default.ArrowBack,
                     contentDescription = stringResource(id = R.string.app_name)
+                )
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NavBackBarWithDone(navController: NavHostController) {
+    TopAppBar (
+        title = {
+            BarImgComponent()
+        },
+        navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(
+                    Icons.Default.ArrowBack,
+                    contentDescription = stringResource(R.string.app_name)
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    Icons.Default.Done,
+                    contentDescription = stringResource(R.string.done)
                 )
             }
         }
