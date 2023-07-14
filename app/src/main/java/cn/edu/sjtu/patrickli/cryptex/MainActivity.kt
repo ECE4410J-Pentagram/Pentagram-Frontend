@@ -12,12 +12,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cn.edu.sjtu.patrickli.cryptex.ContactViews.SelectContactView
 import cn.edu.sjtu.patrickli.cryptex.KeyViews.KeyListView
+import cn.edu.sjtu.patrickli.cryptex.SendViews.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.SendViews.SelectReceiverView
+import cn.edu.sjtu.patrickli.cryptex.model.ContactViewModel
 import cn.edu.sjtu.patrickli.cryptex.ui.theme.CryptexTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val contactViewModel = ContactViewModel()
         setContent {
             val navController = rememberNavController()
             NavHost(navController, startDestination = "HomeView") {
@@ -28,10 +31,13 @@ class MainActivity : ComponentActivity() {
                     KeyListView(context = this@MainActivity, navController = navController)
                 }
                 composable("SendView") {
-                    SelectReceiverView(context = this@MainActivity, navController = navController)
+                    SelectReceiverView(context = this@MainActivity, navController = navController, contactViewModel = contactViewModel)
                 }
                 composable("SelectContactView") {
-                    SelectContactView(context = this@MainActivity, navController = navController)
+                    SelectContactView(context = this@MainActivity, navController = navController, contactViewModel = contactViewModel)
+                }
+                composable("EncryptView") {
+                    EncryptView(context = this@MainActivity, navController = navController, contactViewModel = contactViewModel)
                 }
             }
         }

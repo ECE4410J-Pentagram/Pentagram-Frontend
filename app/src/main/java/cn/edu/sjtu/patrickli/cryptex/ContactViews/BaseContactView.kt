@@ -17,11 +17,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.R
+import cn.edu.sjtu.patrickli.cryptex.model.Contact
 import cn.edu.sjtu.patrickli.cryptex.model.testContacts
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BaseContactView(context: Context, navController: NavHostController) {
+fun BaseContactView(
+    context: Context,
+    navController: NavHostController,
+    onContactClick: (Contact) -> Unit
+) {
     val contacts = testContacts
     Scaffold(
         topBar = {
@@ -32,9 +37,10 @@ fun BaseContactView(context: Context, navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .padding(paddingSize)
+                    .padding(start = 8.dp, end = 8.dp, bottom = 15.dp)
             ) {
                 items(count = contacts.size, key = { index -> index }) {
-                    index -> ContactItem(index = index, contact = contacts[index])
+                    index -> ContactItem(index = index, contact = contacts[index], onContactClick = onContactClick)
                 }
             }
         },

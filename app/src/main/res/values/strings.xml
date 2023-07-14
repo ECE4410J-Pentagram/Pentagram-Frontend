@@ -8,4 +8,11 @@
     <string name="noneReceiver">None</string>
     <string name="addContact">Add Contact</string>
     <string name="defaultContactIconCircle">Default Contact Icon</string>
+    <string name="noReceiverWarningTitle">Continue without receiver</string>
+    <string name="noReceiverWarningContent">ANYONE with the app will be able to decrypt your message!</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="encryptReceiverTitle">Following contact can decrypt your message:</string>
+    <string name="encryptNoReceiverTitle">No receiver is selected. Anyone can decrypt your message.</string>
+    <string name="inputTextPlaceHolder">Text you want to encrypt</string>
 </resources>

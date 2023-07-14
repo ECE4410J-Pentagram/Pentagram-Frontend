@@ -23,18 +23,17 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.Contact
 
 @Composable
-fun ContactItem(index: Int, contact: Contact) {
+fun ContactItem(index: Int, contact: Contact, onContactClick: (Contact) -> Unit = {}) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth(1f)
-            .padding(8.dp, 0.dp, 8.dp, 0.dp)
             .background(
                 color = colorResource(if (index % 2 == 0) R.color.deepGray else R.color.lightGray),
                 shape = RoundedCornerShape(5.dp)
             )
-            .clickable {}
+            .clickable { onContactClick(contact) }
     ) {
         Icon(
             Icons.Rounded.AccountBox,
