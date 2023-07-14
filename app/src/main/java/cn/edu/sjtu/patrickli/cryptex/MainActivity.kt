@@ -10,7 +10,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import cn.edu.sjtu.patrickli.cryptex.ContactViews.SelectContactView
 import cn.edu.sjtu.patrickli.cryptex.KeyViews.KeyListView
+import cn.edu.sjtu.patrickli.cryptex.SendViews.SelectReceiverView
 import cn.edu.sjtu.patrickli.cryptex.ui.theme.CryptexTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,6 +26,12 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("KeyView") {
                     KeyListView(context = this@MainActivity, navController = navController)
+                }
+                composable("SendView") {
+                    SelectReceiverView(context = this@MainActivity, navController = navController)
+                }
+                composable("SelectContactView") {
+                    SelectContactView(context = this@MainActivity, navController = navController)
                 }
             }
         }

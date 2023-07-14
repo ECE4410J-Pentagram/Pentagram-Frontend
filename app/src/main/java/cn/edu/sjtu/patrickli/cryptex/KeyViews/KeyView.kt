@@ -15,9 +15,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,7 +38,6 @@ import cn.edu.sjtu.patrickli.cryptex.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.R
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
-import java.lang.Exception
 import java.util.function.Predicate
 
 
