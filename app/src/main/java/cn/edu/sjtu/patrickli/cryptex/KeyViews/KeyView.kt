@@ -139,6 +139,7 @@ fun AddKeyDialog(
                         imeAction = ImeAction.Done
                     ),
                     singleLine = true,
+                    isError = !supportingText.isEmpty(),
                     maxLines = 1
                 )
                 Button(
