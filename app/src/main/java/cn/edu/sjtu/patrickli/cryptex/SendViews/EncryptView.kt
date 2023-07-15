@@ -32,7 +32,10 @@ fun EncryptView(context: Context, navController: NavHostController, contactViewM
     var inputText by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
-            NavBackBarWithDone(navController = navController)
+            NavBackBarWithDone(
+                navController = navController,
+                onDone = { navController.navigate("EncryptOutputView") }
+            )
         },
         content = { paddingValues ->
             ConstraintLayout (

@@ -16,4 +16,10 @@
     <string name="encryptNoReceiverTitle">No receiver is selected. Anyone can decrypt your message.</string>
     <string name="inputTextPlaceHolder">Text you want to encrypt</string>
     <string name="done">Done</string>
+    <string name="defaultImage">Default Image</string>
+    <string name="share">Share</string>
+    <string name="navHome">Back to Home</string>
+    <string name="encryptDone">Your message is successfully encrypted.</string>
+    <string name="encryptOutputShareTo">You can share this encrypted message to %1$s.</string>
+    <string name="encryptOutputShareAny">Anyone can read the shared message.</string>
 </resources>

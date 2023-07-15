@@ -60,7 +60,7 @@ fun NavBackBar(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavBackBarWithDone(navController: NavHostController) {
+fun NavBackBarWithDone(navController: NavHostController, onDone: () -> Unit) {
     TopAppBar (
         title = {
             BarImgComponent()
@@ -74,7 +74,7 @@ fun NavBackBarWithDone(navController: NavHostController) {
             }
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onDone() }) {
                 Icon(
                     Icons.Default.Done,
                     contentDescription = stringResource(R.string.done)

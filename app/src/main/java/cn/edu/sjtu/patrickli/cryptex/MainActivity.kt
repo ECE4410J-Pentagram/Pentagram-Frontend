@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cn.edu.sjtu.patrickli.cryptex.ContactViews.SelectContactView
 import cn.edu.sjtu.patrickli.cryptex.KeyViews.KeyListView
+import cn.edu.sjtu.patrickli.cryptex.SendViews.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.SendViews.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.SendViews.SelectReceiverView
 import cn.edu.sjtu.patrickli.cryptex.model.ContactViewModel
@@ -38,6 +39,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("EncryptView") {
                     EncryptView(context = this@MainActivity, navController = navController, contactViewModel = contactViewModel)
+                }
+                composable("EncryptOutputView") {
+                    EncryptOutputView(context = this@MainActivity, navController = navController, contactViewModel = contactViewModel)
                 }
             }
         }
