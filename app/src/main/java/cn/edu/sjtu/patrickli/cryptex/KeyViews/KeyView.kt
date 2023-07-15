@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.twotone.Delete
+import androidx.compose.material.icons.twotone.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -18,6 +20,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,14 +46,25 @@ import java.util.function.Predicate
 
 
 @Composable
-fun KeyView(key: Key, onRemove: (name: String) -> Unit) {
+fun KeyView(
+    key: Key,
+    onRemove: (name: String) -> Unit,
+    onRename: (name: String) -> Unit
+) {
     val deleteKey = SwipeAction(
         icon = rememberVectorPainter(image = Icons.TwoTone.Delete),
         background = Color.Red,
         onSwipe = { onRemove(key.name) }
     )
+
+    val renameKey = SwipeAction(
+        icon = rememberVectorPainter(image = Icons.TwoTone.Edit),
+        background = Color.Green,
+        onSwipe = { onRename(key.name) }
+    )
     SwipeableActionsBox (
         endActions = listOf(deleteKey),
+        startActions = listOf(renameKey),
         modifier = Modifier
             .fillMaxWidth()
             .padding()
@@ -79,12 +94,16 @@ fun KeyView(key: Key, onRemove: (name: String) -> Unit) {
 }
 
 @Composable
-fun KeyViewWithDiv(key: Key, onRemove: (name: String) -> Unit) {
+fun KeyViewWithDiv(
+    key: Key,
+    onRemove: (name: String) -> Unit,
+    onRename: (name: String) -> Unit
+) {
     Column (
         modifier = Modifier.fillMaxWidth()
             )
     {
-        KeyView(key = key, onRemove = onRemove)
+        KeyView(key = key, onRemove = onRemove, onRename = onRename)
         Divider()
     }
 }
@@ -128,7 +147,9 @@ fun AddKeyDialog(
                     supportingText = { Text( text = supportingText, color = Color.Red ) }
                 )
                 Button(
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
                     onClick = { onclick(keyName) },
                 ) {
                     Text(text = "Confirm")
@@ -140,15 +161,87 @@ fun AddKeyDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun RenameKeyDialog(
+    onClose: () -> Unit,
+    onRename: (originalName: String, newName: String) -> Unit,
+    original_name: String
+) {
+    var new_name by remember {
+        mutableStateOf<String>(original_name)
+    }
+    AlertDialog(
+        onDismissRequest = {
+            // Dismiss the dialog when the user clicks outside the dialog or on the back
+            // button. If you want to disable that functionality, simply use an empty
+            // onDismissRequest.
+            onClose()
+        },
+        title = {
+            Text(text = "Rename your key $original_name")
+        },
+        text = {
+            TextField(value = new_name, onValueChange = { new_name = it })
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onClose()
+                    onRename(original_name, new_name)
+                }
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onClose()
+                }
+            ) {
+                Text("Dismiss")
+            }
+        }
+    )
+
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun KeyListView(context: Context, navController: NavHostController) {
     val keyList = testKeys
     var addDialogOpen by remember {
         mutableStateOf<Boolean>(false)
     }
+    var renameDialogOpen by remember {
+        mutableStateOf<Boolean>(false)
+    }
+    var renameDialogOriginalName by remember {
+        mutableStateOf<String>("")
+    }
     fun onRemove(name: String) {
         Log.d("KeyView","Remove Called: " + keyList.size)
         keyList.removeIf(Predicate { key -> key.name == name })
         Log.d("KeyView","Remove Called: " + keyList.size)
+    }
+
+    fun onRenameDialogOpen(name: String) {
+        renameDialogOpen = true
+        renameDialogOriginalName = name
+    }
+
+    fun onKeyRename(original_name: String, new_name: String) {
+        Log.d("KeyView","Rename Key $original_name to $new_name")
+        var oldKey = Key(name = "", sk = "", pk = "")
+        for (i in keyList.indices) {
+            if (keyList[i].name == original_name) {
+                oldKey = keyList[i]
+            }
+        }
+        keyList.removeIf {key -> key.name == oldKey.name}
+        oldKey.name = new_name
+        keyList.add(oldKey)
+
     }
     Scaffold(
         topBar = {
@@ -161,13 +254,20 @@ fun KeyListView(context: Context, navController: NavHostController) {
                     .padding(padding)
             ) {
                 items(count = keyList.size) { index ->
-                    KeyViewWithDiv(keyList[index], ::onRemove)
+                    KeyViewWithDiv(keyList[index], ::onRemove, onRename = ::onRenameDialogOpen)
                 }
             }
             if (addDialogOpen) {
                 AddKeyDialog(
                     onClose = { addDialogOpen = false },
                     onAddKey = { keyname -> keyList.add(element = createKey(keyname)) }
+                )
+            }
+            if (renameDialogOpen) {
+                RenameKeyDialog(
+                    onClose = { renameDialogOpen = false },
+                    onRename = ::onKeyRename,
+                    original_name = renameDialogOriginalName
                 )
             }
         },
