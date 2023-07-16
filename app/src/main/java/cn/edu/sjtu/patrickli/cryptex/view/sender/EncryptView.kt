@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.view.contact.ContactItem
-import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.ContactViewModel
+import cn.edu.sjtu.patrickli.cryptex.view.contact.ContactItem
+import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

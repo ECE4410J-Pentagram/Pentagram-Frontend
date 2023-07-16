@@ -15,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.Contact
 import cn.edu.sjtu.patrickli.cryptex.model.testContacts
+import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
