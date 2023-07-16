@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.ContactViewModel
+import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,10 +67,10 @@ fun EncryptOutputView(context: Context, navController: NavHostController, contac
                         modifier = Modifier
                             .padding(16.dp, 10.dp)
                     )
-                    Button(onClick = { shareContent(context) }) {
+                    BaseWideButton(onClick = { shareContent(context) }) {
                         Text(text = stringResource(R.string.share))
                     }
-                    Button(onClick = {
+                    BaseWideButton(onClick = {
                         navController.navigate("HomeView") { popUpTo(0) }
                     }) {
                         Text(text = stringResource(R.string.navHome))

@@ -1,9 +1,13 @@
 package cn.edu.sjtu.patrickli.cryptex.view.sender
 
 import android.content.Context
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -18,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +31,7 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.ContactViewModel
+import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,15 +66,15 @@ fun SelectReceiverView(
                         fontSize = 30.sp,
                         modifier = Modifier.padding(bottom = 50.dp)
                     )
-                    Button(onClick = { /*TODO*/ }) {
+                    BaseWideButton(onClick = { /*TODO*/ }) {
                         Text(text = stringResource(R.string.importReceiver))
                     }
-                    Button(onClick = {
+                    BaseWideButton(onClick = {
                         navController.navigate("SelectContactView")
                     }) {
                         Text(text = stringResource(R.string.contact))
                     }
-                    Button(onClick = { showNoReceiverWarningDialog = true }) {
+                    BaseWideButton(onClick = { showNoReceiverWarningDialog = true }) {
                         Text(text = stringResource(R.string.noneReceiver))
                     }
                 }

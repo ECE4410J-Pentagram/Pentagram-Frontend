@@ -21,21 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
+import cn.edu.sjtu.patrickli.cryptex.view.button.HomeViewButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.BaseTopBar
-
-@Composable
-fun HomeViewBtn(text: String, navController: NavHostController, targetActivity: String) {
-    Button(
-        onClick = {
-                  navController.navigate(targetActivity)
-                  },
-        modifier = Modifier.padding(1.dp)
-        // Assign reference "button" to the Button composable
-        // and constrain it to the top of the ConstraintLayout
-    ) {
-        Text(text)
-    }
-}
 
 @Composable
 fun ConstraintLayoutContent(paddingValues: PaddingValues, navController: NavHostController) {
@@ -56,16 +43,16 @@ fun ConstraintLayoutContent(paddingValues: PaddingValues, navController: NavHost
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 }
-                ){
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.cryptex),
                 contentDescription = stringResource(id = R.string.logo_name),
                 contentScale = ContentScale.Fit,
-                modifier = imageModifier.padding(10.dp)
+                modifier = imageModifier.padding(bottom = 50.dp)
             )
-            HomeViewBtn(text = "Send", navController, "SendView")
-            HomeViewBtn(text = "Receive", navController, "")
-            HomeViewBtn(text = "Keys", navController, "KeyView")
+            HomeViewButton(text = "Send", navController, "SendView")
+            HomeViewButton(text = "Receive", navController, "")
+            HomeViewButton(text = "Keys", navController, "KeyView")
         }
 
 
