@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex
+package cn.edu.sjtu.patrickli.cryptex.view
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -20,6 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import cn.edu.sjtu.patrickli.cryptex.R
+import cn.edu.sjtu.patrickli.cryptex.view.topbar.BaseTopBar
 
 @Composable
 fun HomeViewBtn(text: String, navController: NavHostController, targetActivity: String) {

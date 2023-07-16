@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.ContactViews
+package cn.edu.sjtu.patrickli.cryptex.view.contact
 
 import android.content.Context
 import androidx.compose.runtime.Composable

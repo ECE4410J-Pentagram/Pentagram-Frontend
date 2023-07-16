@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.SendViews
+package cn.edu.sjtu.patrickli.cryptex.view.sender
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.NavBackBar
+import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.ContactViewModel
 

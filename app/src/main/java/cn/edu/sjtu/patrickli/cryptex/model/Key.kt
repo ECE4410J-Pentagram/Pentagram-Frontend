@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.KeyViews
+package cn.edu.sjtu.patrickli.cryptex.model
 
 import androidx.compose.runtime.mutableStateListOf
 

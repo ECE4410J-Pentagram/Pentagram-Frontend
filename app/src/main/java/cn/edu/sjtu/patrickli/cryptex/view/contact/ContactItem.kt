@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.ContactViews
+package cn.edu.sjtu.patrickli.cryptex.view.contact
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

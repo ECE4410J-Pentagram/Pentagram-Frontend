@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.KeyViews
+package cn.edu.sjtu.patrickli.cryptex.view.key
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -38,8 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.NavBackBar
+import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.R
+import cn.edu.sjtu.patrickli.cryptex.model.Key
+import cn.edu.sjtu.patrickli.cryptex.model.createKey
+import cn.edu.sjtu.patrickli.cryptex.model.testKeys
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import java.util.function.Predicate
