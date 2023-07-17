@@ -28,7 +28,11 @@ import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EncryptView(context: Context, navController: NavHostController, contactViewModel: ContactViewModel) {
+fun EncryptView(
+    context: Context,
+    navController: NavHostController,
+    contactViewModel: ContactViewModel
+) {
     var inputText by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
@@ -38,7 +42,7 @@ fun EncryptView(context: Context, navController: NavHostController, contactViewM
             )
         },
         content = { paddingValues ->
-            ConstraintLayout (
+            ConstraintLayout(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
@@ -71,8 +75,7 @@ fun EncryptView(context: Context, navController: NavHostController, contactViewM
                         onValueChange = { inputText = it },
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(bottom = 15.dp)
-                        ,
+                            .padding(bottom = 15.dp),
                         placeholder = {
                             Text(text = stringResource(R.string.inputTextPlaceHolder))
                         }
