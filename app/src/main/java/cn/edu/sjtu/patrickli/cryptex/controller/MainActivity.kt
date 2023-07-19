@@ -22,10 +22,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var viewModelProvider: ViewModelProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModelProvider = ViewModelProvider(
             this, MainViewModelFactory(this)
         )
-        super.onCreate(savedInstanceState)
         ApplicationStart.init(this@MainActivity)
         setContent {
             val navController = rememberNavController()
