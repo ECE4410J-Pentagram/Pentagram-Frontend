@@ -23,13 +23,15 @@ import cn.edu.sjtu.patrickli.cryptex.view.button.HomeViewButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.BaseTopBar
 
 @Composable
-fun ConstraintLayoutContent(paddingValues: PaddingValues, navController: NavHostController) {
+fun ConstraintLayoutContent(
+    paddingValues: PaddingValues,
+    navController: NavHostController
+) {
     ConstraintLayout (
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize()
             ) {
-        // Create references for the composables to constrain
         val (col) = createRefs()
         val imageModifier = Modifier
 
@@ -52,19 +54,21 @@ fun ConstraintLayoutContent(paddingValues: PaddingValues, navController: NavHost
             HomeViewButton(text = "Receive", navController, "")
             HomeViewButton(text = "Keys", navController, "KeyView")
         }
-
-
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeView(context: Context, navController: NavHostController) {
+fun HomeView(
+    context: Context,
+    navController: NavHostController
+) {
     Scaffold(
         topBar = {
             BaseTopBar()
         },
-        content = { padding -> ConstraintLayoutContent(padding, navController = navController)
+        content = { padding ->
+            ConstraintLayoutContent(padding, navController)
         }
     )
 }

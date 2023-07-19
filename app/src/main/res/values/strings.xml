@@ -22,4 +22,8 @@
     <string name="encryptDone">Your message is successfully encrypted.</string>
     <string name="encryptOutputShareTo">You can share this encrypted message to %1$s.</string>
     <string name="encryptOutputShareAny">Anyone can read the shared message.</string>
+    <string name="download">Download</string>
+    <string name="encryptWaiting">Please wait...</string>
+    <string name="unknownError">Something went wrong</string>
+    <string name="downloadedTo">Downloaded to %1$s</string>
 </resources>

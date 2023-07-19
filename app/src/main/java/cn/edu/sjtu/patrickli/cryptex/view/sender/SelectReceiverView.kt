@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
-import cn.edu.sjtu.patrickli.cryptex.model.ContactViewModel
+import cn.edu.sjtu.patrickli.cryptex.model.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 
@@ -32,7 +32,7 @@ import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 fun SelectReceiverView(
     context: Context,
     navController: NavHostController,
-    contactViewModel: ContactViewModel
+    encrypterViewModel: EncrypterViewModel
 ) {
     var showNoReceiverWarningDialog by remember { mutableStateOf(false) }
     Scaffold(
@@ -85,7 +85,7 @@ fun SelectReceiverView(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                contactViewModel.selectedContact = null
+                                encrypterViewModel.contact = null
                                 showNoReceiverWarningDialog = false
                                 navController.navigate("EncryptView")
                             }
