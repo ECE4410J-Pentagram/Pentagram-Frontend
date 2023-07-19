@@ -51,7 +51,7 @@ fun ConstraintLayoutContent(
                 modifier = imageModifier.padding(bottom = 50.dp)
             )
             HomeViewButton(text = "Send", navController, "SendView")
-            HomeViewButton(text = "Receive", navController, "")
+            HomeViewButton(text = "Receive", navController, "DecryptView")
             HomeViewButton(text = "Keys", navController, "KeyView")
         }
     }

@@ -73,7 +73,7 @@ fun EncryptView(
             )
         },
         content = { paddingValues ->
-            ConstraintLayout (
+            ConstraintLayout(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
@@ -141,8 +141,7 @@ fun EncryptView(
                         onValueChange = { inputText = it },
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(bottom = 15.dp)
-                        ,
+                            .padding(bottom = 15.dp),
                         placeholder = {
                             Text(text = stringResource(R.string.inputTextPlaceHolder))
                         }
