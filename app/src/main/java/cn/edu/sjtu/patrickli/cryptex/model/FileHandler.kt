@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import android.widget.Toast
 import cn.edu.sjtu.patrickli.cryptex.R
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import java.io.File
 import java.io.FileOutputStream
 

@@ -3,12 +3,12 @@ package cn.edu.sjtu.patrickli.cryptex.controller
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cn.edu.sjtu.patrickli.cryptex.model.ApplicationStart
-import cn.edu.sjtu.patrickli.cryptex.model.DecryptState
-import cn.edu.sjtu.patrickli.cryptex.model.EncrypterViewModel
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.MainViewModelFactory
 import cn.edu.sjtu.patrickli.cryptex.view.HomeView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.SelectContactView
 import cn.edu.sjtu.patrickli.cryptex.view.key.KeyListView
@@ -19,10 +19,13 @@ import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
 
 class MainActivity : ComponentActivity() {
+    private lateinit var viewModelProvider: ViewModelProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        viewModelProvider = ViewModelProvider(
+            this, MainViewModelFactory(this)
+        )
         super.onCreate(savedInstanceState)
-        val encrypterViewModel = EncrypterViewModel(this@MainActivity)
-        val decryptState = DecryptState()
         ApplicationStart.init(this@MainActivity)
         setContent {
             val navController = rememberNavController()
@@ -40,42 +43,42 @@ class MainActivity : ComponentActivity() {
                     SelectReceiverView(
                         context = this@MainActivity,
                         navController = navController,
-                        encrypterViewModel = encrypterViewModel
+                        viewModelProvider = viewModelProvider
                     )
                 }
                 composable("SelectContactView") {
                     SelectContactView(
                         context = this@MainActivity,
                         navController = navController,
-                        encrypterViewModel = encrypterViewModel
+                        viewModelProvider = viewModelProvider
                     )
                 }
                 composable("EncryptView") {
                     EncryptView(
                         context = this@MainActivity,
                         navController = navController,
-                        encrypterViewModel = encrypterViewModel
+                        viewModelProvider = viewModelProvider
                     )
                 }
                 composable("EncryptOutputView") {
                     EncryptOutputView(
                         context = this@MainActivity,
                         navController = navController,
-                        encrypterViewModel = encrypterViewModel
+                        viewModelProvider = viewModelProvider
                     )
                 }
                 composable("DecryptView") {
                     DecryptView(
                         context = this@MainActivity,
                         navController = navController,
-                        decryptState = decryptState
+                        viewModelProvider = viewModelProvider
                     )
                 }
                 composable("DecryptOutputView") {
                     DecryptOutputView(
                         context = this@MainActivity,
                         navController = navController,
-                        decryptState = decryptState
+                        viewModelProvider = viewModelProvider
                     )
                 }
             }

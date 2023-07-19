@@ -32,10 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
-import cn.edu.sjtu.patrickli.cryptex.model.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.contact.ContactItem
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
 
@@ -57,8 +58,9 @@ fun onInputDone(
 fun EncryptView(
     context: Context,
     navController: NavHostController,
-    encrypterViewModel: EncrypterViewModel
+    viewModelProvider: ViewModelProvider
 ) {
+    val encrypterViewModel = viewModelProvider[EncrypterViewModel::class.java]
     var inputText by remember { mutableStateOf(encrypterViewModel.plainText?:"") }
     var mediaTypeDropdownMenuExpanded by remember { mutableStateOf(false) }
     val availableMediaTypeNames = stringArrayResource(R.array.mediaTypes)

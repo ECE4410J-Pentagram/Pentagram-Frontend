@@ -1,5 +1,6 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import java.io.File
 
 class ImageEncrypter(

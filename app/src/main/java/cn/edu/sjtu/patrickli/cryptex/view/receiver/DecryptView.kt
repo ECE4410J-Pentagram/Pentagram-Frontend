@@ -21,23 +21,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.model.DecryptState
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.DecrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DecryptView(
-    context: Context, navController: NavHostController, decryptState: DecryptState
+    context: Context, navController: NavHostController,
+    viewModelProvider: ViewModelProvider
 ) {
+    val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
     var inputText: String by remember { mutableStateOf("") }
     val pickFileLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
     ) { fileUri ->
         if (fileUri != null) {
             // Update the state with the Uri
-            decryptState.fileUri = fileUri
+            decrypterViewModel.fileUri = fileUri
             navController.navigate("DecryptOutputView")
         }
     }
@@ -64,7 +67,7 @@ fun DecryptView(
                     placeholder = { Text(text = "Input the encrypted text") },
                     trailingIcon = {
                         Button(onClick = {
-                            decryptState.text = inputText
+                            decrypterViewModel.text = inputText
                             navController.navigate("DecryptOutputView")
                         }) {
                             Text(text = "test")

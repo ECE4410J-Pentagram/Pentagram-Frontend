@@ -11,33 +11,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.model.DecryptState
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.DecrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 
 // TODO: implement this
-fun decrypt(decryptState: DecryptState): String {
+fun decrypt(decryptState: DecrypterViewModel): String {
     return "not able to decrypt now"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DecryptOutputView(
-    context: Context, navController: NavHostController, decryptState: DecryptState
+    context: Context, navController: NavHostController,
+    viewModelProvider: ViewModelProvider
 ) {
+    val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
     val inputText: String by remember {
-        mutableStateOf(decryptState.text ?: (decryptState.fileUri?.toString() ?: ""))
+        mutableStateOf(decrypterViewModel.text ?: (decrypterViewModel.fileUri?.toString() ?: ""))
     }
-    val privateKey = decryptState.privateKey
-    val decryptedText = decrypt(decryptState)
+    val privateKey = decrypterViewModel.privateKey
+    val decryptedText = decrypt(decrypterViewModel)
 
     // clear state
-    decryptState.fileUri = null
-    decryptState.text = null
-    decryptState.privateKey = null
+    decrypterViewModel.fileUri = null
+    decrypterViewModel.text = null
+    decrypterViewModel.privateKey = null
 
     // compose
     Scaffold(topBar = { NavBackBar(navController = navController) }, content = { paddingValues ->

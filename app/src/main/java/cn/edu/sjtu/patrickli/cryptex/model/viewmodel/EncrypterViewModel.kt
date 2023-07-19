@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.model
+package cn.edu.sjtu.patrickli.cryptex.model.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.getValue
@@ -6,6 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cn.edu.sjtu.patrickli.cryptex.model.Contact
+import cn.edu.sjtu.patrickli.cryptex.model.ImageEncrypter
+import cn.edu.sjtu.patrickli.cryptex.model.MediaType
+import cn.edu.sjtu.patrickli.cryptex.model.TextEncrypter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File

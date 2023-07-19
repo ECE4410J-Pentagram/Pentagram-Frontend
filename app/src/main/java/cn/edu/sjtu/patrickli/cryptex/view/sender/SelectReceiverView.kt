@@ -21,9 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
-import cn.edu.sjtu.patrickli.cryptex.model.EncrypterViewModel
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 
@@ -32,8 +33,9 @@ import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 fun SelectReceiverView(
     context: Context,
     navController: NavHostController,
-    encrypterViewModel: EncrypterViewModel
+    viewModelProvider: ViewModelProvider
 ) {
+    val encrypterViewModel = viewModelProvider[EncrypterViewModel::class.java]
     var showNoReceiverWarningDialog by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
