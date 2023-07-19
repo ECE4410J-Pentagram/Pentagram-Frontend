@@ -4,15 +4,20 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,15 +35,18 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.EncrypterViewModel
+import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.view.contact.ContactItem
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
 
 fun onInputDone(
     encrypterViewModel: EncrypterViewModel,
     inputText: String,
+    mediaType: MediaType,
     navController: NavHostController
 ) {
     encrypterViewModel.plainText = inputText
+    encrypterViewModel.mediaType = mediaType
     encrypterViewModel.doEncrypt {
         navController.navigate("EncryptOutputView")
     }
@@ -50,13 +59,16 @@ fun EncryptView(
     navController: NavHostController,
     encrypterViewModel: EncrypterViewModel
 ) {
-    var inputText by remember { mutableStateOf("") }
+    var inputText by remember { mutableStateOf(encrypterViewModel.plainText?:"") }
+    var mediaTypeDropdownMenuExpanded by remember { mutableStateOf(false) }
+    val availableMediaTypeNames = stringArrayResource(R.array.mediaTypes)
+    var selectedMediaType by remember { mutableStateOf(encrypterViewModel.mediaType) }
     Scaffold(
         topBar = {
             NavBackBarWithDone(
                 navController = navController,
                 onDone = {
-                    onInputDone(encrypterViewModel, inputText, navController)
+                    onInputDone(encrypterViewModel, inputText, selectedMediaType, navController)
                 }
             )
         },
@@ -88,6 +100,41 @@ fun EncryptView(
                             text = stringResource(R.string.encryptNoReceiverTitle),
                             fontSize = 16.sp
                         )
+                    }
+                    ExposedDropdownMenuBox(
+                        expanded = mediaTypeDropdownMenuExpanded,
+                        onExpandedChange = {
+                            mediaTypeDropdownMenuExpanded = !mediaTypeDropdownMenuExpanded
+                        }
+                    ) {
+                        TextField(
+                            readOnly = true,
+                            value = availableMediaTypeNames[selectedMediaType.type],
+                            onValueChange = {},
+                            label = {
+                                Text(text = stringResource(R.string.outputFormat))
+                            },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = mediaTypeDropdownMenuExpanded)
+                            },
+                            modifier = Modifier.menuAnchor().fillMaxWidth()
+                        )
+                        ExposedDropdownMenu(
+                            expanded = mediaTypeDropdownMenuExpanded,
+                            onDismissRequest = {
+                                mediaTypeDropdownMenuExpanded = false
+                            }
+                        ) {
+                            availableMediaTypeNames.forEachIndexed { index, option ->
+                                DropdownMenuItem(
+                                    text = { Text(option) },
+                                    onClick = {
+                                        selectedMediaType = MediaType.values()[index]
+                                        mediaTypeDropdownMenuExpanded = false
+                                    }
+                                )
+                            }
+                        }
                     }
                     OutlinedTextField(
                         value = inputText,

@@ -2,7 +2,7 @@ package cn.edu.sjtu.patrickli.cryptex.model
 
 import java.io.File
 
-class Encrypter(
+class ImageEncrypter(
     val encrypterViewModel: EncrypterViewModel
 ) {
 

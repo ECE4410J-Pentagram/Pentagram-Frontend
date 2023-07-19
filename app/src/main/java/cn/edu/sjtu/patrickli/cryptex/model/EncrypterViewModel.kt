@@ -15,13 +15,23 @@ class EncrypterViewModel(
 ): ViewModel() {
     var contact: Contact? = null
     var plainText: String? = null
+    var mediaType: MediaType = MediaType.IMAGE
+    var cipherText: String? = null
     var cipherImgFile: File? = null
     var isEncrypting: Boolean by mutableStateOf(false)
     fun doEncrypt(onFinished: () -> Unit) {
         viewModelScope.launch {
             isEncrypting = true
-            val encrypter = Encrypter(this@EncrypterViewModel)
-            cipherImgFile = encrypter.doFinal()
+            when (mediaType) {
+                MediaType.TEXT -> {
+                    val encrypter = TextEncrypter(this@EncrypterViewModel)
+                    cipherText = encrypter.doFinal()
+                }
+                MediaType.IMAGE -> {
+                    val encrypter = ImageEncrypter(this@EncrypterViewModel)
+                    cipherImgFile = encrypter.doFinal()
+                }
+            }
             delay(1000L)
             isEncrypting = false
             onFinished()
