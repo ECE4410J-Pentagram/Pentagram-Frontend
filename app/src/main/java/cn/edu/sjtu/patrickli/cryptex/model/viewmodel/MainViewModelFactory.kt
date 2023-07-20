@@ -9,16 +9,19 @@ class MainViewModelFactory(
 ): ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        when (modelClass) {
+        return when (modelClass) {
             EncrypterViewModel::class.java -> {
-                return EncrypterViewModel(context) as T
+                EncrypterViewModel(context) as T
             }
+
             DecrypterViewModel::class.java -> {
-                return DecrypterViewModel() as T
+                DecrypterViewModel() as T
             }
+
             UserViewModel::class.java -> {
-                return UserViewModel() as T
+                UserViewModel() as T
             }
+
             else -> {
                 throw RuntimeException("Cannot create an instance of ${modelClass}")
             }

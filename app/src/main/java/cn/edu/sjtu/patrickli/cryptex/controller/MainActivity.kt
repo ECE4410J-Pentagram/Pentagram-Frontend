@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cn.edu.sjtu.patrickli.cryptex.model.ApplicationStart
+import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.MainViewModelFactory
 import cn.edu.sjtu.patrickli.cryptex.view.HomeView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.SelectContactView
@@ -24,13 +25,15 @@ import cn.edu.sjtu.patrickli.cryptex.view.user.SignupView
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModelProvider: ViewModelProvider
+    private lateinit var databaseProvider: DatabaseProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModelProvider = ViewModelProvider(
             this, MainViewModelFactory(this)
         )
-        ApplicationStart.init(this@MainActivity, viewModelProvider)
+        databaseProvider = DatabaseProvider(this)
+        ApplicationStart.init(this@MainActivity, viewModelProvider, databaseProvider)
         setContent {
             val navController = rememberNavController()
             NavHost(navController, startDestination = "HomeView") {
@@ -103,14 +106,16 @@ class MainActivity : ComponentActivity() {
                     LoginView(
                         context = this@MainActivity,
                         navController = navController,
-                        viewModelProvider = viewModelProvider
+                        viewModelProvider = viewModelProvider,
+                        databaseProvider = databaseProvider
                     )
                 }
                 composable("SignupView") {
                     SignupView(
                         context = this@MainActivity,
                         navController = navController,
-                        viewModelProvider = viewModelProvider
+                        viewModelProvider = viewModelProvider,
+                        databaseProvider = databaseProvider
                     )
                 }
             }

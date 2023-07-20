@@ -31,6 +31,7 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.controller.UserController
 import cn.edu.sjtu.patrickli.cryptex.model.Util
+import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.UserViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.text.PasswordTextField
@@ -42,7 +43,8 @@ import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
 fun SignupView(
     context: Context,
     navController: NavHostController,
-    viewModelProvider: ViewModelProvider
+    viewModelProvider: ViewModelProvider,
+    databaseProvider: DatabaseProvider
 ) {
     val userViewModel = viewModelProvider[UserViewModel::class.java]
     var username by remember { mutableStateOf(userViewModel.accountName) }
@@ -60,7 +62,7 @@ fun SignupView(
         if (!(usernameIsError || passwordIsError || repeatPasswordIsError)) {
             UserController.onSignup(username, password, userViewModel) { signupSuccess ->
                 if (signupSuccess) {
-                    UserController.onLogin(username, password, userViewModel) { loginSuccess ->
+                    UserController.onLogin(username, password, userViewModel, databaseProvider.userDatabase) { loginSuccess ->
                         if (loginSuccess) {
                             userViewModel.isLoggedIn = true
                             navController.popBackStack()
