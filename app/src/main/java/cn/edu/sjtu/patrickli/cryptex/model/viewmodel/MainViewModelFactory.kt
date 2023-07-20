@@ -16,6 +16,9 @@ class MainViewModelFactory(
             DecrypterViewModel::class.java -> {
                 return DecrypterViewModel() as T
             }
+            UserViewModel::class.java -> {
+                return UserViewModel() as T
+            }
             else -> {
                 throw RuntimeException("Cannot create an instance of ${modelClass}")
             }

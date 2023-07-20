@@ -4,18 +4,19 @@ import android.content.Context
 import android.os.Environment
 import android.widget.Toast
 import cn.edu.sjtu.patrickli.cryptex.R
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import java.io.File
 import java.io.FileOutputStream
+import java.nio.file.Files
+import java.nio.file.Paths
 
 object FileHandler {
 
-    fun saveImgToPublicDownload(context: Context, encrypterViewModel: EncrypterViewModel) {
+    fun saveImgToPublicDownload(context: Context, file: File?) {
         val dlPath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Cryptex")
         dlPath.mkdirs()
-        val targetFile = encrypterViewModel.cipherImgFile?.name?.let { File(dlPath, it) }
+        val targetFile = file?.name?.let { File(dlPath, it) }
         if (targetFile != null) {
-            encrypterViewModel.cipherImgFile?.copyTo(targetFile, overwrite = true)
+            file.copyTo(targetFile, overwrite = true)
             Toast.makeText(context, context.getString(R.string.downloadedTo, targetFile.absolutePath), Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, context.getString(R.string.unknownError), Toast.LENGTH_SHORT).show()
@@ -31,6 +32,12 @@ object FileHandler {
         imgInputStream.use { it.copyTo(fileOutputStream) }
         imgInputStream.close()
         fileOutputStream.close()
+    }
+
+    fun getQrCodeFile(context: Context): File {
+        val qrcodePath = Paths.get(context.filesDir.toString(), "images", "qrcode", "myqrcode.png")
+        Files.createDirectories(qrcodePath.parent)
+        return qrcodePath.toFile()
     }
 
 }

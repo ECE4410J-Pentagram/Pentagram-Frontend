@@ -1,18 +1,11 @@
 package cn.edu.sjtu.patrickli.cryptex.view.sender
 
-import android.content.ClipData
 import android.content.Context
-import android.content.Intent
-import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,25 +20,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
-import cn.edu.sjtu.patrickli.cryptex.model.FileHandler.saveImgToPublicDownload
+import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
+import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
+import cn.edu.sjtu.patrickli.cryptex.view.media.ImageWrapper
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
-import coil.compose.AsyncImage
-import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,36 +54,7 @@ fun OutputPreviewLoader(
             )
         }
         MediaType.IMAGE -> {
-            val imgUri = try {
-                encrypterViewModel.cipherImgFile?.let {
-                    FileProvider.getUriForFile(
-                        context,
-                        context.packageName + ".provider",
-                        it
-                    )
-                }
-            } catch (err: Exception) {
-                Log.e("imgLoader", "cipherImgFile load error")
-                err.printStackTrace()
-                null
-            }
-            if (imgUri != null) {
-                AsyncImage(
-                    model = imgUri,
-                    contentDescription = stringResource(R.string.defaultImage),
-                    modifier = Modifier
-                        .size(300.dp)
-                        .border(1.dp, Color.Black)
-                )
-            } else {
-                Image(
-                    Icons.Outlined.Image,
-                    contentDescription = stringResource(R.string.defaultImage),
-                    modifier = Modifier
-                        .size(300.dp)
-                        .border(1.dp, Color.Black)
-                )
-            }
+            ImageWrapper(context = context, file = encrypterViewModel.cipherImgFile)
         }
     }
 }
@@ -112,7 +73,7 @@ fun OutputOptionButtons(
                 Text(text = stringResource(R.string.copy))
             }
             BaseWideButton(onClick = {
-                shareContent(context, MediaType.TEXT, text = encrypterViewModel.cipherText?:"")
+                Util.shareExternally(context, MediaType.TEXT, text = encrypterViewModel.cipherText?:"")
             }) {
                 Text(text = stringResource(R.string.share))
             }
@@ -120,7 +81,7 @@ fun OutputOptionButtons(
         MediaType.IMAGE -> {
             var showImageShareWarningDialog by remember { mutableStateOf(false) }
             BaseWideButton(onClick = {
-                saveImgToPublicDownload(context, encrypterViewModel)
+                FileHandler.saveImgToPublicDownload(context, encrypterViewModel.cipherImgFile)
             }) {
                 Text(text = stringResource(R.string.download))
             }
@@ -136,7 +97,7 @@ fun OutputOptionButtons(
                     confirmButton = {
                         TextButton(onClick = {
                             showImageShareWarningDialog = false
-                            shareContent(
+                            Util.shareExternally(
                                 context,
                                 MediaType.IMAGE,
                                 file = encrypterViewModel.cipherImgFile
@@ -214,34 +175,5 @@ fun EncryptOutputView(
                 }
             }
         }
-    )
-}
-
-fun shareContent(context: Context, type: MediaType, text: String? = null, file: File? = null) {
-    val intent = Intent(Intent.ACTION_SEND)
-    val shareWith = "ShareWith"
-    when (type) {
-        MediaType.TEXT -> {
-            if (text != null) {
-                intent.type = "text/plain"
-                intent.putExtra(Intent.EXTRA_TEXT, text)
-            }
-        }
-        MediaType.IMAGE -> {
-            if (file != null) {
-                val uri = FileProvider.getUriForFile(
-                    context, context.packageName + ".provider", file
-                )
-                intent.type = "image/jpeg"
-                intent.clipData = ClipData.newRawUri("", uri)
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                intent.putExtra(Intent.EXTRA_STREAM, uri)
-            }
-        }
-    }
-    ContextCompat.startActivity(
-        context,
-        Intent.createChooser(intent, shareWith),
-        null
     )
 }

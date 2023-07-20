@@ -17,6 +17,8 @@ import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
+import cn.edu.sjtu.patrickli.cryptex.view.user.ProfileView
+import cn.edu.sjtu.patrickli.cryptex.view.user.QrCodeView
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModelProvider: ViewModelProvider
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
         viewModelProvider = ViewModelProvider(
             this, MainViewModelFactory(this)
         )
-        ApplicationStart.init(this@MainActivity)
+        ApplicationStart.init(this@MainActivity, viewModelProvider)
         setContent {
             val navController = rememberNavController()
             NavHost(navController, startDestination = "HomeView") {
@@ -76,6 +78,20 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("DecryptOutputView") {
                     DecryptOutputView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
+                    )
+                }
+                composable("ProfileView") {
+                    ProfileView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
+                    )
+                }
+                composable("QrCodeView") {
+                    QrCodeView(
                         context = this@MainActivity,
                         navController = navController,
                         viewModelProvider = viewModelProvider

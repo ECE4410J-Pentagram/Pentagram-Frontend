@@ -31,6 +31,10 @@
     <string name="copy">Copy</string>
     <string name="shareImgWarningTitle">Share the image directly?</string>
     <string name="shareImgWarningContent">Most SNS apps will lossy compress your image, which may break the cipher message and cannot be decrypted. If you know what you are doing, continue; Otherwise, press \"Download\" and send the original image from your favorite SNS app.</string>
+    <string name="profile">Profile</string>
+    <string name="login">Log in</string>
+    <string name="myqr">My QR Code</string>
+    <string name="myIcon">My Account Icon</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

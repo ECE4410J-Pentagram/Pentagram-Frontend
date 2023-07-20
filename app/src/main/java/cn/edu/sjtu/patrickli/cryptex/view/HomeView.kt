@@ -20,7 +20,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.view.button.HomeViewButton
-import cn.edu.sjtu.patrickli.cryptex.view.topbar.BaseTopBar
+import cn.edu.sjtu.patrickli.cryptex.view.topbar.HomeTopBar
 
 @Composable
 fun ConstraintLayoutContent(
@@ -65,7 +65,7 @@ fun HomeView(
 ) {
     Scaffold(
         topBar = {
-            BaseTopBar()
+            HomeTopBar(navController)
         },
         content = { padding ->
             ConstraintLayoutContent(padding, navController)
