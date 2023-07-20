@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class UserViewModel: ViewModel() {
-    var accountName: String = "Anonymous Account"
+    var accountName: String = ""
     val deviceName: String = android.os.Build.MODEL
     var deviceKey: String? = null
     var qrcodeFile: File? = null
@@ -23,7 +23,7 @@ class UserViewModel: ViewModel() {
             isLoggingIn = true
             delay(1000L)
             isLoggingIn = false
-            onFinished(false)
+            onFinished(true)
         }
     }
     fun signup(onFinished: (Boolean) -> Unit) {
@@ -31,7 +31,7 @@ class UserViewModel: ViewModel() {
             isSigningUp = true
             delay(1000L)
             isSigningUp = false
-            onFinished(false)
+            onFinished(true)
         }
     }
 }

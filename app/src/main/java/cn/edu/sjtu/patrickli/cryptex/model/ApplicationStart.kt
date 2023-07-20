@@ -10,7 +10,6 @@ object ApplicationStart {
 
     private fun initAccountInfo(context: Context, viewModelProvider: ViewModelProvider) {
         val userViewModel = viewModelProvider[UserViewModel::class.java]
-        userViewModel.accountName = "Anonymous Account"
         userViewModel.deviceKey = UUID.randomUUID().toString()
         val qrcodeFile = FileHandler.getQrCodeFile(context)
         userViewModel.qrcodeFile = qrcodeFile

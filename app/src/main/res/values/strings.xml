@@ -47,6 +47,8 @@
     <string name="repeatPassword">Repeat Password</string>
     <string name="repeatPasswordRequirement">Password not the same</string>
     <string name="signupExists">Account with the same name already exists</string>
+    <string name="logout">Log out</string>
+    <string name="logoutWarningTitle">Are you sure to logout?</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>
