@@ -17,6 +17,7 @@ import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
+import cn.edu.sjtu.patrickli.cryptex.view.user.LoginView
 import cn.edu.sjtu.patrickli.cryptex.view.user.ProfileView
 import cn.edu.sjtu.patrickli.cryptex.view.user.QrCodeView
 
@@ -92,6 +93,13 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("QrCodeView") {
                     QrCodeView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
+                    )
+                }
+                composable("LoginView") {
+                    LoginView(
                         context = this@MainActivity,
                         navController = navController,
                         viewModelProvider = viewModelProvider

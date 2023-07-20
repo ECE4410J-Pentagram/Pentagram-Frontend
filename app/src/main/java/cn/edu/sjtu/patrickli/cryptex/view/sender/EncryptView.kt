@@ -6,16 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -27,10 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
@@ -38,20 +32,9 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.contact.ContactItem
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
 
-fun onInputDone(
-    encrypterViewModel: EncrypterViewModel,
-    inputText: String,
-    mediaType: MediaType,
-    navController: NavHostController
-) {
-    encrypterViewModel.plainText = inputText
-    encrypterViewModel.mediaType = mediaType
-    encrypterViewModel.doEncrypt {
-        navController.navigate("EncryptOutputView")
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,13 +48,18 @@ fun EncryptView(
     var mediaTypeDropdownMenuExpanded by remember { mutableStateOf(false) }
     val availableMediaTypeNames = stringArrayResource(R.array.mediaTypes)
     var selectedMediaType by remember { mutableStateOf(encrypterViewModel.mediaType) }
+    fun onInputDone() {
+        encrypterViewModel.plainText = inputText
+        encrypterViewModel.mediaType = selectedMediaType
+        encrypterViewModel.doEncrypt {
+            navController.navigate("EncryptOutputView")
+        }
+    }
     Scaffold(
         topBar = {
             NavBackBarWithDone(
                 navController = navController,
-                onDone = {
-                    onInputDone(encrypterViewModel, inputText, selectedMediaType, navController)
-                }
+                onDone = { onInputDone() }
             )
         },
         content = { paddingValues ->
@@ -119,7 +107,9 @@ fun EncryptView(
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = mediaTypeDropdownMenuExpanded)
                             },
-                            modifier = Modifier.menuAnchor().fillMaxWidth()
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
                         )
                         ExposedDropdownMenu(
                             expanded = mediaTypeDropdownMenuExpanded,
@@ -151,27 +141,7 @@ fun EncryptView(
                 }
             }
             if (encrypterViewModel.isEncrypting) {
-                Dialog(onDismissRequest = {}) {
-                    Surface(
-                        shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier
-                            .width(240.dp)
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier
-                                .padding(16.dp)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.encryptWaiting),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            CircularProgressIndicator()
-                        }
-                    }
-                }
+                LoadingDialog()
             }
         }
     )
