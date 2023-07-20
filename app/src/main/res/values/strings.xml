@@ -31,24 +31,7 @@
     <string name="copy">Copy</string>
     <string name="shareImgWarningTitle">Share the image directly?</string>
     <string name="shareImgWarningContent">Most SNS apps will lossy compress your image, which may break the cipher message and cannot be decrypted. If you know what you are doing, continue; Otherwise, press \"Download\" and send the original image from your favorite SNS app.</string>
-    <string name="profile">Profile</string>
-    <string name="login">Log in</string>
     <string name="myqr">My QR Code</string>
-    <string name="myIcon">My Account Icon</string>
-    <string name="signup">Sign up</string>
-    <string name="usernameRequirement">Should contain 3~20 characters</string>
-    <string name="passwordRequirement">Should contain 1~32 characters</string>
-    <string name="badAccountPassword">Account does not exist or password does not match</string>
-    <string name="logging">Logging in</string>
-    <string name="hidePassword">Hide Password</string>
-    <string name="showPassword">Show Password</string>
-    <string name="username">User Name</string>
-    <string name="password">Password</string>
-    <string name="repeatPassword">Repeat Password</string>
-    <string name="repeatPasswordRequirement">Password not the same</string>
-    <string name="signupExists">Account with the same name already exists</string>
-    <string name="logout">Log out</string>
-    <string name="logoutWarningTitle">Are you sure to logout?</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

@@ -18,10 +18,7 @@ import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
-import cn.edu.sjtu.patrickli.cryptex.view.user.LoginView
-import cn.edu.sjtu.patrickli.cryptex.view.user.ProfileView
 import cn.edu.sjtu.patrickli.cryptex.view.user.QrCodeView
-import cn.edu.sjtu.patrickli.cryptex.view.user.SignupView
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModelProvider: ViewModelProvider
@@ -88,34 +85,11 @@ class MainActivity : ComponentActivity() {
                         viewModelProvider = viewModelProvider
                     )
                 }
-                composable("ProfileView") {
-                    ProfileView(
-                        context = this@MainActivity,
-                        navController = navController,
-                        viewModelProvider = viewModelProvider
-                    )
-                }
                 composable("QrCodeView") {
                     QrCodeView(
                         context = this@MainActivity,
                         navController = navController,
                         viewModelProvider = viewModelProvider
-                    )
-                }
-                composable("LoginView") {
-                    LoginView(
-                        context = this@MainActivity,
-                        navController = navController,
-                        viewModelProvider = viewModelProvider,
-                        databaseProvider = databaseProvider
-                    )
-                }
-                composable("SignupView") {
-                    SignupView(
-                        context = this@MainActivity,
-                        navController = navController,
-                        viewModelProvider = viewModelProvider,
-                        databaseProvider = databaseProvider
                     )
                 }
             }

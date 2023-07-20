@@ -27,15 +27,8 @@ class UserDatabaseOpenHelper internal constructor(context: Context?) :
     companion object {
         private const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "user.db"
-        private val SQL_CREATE_ENTRIES = """
-            CREATE TABLE IF NOT EXISTS user(
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                name TEXT NOT NULL,
-                authorization TEXT,
-                active INTEGER
-            )
-        """.trimIndent()
-        private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS user"
+        private const val SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS INFO(field TEXT, value TEXT)"
+        private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS info"
     }
 
 }

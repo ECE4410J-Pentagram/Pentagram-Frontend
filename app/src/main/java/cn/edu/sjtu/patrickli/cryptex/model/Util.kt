@@ -44,20 +44,4 @@ object Util {
         )
     }
 
-    fun checkUsernameIsLegal(username: String): Boolean {
-        var isLegal = false
-        if ((username.length >= 3) && (username.length <= 20)) {
-            isLegal = true
-        }
-        return isLegal
-    }
-
-    fun checkPasswordIsLegal(password: String): Boolean {
-        var isLegal = false
-        if ((password.isNotEmpty()) && (password.length <= 32)) {
-            isLegal = true
-        }
-        return isLegal
-    }
-
 }

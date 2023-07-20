@@ -9,9 +9,8 @@ import java.util.UUID
 
 object ApplicationStart {
 
-    private fun initAccountInfo(context: Context, viewModelProvider: ViewModelProvider) {
+    private fun initUserInfo(context: Context, viewModelProvider: ViewModelProvider) {
         val userViewModel = viewModelProvider[UserViewModel::class.java]
-        userViewModel.deviceKey = UUID.randomUUID().toString()
         val qrcodeFile = FileHandler.getQrCodeFile(context)
         userViewModel.qrcodeFile = qrcodeFile
         QrCode.generateUserCode(userViewModel)
@@ -29,16 +28,13 @@ object ApplicationStart {
         cur.close()
     }
 
-    private fun loadLoggedInUser(databaseProvider: DatabaseProvider, viewModelProvider: ViewModelProvider) {
+    private fun loadConfig(context: Context, viewModelProvider: ViewModelProvider) {
         val userViewModel = viewModelProvider[UserViewModel::class.java]
-        val cur = databaseProvider.userDatabase.rawQuery("SELECT name, authorization FROM user WHERE active=1", arrayOf())
-        cur.moveToFirst()
-        if (cur.count > 0) {
-            userViewModel.isLoggedIn = true
-            userViewModel.accountName = cur.getString(0)
-            userViewModel.authorization = cur.getString(1)
+        val configLoadSuccess = userViewModel.loadFromConfigFile(context)
+        if (!configLoadSuccess) {
+            userViewModel.deviceKey = UUID.randomUUID().toString()
+            userViewModel.writeToConfigFile(context)
         }
-        cur.close()
     }
 
     fun init(
@@ -48,11 +44,12 @@ object ApplicationStart {
     ) {
         FileHandler.copyTestImgToFileDir(context)
         Log.d("AppInit", "Copy test image to file dir done")
-        initAccountInfo(context, viewModelProvider)
+        loadConfig(context, viewModelProvider)
+        Log.d("ConfigLoad", "Load config.json done")
+        initUserInfo(context, viewModelProvider)
         Log.d("AppInit", "Reading device UID done")
         initDatabase(databaseProvider)
         Log.d("DatabaseInit", "Database connection done")
-        loadLoggedInUser(databaseProvider, viewModelProvider)
         Log.d("AppInit", "Init process finished")
     }
 

@@ -1,7 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex.view.topbar
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,10 +19,10 @@ fun HomeTopBar(navController: NavController) {
             BarImgComponent()
         },
         actions = {
-            IconButton(onClick = { navController.navigate("ProfileView") }) {
+            IconButton(onClick = { navController.navigate("QrCodeView") }) {
                 Icon(
-                    Icons.Default.AccountCircle,
-                    contentDescription = stringResource(R.string.profile)
+                    Icons.Default.QrCode,
+                    contentDescription = stringResource(R.string.myqr)
                 )
             }
         }
