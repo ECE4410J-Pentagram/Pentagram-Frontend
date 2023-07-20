@@ -14,4 +14,15 @@ object UserController {
             onFinished(it)
         }
     }
+    fun onSignup(
+        username: String,
+        password: String,
+        userViewModel: UserViewModel,
+        onFinished: (Boolean) -> Unit
+    ) {
+        userViewModel.accountName = username
+        userViewModel.signup() {
+            onFinished(it)
+        }
+    }
 }

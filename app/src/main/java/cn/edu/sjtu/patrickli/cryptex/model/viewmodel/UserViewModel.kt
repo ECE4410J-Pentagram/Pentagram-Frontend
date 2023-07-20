@@ -16,12 +16,21 @@ class UserViewModel: ViewModel() {
     var qrcodeFile: File? = null
     var isLoggedIn: Boolean = false
     var isLoggingIn: Boolean by mutableStateOf(false)
+    var isSigningUp: Boolean by mutableStateOf(false)
     var authorization: String? = null
     fun login(onFinished: (Boolean) -> Unit) {
         viewModelScope.launch {
             isLoggingIn = true
             delay(1000L)
             isLoggingIn = false
+            onFinished(false)
+        }
+    }
+    fun signup(onFinished: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            isSigningUp = true
+            delay(1000L)
+            isSigningUp = false
             onFinished(false)
         }
     }

@@ -64,10 +64,10 @@ fun ProfileView(
                 Text(text = userViewModel.deviceName)
                 Text(text = userViewModel.deviceKey?:"Empty Device Key")
                 Spacer(modifier = Modifier.height(30.dp))
-                BaseWideButton(onClick = { navController.navigate(("LoginView")) }) {
+                BaseWideButton(onClick = { navController.navigate("LoginView") }) {
                     Text(text = stringResource(R.string.login))
                 }
-                BaseWideButton(onClick = { /*TODO*/ }) {
+                BaseWideButton(onClick = { navController.navigate("SignupView") }) {
                     Text(text = stringResource(R.string.signup))
                 }
                 BaseWideButton(onClick = { navController.navigate("QrCodeView") }) {

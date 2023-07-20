@@ -42,6 +42,11 @@
     <string name="logging">Logging in</string>
     <string name="hidePassword">Hide Password</string>
     <string name="showPassword">Show Password</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="repeatPassword">Repeat Password</string>
+    <string name="repeatPasswordRequirement">Password not the same</string>
+    <string name="signupExists">Account with the same name already exists</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

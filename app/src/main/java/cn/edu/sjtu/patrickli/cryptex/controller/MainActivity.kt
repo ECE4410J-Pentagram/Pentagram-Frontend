@@ -20,6 +20,7 @@ import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
 import cn.edu.sjtu.patrickli.cryptex.view.user.LoginView
 import cn.edu.sjtu.patrickli.cryptex.view.user.ProfileView
 import cn.edu.sjtu.patrickli.cryptex.view.user.QrCodeView
+import cn.edu.sjtu.patrickli.cryptex.view.user.SignupView
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModelProvider: ViewModelProvider
@@ -100,6 +101,13 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("LoginView") {
                     LoginView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
+                    )
+                }
+                composable("SignupView") {
+                    SignupView(
                         context = this@MainActivity,
                         navController = navController,
                         viewModelProvider = viewModelProvider
