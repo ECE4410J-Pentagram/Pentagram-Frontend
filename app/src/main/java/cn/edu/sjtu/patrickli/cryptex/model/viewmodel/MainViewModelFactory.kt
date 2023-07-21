@@ -22,6 +22,10 @@ class MainViewModelFactory(
                 UserViewModel(context) as T
             }
 
+            RequestViewModel::class.java -> {
+                RequestViewModel(context) as T
+            }
+
             else -> {
                 throw RuntimeException("Cannot create an instance of ${modelClass}")
             }

@@ -3,9 +3,11 @@ package cn.edu.sjtu.patrickli.cryptex.model.viewmodel
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyDecrypter
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.File
@@ -61,5 +63,28 @@ class UserViewModel(
             }
         }
         return loadSuccess
+    }
+    fun auth(requestViewModel: RequestViewModel) {
+        viewModelScope.launch {
+            val requestQueue = requestViewModel.requestQueue
+            val requestStore = requestViewModel.requestStore
+            Log.d("Auth", "Logging in for device ${deviceName}@${deviceId}")
+            requestQueue.add(requestStore.getLoginRequest(
+                this@UserViewModel,
+                onError = {
+                    if (it.networkResponse?.statusCode == 401) {
+                        Log.d("Auth", "Unregistered device ${deviceName}@${deviceId}")
+                        Log.d("Auth", "Registering device ${deviceName}@${deviceId}")
+                        requestQueue.add(requestStore.getCreateDeviceRequest(
+                            this@UserViewModel,
+                            onResponse = {
+                                Log.d("Auth", "Registering device ${deviceName}@${deviceId} success, logging in")
+                                requestQueue.add(requestStore.getLoginRequest(this@UserViewModel))
+                            }
+                        ))
+                    }
+                }
+            ))
+        }
     }
 }

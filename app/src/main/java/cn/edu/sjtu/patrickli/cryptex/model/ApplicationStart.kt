@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.RequestViewModel
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.UserViewModel
 import java.security.SecureRandom
 import java.util.UUID
@@ -46,6 +47,10 @@ object ApplicationStart {
         QrCode.generateUserCode(userViewModel)
     }
 
+    private fun authUserDevice(viewModelProvider: ViewModelProvider) {
+        viewModelProvider[UserViewModel::class.java].auth(viewModelProvider[RequestViewModel::class.java])
+    }
+
     fun init(
         context: Context,
         viewModelProvider: ViewModelProvider,
@@ -58,6 +63,12 @@ object ApplicationStart {
         initDatabase(databaseProvider)
         Log.d("DatabaseInit", "Database connection done")
         Log.d("AppInit", "Init process finished")
+        try {
+            authUserDevice(viewModelProvider)
+        } catch (err: Exception) {
+            Log.e("Auth", "Unexpected error authorizing device")
+            err.printStackTrace()
+        }
     }
 
 }
