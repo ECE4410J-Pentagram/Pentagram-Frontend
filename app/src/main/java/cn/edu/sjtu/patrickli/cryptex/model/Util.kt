@@ -44,4 +44,13 @@ object Util {
         )
     }
 
+    fun byteArrayToHexString(byteArray: ByteArray?): String {
+        return byteArray?.joinToString("") { String.format("%02x", it) }?:""
+    }
+
+    fun hexStringToByteArray(text: String?): ByteArray {
+        return text?.chunked(2)?.map { it.toInt(16).toByte() }?.toByteArray()
+            ?: byteArrayOf()
+    }
+
 }

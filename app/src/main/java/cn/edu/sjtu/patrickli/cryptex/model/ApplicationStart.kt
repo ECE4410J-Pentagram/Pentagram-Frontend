@@ -4,16 +4,24 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
+import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.UserViewModel
+import java.security.SecureRandom
 import java.util.UUID
 
 object ApplicationStart {
 
-    private fun initUserInfo(context: Context, viewModelProvider: ViewModelProvider) {
-        val userViewModel = viewModelProvider[UserViewModel::class.java]
-        val qrcodeFile = FileHandler.getQrCodeFile(context)
-        userViewModel.qrcodeFile = qrcodeFile
-        QrCode.generateUserCode(userViewModel)
+    private fun initUserInfo(userViewModel: UserViewModel) {
+        userViewModel.deviceId = UUID.randomUUID().toString()
+        val secureRandom = SecureRandom.getInstance("SHA1PRNG")
+        val tokenBytes = ByteArray(16)
+        secureRandom.nextBytes(tokenBytes)
+        val deviceKey = Util.byteArrayToHexString(tokenBytes)
+        val encrypter = KeyEncrypter()
+        val (encryptedDeviceKey, iv) = encrypter.doFinal("deviceKey", deviceKey)
+        userViewModel.deviceKey = deviceKey
+        userViewModel.encryptedDeviceKey = encryptedDeviceKey
+        userViewModel.encryptedDeviceKeyIv = iv
     }
 
     private fun initDatabase(databaseProvider: DatabaseProvider) {
@@ -32,9 +40,10 @@ object ApplicationStart {
         val userViewModel = viewModelProvider[UserViewModel::class.java]
         val configLoadSuccess = userViewModel.loadFromConfigFile(context)
         if (!configLoadSuccess) {
-            userViewModel.deviceKey = UUID.randomUUID().toString()
+            initUserInfo(userViewModel)
             userViewModel.writeToConfigFile(context)
         }
+        QrCode.generateUserCode(userViewModel)
     }
 
     fun init(
@@ -46,8 +55,6 @@ object ApplicationStart {
         Log.d("AppInit", "Copy test image to file dir done")
         loadConfig(context, viewModelProvider)
         Log.d("ConfigLoad", "Load config.json done")
-        initUserInfo(context, viewModelProvider)
-        Log.d("AppInit", "Reading device UID done")
         initDatabase(databaseProvider)
         Log.d("DatabaseInit", "Database connection done")
         Log.d("AppInit", "Init process finished")

@@ -9,7 +9,7 @@ object QrCode {
     fun generateUserCode(userViewModel: UserViewModel) {
         val contentString =
             Base64.getEncoder().encodeToString(userViewModel.deviceName.toByteArray()) +
-                    ":" + Base64.getEncoder().encodeToString(userViewModel.deviceKey?.toByteArray())
+                    ":" + Base64.getEncoder().encodeToString(userViewModel.deviceId?.toByteArray())
         FileOutputStream(userViewModel.qrcodeFile).use {
             QRCode(contentString).render(margin = 25).writeImage(it)
         }

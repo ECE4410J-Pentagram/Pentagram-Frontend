@@ -19,7 +19,7 @@ class MainViewModelFactory(
             }
 
             UserViewModel::class.java -> {
-                UserViewModel() as T
+                UserViewModel(context) as T
             }
 
             else -> {
