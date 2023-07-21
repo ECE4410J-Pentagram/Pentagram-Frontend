@@ -30,8 +30,7 @@ class UserViewModel(
                     "name" to deviceName,
                     "key" to Util.byteArrayToHexString(encryptedDeviceKey),
                     "iv" to Util.byteArrayToHexString(encryptedDeviceKeyIv),
-                ),
-                "authorization" to authorization
+                )
             )
         )
     }
@@ -51,7 +50,6 @@ class UserViewModel(
                 val deviceObject = jsonObject.getJSONObject("device")
                 deviceId = deviceObject.getString("id")
                 deviceName = deviceObject.getString("name")
-                authorization = jsonObject.getString("authorization")
                 encryptedDeviceKey = Util.hexStringToByteArray(deviceObject.getString("key"))
                 encryptedDeviceKeyIv = Util.hexStringToByteArray(deviceObject.getString("iv"))
                 val decrypter = KeyDecrypter()

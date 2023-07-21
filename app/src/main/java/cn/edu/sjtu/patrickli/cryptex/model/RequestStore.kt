@@ -1,5 +1,6 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
+import android.util.Log
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.UserViewModel
 import com.android.volley.Request
 import com.android.volley.VolleyError
@@ -45,6 +46,9 @@ class RequestStore {
             payload,
             onResponse ?: {
                 userViewModel.authorization = it.getString("Authorization")
+                // Print out the authorization string for debug use
+                Log.d("Auth", "Authorization: ${userViewModel.authorization}")
+                Unit
             },
             onError ?: {}
         )
