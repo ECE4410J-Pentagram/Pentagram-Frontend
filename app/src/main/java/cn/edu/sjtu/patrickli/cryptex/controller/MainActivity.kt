@@ -12,7 +12,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.MainViewModelFactory
 import cn.edu.sjtu.patrickli.cryptex.view.HomeView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.SelectContactView
-import cn.edu.sjtu.patrickli.cryptex.view.key.KeyListView
+import cn.edu.sjtu.patrickli.cryptex.view.key.KeyView
 import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
@@ -41,7 +41,10 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable("KeyView") {
-                    KeyListView(context = this@MainActivity, navController = navController)
+                    KeyView(
+                        context = this@MainActivity,
+                        navController = navController
+                    )
                 }
                 composable("SendView") {
                     SelectReceiverView(
