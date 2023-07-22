@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.RequestViewModel
 import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.UserViewModel
 import java.security.SecureRandom
@@ -48,24 +47,6 @@ object ApplicationStart {
         QrCode.generateUserCode(userViewModel)
     }
 
-    private fun loadKeys(viewModelProvider: ViewModelProvider, databaseProvider: DatabaseProvider) {
-        val keyViewModel = viewModelProvider[KeyViewModel::class.java]
-        val userViewModel = viewModelProvider[UserViewModel::class.java]
-        val query = "SELECT name, privateKeyAlias FROM [key] WHERE deviceId=?"
-        val cur = databaseProvider.userDatabase.rawQuery(query, arrayOf(userViewModel.deviceId))
-        if (cur.moveToFirst()) {
-            do {
-                keyViewModel.myKeys.add(Key(cur.getString(0), cur.getString(1)))
-            } while (cur.moveToNext())
-        } else {
-            val defaultKey = Key("Default")
-            defaultKey.init()
-            keyViewModel.myKeys.add(defaultKey)
-            keyViewModel.saveKeyToDatabase(defaultKey, viewModelProvider, databaseProvider)
-        }
-        cur.close()
-    }
-
     private fun authUserDevice(viewModelProvider: ViewModelProvider) {
         viewModelProvider[UserViewModel::class.java].auth(viewModelProvider[RequestViewModel::class.java])
     }
@@ -81,8 +62,6 @@ object ApplicationStart {
         Log.d("ConfigLoad", "Load config.json done")
         initDatabase(databaseProvider)
         Log.d("DatabaseInit", "Database connection done")
-        loadKeys(viewModelProvider, databaseProvider)
-        Log.d("KeyLoad", "Load keys from database done")
         Log.d("AppInit", "Init process finished")
         try {
             authUserDevice(viewModelProvider)

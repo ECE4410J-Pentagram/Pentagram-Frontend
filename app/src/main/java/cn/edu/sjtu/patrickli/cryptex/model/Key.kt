@@ -32,4 +32,7 @@ class Key(
         val keyFactory = KeyFactory.getInstance("RSA")
         privateKey = keyFactory.generatePrivate(PKCS8EncodedKeySpec(privateKeyByteArray))
     }
+    fun publicKeyIsInitialized(): Boolean {
+        return ::publicKey.isInitialized
+    }
 }

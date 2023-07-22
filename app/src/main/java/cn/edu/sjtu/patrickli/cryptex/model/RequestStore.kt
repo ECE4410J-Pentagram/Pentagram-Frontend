@@ -54,4 +54,53 @@ class RequestStore {
         )
     }
 
+    fun getAddKeyRequest(
+        key: Key,
+        userViewModel: UserViewModel,
+        onResponse: ((JSONObject) -> Unit)? = null,
+        onError: ((VolleyError) -> Unit)? = null
+    ): JsonObjectRequest {
+        val payload = JSONObject(mapOf(
+            "name" to key.alias,
+            "pk" to Util.publicKeyToString(key.publicKey)
+        ))
+        return object: JsonObjectRequest(
+            Request.Method.POST,
+            getApi("key/"),
+            payload,
+            onResponse ?: {},
+            onError ?: {}
+        ) {
+            override fun getHeaders(): Map<String, String> {
+                return mapOf(
+                    "Content-Type" to "application/json",
+                    "Authorization" to (userViewModel.authorization ?: "")
+                )
+            }
+        }
+    }
+
+    fun getRemoveKeyRequest(
+        key: Key,
+        userViewModel: UserViewModel,
+        onResponse: ((JSONObject) -> Unit)? = null,
+        onError: ((VolleyError) -> Unit)? = null
+    ): JsonObjectRequest {
+        val payload = JSONObject()
+        return object: JsonObjectRequest(
+            Request.Method.DELETE,
+            getApi("key/${key.alias}"),
+            payload,
+            onResponse ?: {},
+            onError ?: {}
+        ) {
+            override fun getHeaders(): Map<String, String> {
+                return mapOf(
+                    "Content-Type" to "application/json",
+                    "Authorization" to (userViewModel.authorization ?: "")
+                )
+            }
+        }
+    }
+
 }

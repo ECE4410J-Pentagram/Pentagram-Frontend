@@ -46,4 +46,64 @@ class KeyViewModel: ViewModel() {
         databaseProvider.userDatabase.update("key", values, "privateKeyAlias=?", arrayOf(key.alias))
     }
 
+    fun loadKeysFromDatabase(viewModelProvider: ViewModelProvider, databaseProvider: DatabaseProvider) {
+        val userViewModel = viewModelProvider[UserViewModel::class.java]
+        val query = "SELECT name, privateKeyAlias FROM [key] WHERE deviceId=?"
+        val cur = databaseProvider.userDatabase.rawQuery(query, arrayOf(userViewModel.deviceId))
+        if (cur.moveToFirst()) {
+            do {
+                myKeys.add(Key(cur.getString(0), cur.getString(1)))
+            } while (cur.moveToNext())
+        }
+        cur.close()
+    }
+
+    fun loadPublicKey(
+        key: Key,
+        databaseProvider: DatabaseProvider
+    ) {
+        val cur = databaseProvider.userDatabase.rawQuery(
+            "SELECT publicKey FROM [key] WHERE privateKeyAlias=?", arrayOf(key.alias)
+        )
+        cur.moveToFirst()
+        key.setPublicKey(cur.getBlob(0))
+        cur.close()
+    }
+
+    fun pushKeyToRemote(
+        key: Key,
+        viewModelProvider: ViewModelProvider,
+        databaseProvider: DatabaseProvider,
+        onFinished: () -> Unit = {}
+    ) {
+        if (!key.publicKeyIsInitialized()) {
+            loadPublicKey(key, databaseProvider)
+        }
+        val requestViewModel = viewModelProvider[RequestViewModel::class.java]
+        requestViewModel.requestQueue.add(requestViewModel.requestStore.getAddKeyRequest(
+            key,
+            viewModelProvider[UserViewModel::class.java],
+            {
+                onFinished()
+            },
+            { onFinished() }
+        ))
+    }
+
+    fun removeKeyFromRemote(
+        key: Key,
+        viewModelProvider: ViewModelProvider,
+        onFinished: () -> Unit = {}
+    ) {
+        val requestViewModel = viewModelProvider[RequestViewModel::class.java]
+        requestViewModel.requestQueue.add(requestViewModel.requestStore.getRemoveKeyRequest(
+            key,
+            viewModelProvider[UserViewModel::class.java],
+            {
+                onFinished()
+            },
+            { onFinished() }
+        ))
+    }
+
 }

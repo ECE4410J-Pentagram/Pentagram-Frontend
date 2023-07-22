@@ -35,6 +35,7 @@
     <string name="renameKey">Rename your key</string>
     <string name="removeKeyWarningTitle">Remove key \"%1$s\"?</string>
     <string name="removeKeyWarningContent">Once removed, messages encrypted with this key cannot be read anymore.</string>
+    <string name="noKey">You have not created any keys yet. Try adding a new one.</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>
