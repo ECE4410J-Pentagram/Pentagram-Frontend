@@ -43,7 +43,9 @@ class MainActivity : ComponentActivity() {
                 composable("KeyView") {
                     KeyView(
                         context = this@MainActivity,
-                        navController = navController
+                        navController = navController,
+                        viewModelProvider = viewModelProvider,
+                        databaseProvider = databaseProvider
                     )
                 }
                 composable("SendView") {

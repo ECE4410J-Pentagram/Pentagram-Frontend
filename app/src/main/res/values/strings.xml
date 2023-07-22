@@ -32,6 +32,9 @@
     <string name="shareImgWarningTitle">Share the image directly?</string>
     <string name="shareImgWarningContent">Most SNS apps will lossy compress your image, which may break the cipher message and cannot be decrypted. If you know what you are doing, continue; Otherwise, press \"Download\" and send the original image from your favorite SNS app.</string>
     <string name="myqr">My QR Code</string>
+    <string name="renameKey">Rename your key</string>
+    <string name="removeKeyWarningTitle">Remove key \"%1$s\"?</string>
+    <string name="removeKeyWarningContent">Once removed, messages encrypted with this key cannot be read anymore.</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

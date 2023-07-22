@@ -10,8 +10,8 @@ import cn.edu.sjtu.patrickli.cryptex.model.Key
 @Composable
 fun KeyItemWithDiv(
     key: Key,
-    onRemove: (name: String) -> Unit,
-    onRename: (name: String) -> Unit
+    onRemove: () -> Unit,
+    onRename: (Key) -> Unit
 ) {
     Column (
         modifier = Modifier.fillMaxWidth()

@@ -1,6 +1,6 @@
 package cn.edu.sjtu.patrickli.cryptex.view.key
+
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,78 +18,94 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.Key
-import cn.edu.sjtu.patrickli.cryptex.model.createKey
-import cn.edu.sjtu.patrickli.cryptex.model.testKeys
+import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
+import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.AddKeyDialog
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.RemoveKeyDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.RenameKeyDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
-import java.util.function.Predicate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KeyView(context: Context, navController: NavHostController) {
-    val keyList = testKeys
-    var addDialogOpen by remember {
-        mutableStateOf<Boolean>(false)
-    }
-    var renameDialogOpen by remember {
-        mutableStateOf<Boolean>(false)
-    }
-    var renameDialogOriginalName by remember {
-        mutableStateOf<String>("")
-    }
-    fun onRemove(name: String) {
-        Log.d("KeyView","Remove Called: " + keyList.size)
-        keyList.removeIf(Predicate { key -> key.name == name })
-        Log.d("KeyView","Remove Called: " + keyList.size)
+fun KeyView(
+    context: Context,
+    navController: NavHostController,
+    viewModelProvider: ViewModelProvider,
+    databaseProvider: DatabaseProvider
+) {
+    val keyViewModel = viewModelProvider[KeyViewModel::class.java]
+    val keyList = keyViewModel.myKeys
+    var addDialogOpen by remember { mutableStateOf(false) }
+    var renameDialogOpen by remember { mutableStateOf(false) }
+    var selectedKey by remember { mutableStateOf(Key()) }
+    var showRemoveKeyWarningDialog by remember { mutableStateOf(false) }
+    fun onRemove(key: Key) {
+        keyList.remove(key)
+        keyViewModel.removeKeyFromDatabase(key, databaseProvider)
     }
 
-    fun onRenameDialogOpen(name: String) {
+    fun onRenameDialogOpen(key: Key) {
         renameDialogOpen = true
-        renameDialogOriginalName = name
+        selectedKey = key
     }
 
-    fun onKeyRename(original_name: String, new_name: String) {
-        Log.d("KeyView","Rename Key $original_name to $new_name")
-        var oldKey = Key(name = "", sk = "", pk = "")
-        for (i in keyList.indices) {
-            if (keyList[i].name == original_name) {
-                oldKey = keyList[i]
-            }
-        }
-        keyList.removeIf {key -> key.name == oldKey.name}
-        oldKey.name = new_name
-        keyList.add(oldKey)
-
+    fun onRenameKey(name: String) {
+        val index = keyList.indexOf(selectedKey)
+        val newKey = Key(name, selectedKey.alias)
+        keyList[index] = newKey
+        keyViewModel.renameKeyInDatabase(newKey, databaseProvider)
     }
+
+    fun onAddKey(name: String) {
+        val newKey = Key(name)
+        newKey.init()
+        keyList.add(newKey)
+        keyViewModel.saveKeyToDatabase(newKey, viewModelProvider, databaseProvider)
+    }
+
     Scaffold(
         topBar = {
             NavBackBar(navController = navController)
         },
-        content = { padding ->
+        content = {
             LazyColumn(
                 verticalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier
-                    .padding(padding)
+                    .padding(it)
             ) {
                 items(count = keyList.size) { index ->
-                    KeyItemWithDiv(keyList[index], ::onRemove, onRename = ::onRenameDialogOpen)
+                    KeyItemWithDiv(
+                        keyList[index],
+                        {
+                            selectedKey = keyList[index]
+                            showRemoveKeyWarningDialog = true
+                        },
+                        onRename = ::onRenameDialogOpen
+                    )
                 }
             }
             if (addDialogOpen) {
                 AddKeyDialog(
                     onClose = { addDialogOpen = false },
-                    onAddKey = { keyname -> keyList.add(element = createKey(keyname)) }
+                    onAddKey = ::onAddKey
                 )
             }
             if (renameDialogOpen) {
                 RenameKeyDialog(
-                    onClose = { renameDialogOpen = false },
-                    onRename = ::onKeyRename,
-                    original_name = renameDialogOriginalName
+                    key = selectedKey,
+                    onRename = ::onRenameKey,
+                    onClose = { renameDialogOpen = false }
+                )
+            }
+            if (showRemoveKeyWarningDialog) {
+                RemoveKeyDialog(
+                    key = selectedKey,
+                    onRemove = ::onRemove,
+                    onClose = { showRemoveKeyWarningDialog = false }
                 )
             }
         },
@@ -97,12 +113,11 @@ fun KeyView(context: Context, navController: NavHostController) {
             FloatingActionButton(
                 modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 8.dp),
                 onClick = {
-                    // navigate to PostView
                     addDialogOpen = true
                 }
             ) {
                 Icon(Icons.Default.Add, stringResource(R.string.addKey))
             }
-        },
+        }
     )
 }

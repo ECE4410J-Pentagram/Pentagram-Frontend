@@ -6,6 +6,9 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import java.io.File
+import java.security.PrivateKey
+import java.security.PublicKey
+import java.util.Base64
 
 object Util {
 
@@ -51,6 +54,14 @@ object Util {
     fun hexStringToByteArray(text: String?): ByteArray {
         return text?.chunked(2)?.map { it.toInt(16).toByte() }?.toByteArray()
             ?: byteArrayOf()
+    }
+
+    fun privateKeyToString(privateKey: PrivateKey, trim: Boolean = false): String {
+        return Base64.getEncoder().encode(privateKey.encoded).toString(Charsets.UTF_8)
+    }
+
+    fun publicKeyToString(publicKey: PublicKey, trim: Boolean = false): String {
+        return Base64.getEncoder().encode(publicKey.encoded).toString(Charsets.UTF_8)
     }
 
 }

@@ -53,7 +53,9 @@ class UserViewModel(
                 encryptedDeviceKey = Util.hexStringToByteArray(deviceObject.getString("key"))
                 encryptedDeviceKeyIv = Util.hexStringToByteArray(deviceObject.getString("iv"))
                 val decrypter = KeyDecrypter()
-                deviceKey = decrypter.doFinal("deviceKey", encryptedDeviceKey!!, encryptedDeviceKeyIv!!)
+                deviceKey = decrypter
+                    .doFinal("deviceKey", encryptedDeviceKey!!, encryptedDeviceKeyIv!!)
+                    .toString(Charsets.UTF_8)
                 loadSuccess = true
             } catch (err: Exception) {
                 Log.e("ConfigLoad", "Parse config.json error")

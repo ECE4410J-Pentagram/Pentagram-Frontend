@@ -26,6 +26,10 @@ class MainViewModelFactory(
                 RequestViewModel(context) as T
             }
 
+            KeyViewModel::class.java -> {
+                KeyViewModel() as T
+            }
+
             else -> {
                 throw RuntimeException("Cannot create an instance of ${modelClass}")
             }
