@@ -30,10 +30,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.contact.ContactItem
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)

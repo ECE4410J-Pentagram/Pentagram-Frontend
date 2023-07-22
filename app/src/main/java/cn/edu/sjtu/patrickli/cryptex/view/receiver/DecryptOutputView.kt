@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.DecrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.DecrypterViewModel
 
 // TODO: implement this
 fun decrypt(decryptState: DecrypterViewModel): String {

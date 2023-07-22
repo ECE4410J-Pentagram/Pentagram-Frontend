@@ -24,9 +24,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

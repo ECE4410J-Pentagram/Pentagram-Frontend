@@ -1,6 +1,6 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.UserViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
 import io.github.g0dkar.qrcode.QRCode
 import java.io.FileOutputStream
 import java.util.Base64

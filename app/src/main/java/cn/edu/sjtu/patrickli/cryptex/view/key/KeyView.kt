@@ -31,12 +31,12 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.Key
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.AddKeyDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.RemoveKeyDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.RenameKeyDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

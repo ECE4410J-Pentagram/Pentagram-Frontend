@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
 
 @Composable
 fun SelectContactView(

@@ -1,7 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
 import android.util.Log
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.UserViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
 import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest

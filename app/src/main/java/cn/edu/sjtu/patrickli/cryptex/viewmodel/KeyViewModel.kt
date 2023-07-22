@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.model.viewmodel
+package cn.edu.sjtu.patrickli.cryptex.viewmodel
 
 import android.content.ContentValues
 import androidx.compose.runtime.mutableStateListOf

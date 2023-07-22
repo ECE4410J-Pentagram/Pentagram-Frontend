@@ -32,10 +32,10 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.model.Util
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 import cn.edu.sjtu.patrickli.cryptex.view.media.ImageWrapper
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

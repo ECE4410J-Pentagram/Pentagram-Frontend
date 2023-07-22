@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.RequestViewModel
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.UserViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.RequestViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
 import java.security.SecureRandom
 import java.util.UUID
 
