@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.model.Contact
 import cn.edu.sjtu.patrickli.cryptex.model.QrCode
+import cn.edu.sjtu.patrickli.cryptex.model.QrCodeScanState
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.BadQrCodeDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.NoCameraPermissionDialog
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
@@ -40,7 +41,7 @@ fun QrCodeScanView(
     var showNoCameraPermissionDialog by remember { mutableStateOf(false) }
     var showBadQrCodeDialog by remember { mutableStateOf(false) }
     val contactViewModel = viewModelProvider[ContactViewModel::class.java]
-    var scanStatus by remember { mutableStateOf("pend") }
+    var scanState by remember { mutableStateOf(QrCodeScanState.PEND) }
     LaunchedEffect(Unit) {
         if (!cameraPermissionState.status.isGranted) {
             if (cameraPermissionState.status.shouldShowRationale) {
@@ -65,20 +66,21 @@ fun QrCodeScanView(
     fun onScanSuccess(contact: Contact) {
         contactViewModel.scannedContact = contact
         println(contact.name)
-        scanStatus = "success"
+        scanState = QrCodeScanState.SUCCESS
     }
     fun onScanFailure() {
-        scanStatus = "fail"
+        scanState = QrCodeScanState.FAIL
     }
-    when (scanStatus) {
-        "success" -> {
-            scanStatus = "pend"
+    when (scanState) {
+        QrCodeScanState.SUCCESS -> {
+            scanState = QrCodeScanState.PEND
             navController.popBackStack()
         }
-        "fail" -> {
-            scanStatus = "pend"
+        QrCodeScanState.FAIL -> {
+            scanState = QrCodeScanState.PEND
             navController.popBackStack()
         }
+        else -> {}
     }
     if (cameraPermissionState.status.isGranted) {
         Box(Modifier.fillMaxSize()) {
