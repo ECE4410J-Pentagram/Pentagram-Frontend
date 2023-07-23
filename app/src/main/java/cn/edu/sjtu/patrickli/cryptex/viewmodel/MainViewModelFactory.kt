@@ -30,6 +30,10 @@ class MainViewModelFactory(
                 KeyViewModel() as T
             }
 
+            ContactViewModel::class.java -> {
+                ContactViewModel() as T
+            }
+
             else -> {
                 throw RuntimeException("Cannot create an instance of ${modelClass}")
             }

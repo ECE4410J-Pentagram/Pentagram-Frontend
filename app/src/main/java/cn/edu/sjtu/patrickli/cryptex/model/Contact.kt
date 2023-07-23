@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 
 class Contact (
     val name: String? = null,
+    val id: String? = null,
     val publicKey: String? = null
 ) {}
 

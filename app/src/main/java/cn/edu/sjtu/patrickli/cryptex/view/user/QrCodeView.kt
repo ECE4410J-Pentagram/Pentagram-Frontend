@@ -60,6 +60,11 @@ fun QrCodeView(
                 ImageWrapper(context = context, file = userViewModel.qrcodeFile)
                 Spacer(modifier = Modifier.height(30.dp))
                 BaseWideButton(onClick = {
+                    navController.navigate("QrCodeScanView")
+                }) {
+                    Text(text = stringResource(R.string.scanQr))
+                }
+                BaseWideButton(onClick = {
                     FileHandler.saveImgToPublicDownload(context, userViewModel.qrcodeFile)
                 }) {
                     Text(text = stringResource(R.string.download))
