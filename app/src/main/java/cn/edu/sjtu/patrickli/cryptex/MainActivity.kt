@@ -17,8 +17,8 @@ import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
-import cn.edu.sjtu.patrickli.cryptex.view.user.QrCodeScanView
-import cn.edu.sjtu.patrickli.cryptex.view.user.QrCodeView
+import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeScanView
+import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeView
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.MainViewModelFactory
 
 class MainActivity : ComponentActivity() {

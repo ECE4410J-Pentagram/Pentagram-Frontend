@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.view.user
+package cn.edu.sjtu.patrickli.cryptex.view.qrcode
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
