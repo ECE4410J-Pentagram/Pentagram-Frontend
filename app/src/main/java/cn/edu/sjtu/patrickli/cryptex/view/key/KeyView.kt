@@ -1,7 +1,6 @@
 package cn.edu.sjtu.patrickli.cryptex.view.key
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +42,8 @@ fun KeyView(
     context: Context,
     navController: NavHostController,
     viewModelProvider: ViewModelProvider,
-    databaseProvider: DatabaseProvider
+    databaseProvider: DatabaseProvider,
+    onKeyClick: (Key) -> Unit = {}
 ) {
     val keyViewModel = viewModelProvider[KeyViewModel::class.java]
     val keyList = keyViewModel.myKeys
@@ -53,13 +52,6 @@ fun KeyView(
     var selectedKey by remember { mutableStateOf(Key()) }
     var showRemoveKeyWarningDialog by remember { mutableStateOf(false) }
     var showKeyOperationLoadingDialog by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        if (keyList.size == 0) {
-            keyViewModel.loadKeysFromDatabase(viewModelProvider, databaseProvider)
-            Log.d("KeyLoad", "Load keys from database done")
-        }
-    }
 
     fun onRemove(key: Key) {
         showKeyOperationLoadingDialog = true
@@ -112,7 +104,8 @@ fun KeyView(
                             selectedKey = keyList[index]
                             showRemoveKeyWarningDialog = true
                         },
-                        onRename = ::onRenameDialogOpen
+                        onRename = ::onRenameDialogOpen,
+                        onClick = { onKeyClick(keyList[index]) }
                     )
                 }
             }

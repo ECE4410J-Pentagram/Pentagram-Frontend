@@ -10,6 +10,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
 
 class KeyViewModel: ViewModel() {
     val myKeys = mutableStateListOf<Key>()
+    var keyToShare: Key? = null
 
     fun saveKeyToDatabase(
         key: Key,

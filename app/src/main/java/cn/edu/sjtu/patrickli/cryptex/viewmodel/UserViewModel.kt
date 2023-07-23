@@ -82,6 +82,8 @@ class UserViewModel(
                                 requestQueue.add(requestStore.getLoginRequest(this@UserViewModel))
                             }
                         ))
+                    } else {
+                        it.printStackTrace()
                     }
                 }
             ))

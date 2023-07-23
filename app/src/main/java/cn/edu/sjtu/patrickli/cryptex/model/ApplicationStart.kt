@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.RequestViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
 import java.security.SecureRandom
@@ -51,6 +52,10 @@ object ApplicationStart {
         viewModelProvider[UserViewModel::class.java].auth(viewModelProvider[RequestViewModel::class.java])
     }
 
+    private fun loadKeys(viewModelProvider: ViewModelProvider, databaseProvider: DatabaseProvider) {
+        viewModelProvider[KeyViewModel::class.java].loadKeysFromDatabase(viewModelProvider, databaseProvider)
+    }
+
     fun init(
         context: Context,
         viewModelProvider: ViewModelProvider,
@@ -62,6 +67,8 @@ object ApplicationStart {
         Log.d("ConfigLoad", "Load config.json done")
         initDatabase(databaseProvider)
         Log.d("DatabaseInit", "Database connection done")
+        loadKeys(viewModelProvider, databaseProvider)
+        Log.d("KeyLoad", "Load keys from database done")
         Log.d("AppInit", "Init process finished")
         try {
             authUserDevice(viewModelProvider)

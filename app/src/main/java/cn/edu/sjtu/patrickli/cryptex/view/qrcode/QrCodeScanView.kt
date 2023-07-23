@@ -65,7 +65,6 @@ fun QrCodeScanView(
     }
     fun onScanSuccess(contact: Contact) {
         contactViewModel.scannedContact = contact
-        println(contact.name)
         scanState = QrCodeScanState.SUCCESS
     }
     fun onScanFailure() {
@@ -74,7 +73,7 @@ fun QrCodeScanView(
     when (scanState) {
         QrCodeScanState.SUCCESS -> {
             scanState = QrCodeScanState.PEND
-            navController.popBackStack()
+            navController.navigate("SendInvitationView")
         }
         QrCodeScanState.FAIL -> {
             scanState = QrCodeScanState.PEND

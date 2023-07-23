@@ -11,14 +11,16 @@ import cn.edu.sjtu.patrickli.cryptex.model.ApplicationStart
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.view.HomeView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.SelectContactView
+import cn.edu.sjtu.patrickli.cryptex.view.contact.SendInvitationView
 import cn.edu.sjtu.patrickli.cryptex.view.key.KeyView
+import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeScanView
+import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeView
 import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
-import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeScanView
-import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeView
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.MainViewModelFactory
 
 class MainActivity : ComponentActivity() {
@@ -47,6 +49,18 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         viewModelProvider = viewModelProvider,
                         databaseProvider = databaseProvider
+                    )
+                }
+                composable("SelectKeyView") {
+                    KeyView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider,
+                        databaseProvider = databaseProvider,
+                        onKeyClick = { key ->
+                            viewModelProvider[KeyViewModel::class.java].keyToShare = key
+                            navController.popBackStack()
+                        }
                     )
                 }
                 composable("SendView") {
@@ -100,6 +114,13 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("QrCodeScanView") {
                     QrCodeScanView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
+                    )
+                }
+                composable("SendInvitationView") {
+                    SendInvitationView(
                         context = this@MainActivity,
                         navController = navController,
                         viewModelProvider = viewModelProvider
