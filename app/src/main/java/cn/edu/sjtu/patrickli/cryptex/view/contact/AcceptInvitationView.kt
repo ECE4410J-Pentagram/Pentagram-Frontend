@@ -14,7 +14,7 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 
 @Composable
-fun SendInvitationView(
+fun AcceptInvitationView(
     context: Context,
     viewModelProvider: ViewModelProvider,
     navController: NavHostController
@@ -26,7 +26,7 @@ fun SendInvitationView(
     ) {
         Spacer(modifier = Modifier.height(70.dp))
         BaseWideButton(onClick = { navController.navigate("HomeView") { popUpTo(0) } }) {
-            Text(text = stringResource(R.string.addFriend))
+            Text(text = stringResource(R.string.acceptFriend))
         }
     }
 }

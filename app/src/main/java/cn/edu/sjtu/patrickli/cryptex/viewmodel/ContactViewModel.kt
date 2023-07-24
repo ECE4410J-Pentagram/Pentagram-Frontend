@@ -6,5 +6,5 @@ import cn.edu.sjtu.patrickli.cryptex.model.Contact
 
 class ContactViewModel: ViewModel() {
     var contactList = mutableStateListOf<Contact>()
-    var scannedContact: Contact? = null
+    var contact: Contact? = null
 }

@@ -34,6 +34,10 @@ class MainViewModelFactory(
                 ContactViewModel() as T
             }
 
+            InvitationViewModel::class.java -> {
+                InvitationViewModel() as T
+            }
+
             else -> {
                 throw RuntimeException("Cannot create an instance of ${modelClass}")
             }

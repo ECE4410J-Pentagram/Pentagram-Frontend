@@ -64,7 +64,7 @@ fun QrCodeScanView(
         }
     }
     fun onScanSuccess(contact: Contact) {
-        contactViewModel.scannedContact = contact
+        contactViewModel.contact = contact
         scanState = QrCodeScanState.SUCCESS
     }
     fun onScanFailure() {

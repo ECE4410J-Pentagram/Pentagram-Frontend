@@ -10,6 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import cn.edu.sjtu.patrickli.cryptex.model.ApplicationStart
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.view.HomeView
+import cn.edu.sjtu.patrickli.cryptex.view.contact.AcceptInvitationView
+import cn.edu.sjtu.patrickli.cryptex.view.contact.InvitationListView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.SelectContactView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.SendInvitationView
 import cn.edu.sjtu.patrickli.cryptex.view.key.KeyView
@@ -40,7 +42,8 @@ class MainActivity : ComponentActivity() {
                 composable("HomeView") {
                     HomeView(
                         context = this@MainActivity,
-                        navController = navController
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
                     )
                 }
                 composable("KeyView") {
@@ -121,6 +124,20 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("SendInvitationView") {
                     SendInvitationView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
+                    )
+                }
+                composable("AcceptInvitationView") {
+                    AcceptInvitationView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
+                    )
+                }
+                composable("InvitationView") {
+                    InvitationListView(
                         context = this@MainActivity,
                         navController = navController,
                         viewModelProvider = viewModelProvider

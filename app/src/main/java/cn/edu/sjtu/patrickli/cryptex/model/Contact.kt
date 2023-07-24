@@ -2,11 +2,17 @@ package cn.edu.sjtu.patrickli.cryptex.model
 
 import androidx.compose.runtime.mutableStateListOf
 
-class Contact (
+data class Contact (
     val name: String? = null,
     val id: String? = null,
     val publicKey: String? = null
-) {}
+) {
+    companion object {
+        fun fromInvitation(invitation: Invitation): Contact {
+            return Contact(invitation.fromDeviceName, invitation.fromDeviceId)
+        }
+    }
+}
 
 val testContacts = mutableStateListOf<Contact>(
     Contact(name = "Contact 0"),
