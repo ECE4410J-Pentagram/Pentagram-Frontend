@@ -78,5 +78,6 @@ dependencies {
     implementation "io.github.g0dkar:qrcode-kotlin-android:3.3.0"
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
     implementation "com.google.accompanist:accompanist-permissions:0.25.1"
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.23.1"
 
 }

@@ -49,6 +49,9 @@
     <string name="invitationReceived">New friend requests</string>
     <string name="invitationSent">Sent requests waiting confirmation</string>
     <string name="acceptFriend">Accept Invitation</string>
+    <string name="addFriendSuccess">Friend request sent</string>
+    <string name="success">Success</string>
+    <string name="noInvitations">There\'s nothing here but a sad rabbit. Try inviting your friends to scan your QR Code!</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

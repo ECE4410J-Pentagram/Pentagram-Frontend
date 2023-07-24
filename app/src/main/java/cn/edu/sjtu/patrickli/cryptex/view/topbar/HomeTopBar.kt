@@ -24,7 +24,7 @@ import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
 @Composable
 fun HomeTopBar(navController: NavController, viewModelProvider: ViewModelProvider) {
     val invitationViewModel = viewModelProvider[InvitationViewModel::class.java]
-    val invitationUnreadCount = invitationViewModel.invitations.size
+    val invitationUnreadCount = invitationViewModel.receivedUnreadCount
     TopAppBar(
         title = {
             BarImgComponent()

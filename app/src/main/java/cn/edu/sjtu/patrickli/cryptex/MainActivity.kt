@@ -1,6 +1,8 @@
 package cn.edu.sjtu.patrickli.cryptex
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
@@ -22,12 +24,20 @@ import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.MainViewModelFactory
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModelProvider: ViewModelProvider
     private lateinit var databaseProvider: DatabaseProvider
+    private lateinit var mainHandler: Handler
+    private val updateInvitationListTask = object : Runnable {
+        override fun run() {
+            viewModelProvider[InvitationViewModel::class.java].updateInvitationList(viewModelProvider)
+            mainHandler.postDelayed(this, 10000)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +46,7 @@ class MainActivity : ComponentActivity() {
         )
         databaseProvider = DatabaseProvider(this)
         ApplicationStart.init(this@MainActivity, viewModelProvider, databaseProvider)
+        mainHandler = Handler(Looper.getMainLooper())
         setContent {
             val navController = rememberNavController()
             NavHost(navController, startDestination = "HomeView") {
@@ -146,4 +157,15 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        mainHandler.removeCallbacks(updateInvitationListTask)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainHandler.post(updateInvitationListTask)
+    }
+
 }
