@@ -47,8 +47,8 @@ object ApplicationStart {
         QrCode.generateUserCode(userViewModel)
     }
 
-    private fun authUserDevice(viewModelProvider: ViewModelProvider) {
-        viewModelProvider[UserViewModel::class.java].auth(viewModelProvider)
+    private fun authUserDevice(viewModelProvider: ViewModelProvider, onAuthSuccess: () -> Unit) {
+        viewModelProvider[UserViewModel::class.java].auth(viewModelProvider, onAuthSuccess)
     }
 
     private fun loadKeys(viewModelProvider: ViewModelProvider, databaseProvider: DatabaseProvider) {
@@ -58,7 +58,8 @@ object ApplicationStart {
     fun init(
         context: Context,
         viewModelProvider: ViewModelProvider,
-        databaseProvider: DatabaseProvider
+        databaseProvider: DatabaseProvider,
+        onAuthSuccess: () -> Unit = {}
     ) {
         FileHandler.copyTestImgToFileDir(context)
         Log.d("AppInit", "Copy test image to file dir done")
@@ -70,7 +71,7 @@ object ApplicationStart {
         Log.d("KeyLoad", "Load keys from database done")
         Log.d("AppInit", "Init process finished")
         try {
-            authUserDevice(viewModelProvider)
+            authUserDevice(viewModelProvider, onAuthSuccess)
         } catch (err: Exception) {
             Log.e("Auth", "Unexpected error authorizing device")
             err.printStackTrace()

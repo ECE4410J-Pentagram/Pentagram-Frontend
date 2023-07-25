@@ -65,7 +65,7 @@ class UserViewModel(
         }
         return loadSuccess
     }
-    fun auth(viewModelProvider: ViewModelProvider) {
+    fun auth(viewModelProvider: ViewModelProvider, onAuthSuccess: () -> Unit = {}) {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
         val contactViewModel = viewModelProvider[ContactViewModel::class.java]
         viewModelScope.launch {
@@ -76,6 +76,7 @@ class UserViewModel(
                 this@UserViewModel,
                 onResponse = {
                     contactViewModel.updateContactList(viewModelProvider)
+                    onAuthSuccess()
                 },
                 onError = {
                     if (it.networkResponse?.statusCode == 401) {
@@ -85,7 +86,12 @@ class UserViewModel(
                             this@UserViewModel,
                             onResponse = {
                                 Log.d("Auth", "Registering device ${deviceName}@${deviceId} success, logging in")
-                                requestQueue.add(requestStore.getLoginRequest(this@UserViewModel))
+                                requestQueue.add(requestStore.getLoginRequest(
+                                    this@UserViewModel,
+                                    onResponse = {
+                                        onAuthSuccess()
+                                    }
+                                ))
                             }
                         ))
                     } else {

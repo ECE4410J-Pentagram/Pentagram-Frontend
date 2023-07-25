@@ -32,11 +32,11 @@ import cn.edu.sjtu.patrickli.cryptex.viewmodel.MainViewModelFactory
 class MainActivity : ComponentActivity() {
     private lateinit var viewModelProvider: ViewModelProvider
     private lateinit var databaseProvider: DatabaseProvider
-    private lateinit var mainHandler: Handler
+    private var mainHandler: Handler? = null
     private val updateInvitationListTask = object : Runnable {
         override fun run() {
             viewModelProvider[InvitationViewModel::class.java].updateInvitationList(viewModelProvider)
-            mainHandler.postDelayed(this, 10000)
+            mainHandler?.postDelayed(this, 10000)
         }
     }
 
@@ -46,8 +46,10 @@ class MainActivity : ComponentActivity() {
             this, MainViewModelFactory(this)
         )
         databaseProvider = DatabaseProvider(this)
-        ApplicationStart.init(this@MainActivity, viewModelProvider, databaseProvider)
-        mainHandler = Handler(Looper.getMainLooper())
+        ApplicationStart.init(this@MainActivity, viewModelProvider, databaseProvider) {
+            mainHandler = Handler(Looper.getMainLooper())
+            mainHandler!!.post(updateInvitationListTask)
+        }
         setContent {
             val navController = rememberNavController()
             NavHost(navController, startDestination = "HomeView") {
@@ -168,12 +170,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
-        mainHandler.removeCallbacks(updateInvitationListTask)
+        mainHandler?.removeCallbacks(updateInvitationListTask)
     }
 
     override fun onResume() {
         super.onResume()
-        mainHandler.post(updateInvitationListTask)
+        mainHandler?.post(updateInvitationListTask)
     }
 
 }
