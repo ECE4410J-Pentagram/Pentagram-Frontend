@@ -13,21 +13,29 @@ class ContactViewModel: ViewModel() {
     var contactList = mutableStateListOf<Contact>()
     var contactCount by mutableStateOf(0)
     var contact: Contact? = null
-    fun updateContactList(viewModelProvider: ViewModelProvider) {
+    var hasNewContact by mutableStateOf(false)
+    fun updateContactList(
+        viewModelProvider: ViewModelProvider,
+        resetNewContactIndicator: Boolean = false,
+        onFinished: () -> Unit = {}
+    ) {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
-        val userViewModel = viewModelProvider[UserViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getFetchContactsRequest(
             onResponse = {
+                val oldContactCount = contactCount
                 contactList.clear()
                 for (i in 0 until it.length()) {
                     contactList.add(Contact.fromJson(it.getJSONObject(i)))
                 }
                 contactCount = contactList.size
-                Log.d("UpdateContact", "Success fetched ${contactCount} contacts")
+                hasNewContact = (contactCount > oldContactCount) && (!resetNewContactIndicator)
+                Log.d("UpdateContact", "Success fetched ${contactCount} contacts, hasNewContact=${hasNewContact}")
+                onFinished()
             },
             onError = {
                 Log.e("UpdateContact", "Failed")
                 it.printStackTrace()
+                onFinished()
             }
         ))
     }
@@ -37,7 +45,7 @@ class ContactViewModel: ViewModel() {
             contact,
             onResponse = {
                 Log.d("DeleteContact", "Success")
-                onFinished()
+                updateContactList(viewModelProvider, true, onFinished)
             },
             onError = {
                 Log.e("DeleteContact", "Failed")

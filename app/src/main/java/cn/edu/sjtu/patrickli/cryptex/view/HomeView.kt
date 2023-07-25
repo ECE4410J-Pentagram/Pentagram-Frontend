@@ -8,14 +8,17 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.FileUpload
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.Key
+import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,11 +32,14 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.view.button.HomeViewButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.HomeTopBar
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConstraintLayoutContent(
     paddingValues: PaddingValues,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModelProvider: ViewModelProvider
 ) {
     ConstraintLayout (
         modifier = Modifier
@@ -90,7 +96,14 @@ fun ConstraintLayoutContent(
                         Icons.Outlined.Group,
                         "Contacts",
                         navController,
-                        "ContactListView"
+                        "ContactListView",
+                        badge = {
+                            if (viewModelProvider[ContactViewModel::class.java].hasNewContact) {
+                                Badge(
+                                    modifier = Modifier.offset((-15).dp, 15.dp)
+                                ) { Text(text = "") }
+                            }
+                        }
                     )
                     HomeViewButton(
                         Icons.Outlined.Key,
@@ -116,7 +129,7 @@ fun HomeView(
             HomeTopBar(navController, viewModelProvider)
         },
         content = { padding ->
-            ConstraintLayoutContent(padding, navController)
+            ConstraintLayoutContent(padding, navController, viewModelProvider)
         }
     )
 }

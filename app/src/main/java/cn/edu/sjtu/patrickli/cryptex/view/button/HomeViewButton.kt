@@ -1,5 +1,6 @@
 package cn.edu.sjtu.patrickli.cryptex.view.button
 
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -10,7 +11,8 @@ fun HomeViewButton(
     imageVector: ImageVector,
     text: String,
     navController: NavHostController,
-    targetActivity: String
+    targetActivity: String,
+    badge: @Composable() (BoxScope.() -> Unit) = {}
 ) {
     IconTextButton(
         imageVector,
@@ -18,6 +20,7 @@ fun HomeViewButton(
         iconSize = 70.dp,
         onClick = {
             navController.navigate(targetActivity)
-        }
+        },
+        badge = badge
     )
 }

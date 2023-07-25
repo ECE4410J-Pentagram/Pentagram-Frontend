@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.RequestViewModel
 
@@ -43,6 +44,7 @@ fun AcceptInvitationView(
                 onResponse = {
                     Log.d("AcceptInvitation", "Success")
                     viewModelProvider[InvitationViewModel::class.java].updateInvitationList(viewModelProvider)
+                    viewModelProvider[ContactViewModel::class.java].updateContactList(viewModelProvider)
                     Toast.makeText(context, context.getString(R.string.success), Toast.LENGTH_SHORT).show()
                     showLoadingDialog = false
                     navController.navigate("HomeView") { popUpTo(0) }

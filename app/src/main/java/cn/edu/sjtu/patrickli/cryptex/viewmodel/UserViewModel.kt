@@ -77,7 +77,7 @@ class UserViewModel(
             requestQueue.add(requestStore.getLoginRequest(
                 this@UserViewModel,
                 onResponse = {
-                    contactViewModel.updateContactList(viewModelProvider)
+                    contactViewModel.updateContactList(viewModelProvider, true)
                     onAuthSuccess()
                 },
                 onError = {

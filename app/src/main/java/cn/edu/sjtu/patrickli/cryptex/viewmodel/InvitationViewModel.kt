@@ -17,9 +17,10 @@ class InvitationViewModel: ViewModel() {
     var selectedInvitation: Invitation? = null
     fun updateInvitationList(viewModelProvider: ViewModelProvider) {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
-        val userViewModel = viewModelProvider[UserViewModel::class.java]
+        val contactViewModel = viewModelProvider[ContactViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getFetchSentInvitationRequest(
             onResponse = {
+                val oldSentUnreadCount = sentUnreadCount
                 sentInvitations.clear()
                 for (i in 0 until it.length()) {
                     val jsonObject = it.getJSONObject(i)
@@ -27,6 +28,9 @@ class InvitationViewModel: ViewModel() {
                 }
                 sentUnreadCount = sentInvitations.size
                 Log.d("UpdateInvitation", "Success fetched ${sentUnreadCount} sent invitations")
+                if (oldSentUnreadCount > sentUnreadCount) {
+                    contactViewModel.updateContactList(viewModelProvider)
+                }
             },
             onError = {
                 Log.e("UpdateInvitation", "Failure fetching sent invitations")

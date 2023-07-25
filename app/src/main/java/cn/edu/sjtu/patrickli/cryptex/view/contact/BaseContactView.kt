@@ -60,9 +60,12 @@ fun BaseContactView(
     var showLoadingDialog by remember { mutableStateOf(false) }
     var selectedContact by remember { mutableStateOf(Contact()) }
     var showNoReceiverWarningDialog by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        contactViewModel.updateContactList(viewModelProvider, true)
+    }
     LaunchedEffect(isRefreshing) {
         if (isRefreshing) {
-            contactViewModel.updateContactList(viewModelProvider)
+            contactViewModel.updateContactList(viewModelProvider, true)
             delay(1000)
             isRefreshing = false
         }
@@ -129,7 +132,6 @@ fun BaseContactView(
                         contactViewModel.contact = selectedContact
                         contactViewModel.deleteContact(viewModelProvider) {
                             showLoadingDialog = false
-                            isRefreshing = true
                         }
                     },
                     onClose = {
