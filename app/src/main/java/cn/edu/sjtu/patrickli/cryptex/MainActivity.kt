@@ -13,6 +13,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.ApplicationStart
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.view.HomeView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.AcceptInvitationView
+import cn.edu.sjtu.patrickli.cryptex.view.contact.ContactListView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.InvitationListView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.SelectContactView
 import cn.edu.sjtu.patrickli.cryptex.view.contact.SendInvitationView
@@ -79,6 +80,13 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("SendView") {
                     SelectReceiverView(
+                        context = this@MainActivity,
+                        navController = navController,
+                        viewModelProvider = viewModelProvider
+                    )
+                }
+                composable("ContactListView") {
+                    ContactListView(
                         context = this@MainActivity,
                         navController = navController,
                         viewModelProvider = viewModelProvider

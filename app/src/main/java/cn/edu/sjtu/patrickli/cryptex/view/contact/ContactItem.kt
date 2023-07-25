@@ -1,49 +1,87 @@
 package cn.edu.sjtu.patrickli.cryptex.view.contact
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountBox
+import androidx.compose.material.icons.twotone.Delete
+import androidx.compose.material.icons.twotone.Edit
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.Contact
+import me.saket.swipe.SwipeAction
+import me.saket.swipe.SwipeableActionsBox
 
 @Composable
-fun ContactItem(index: Int, contact: Contact, onContactClick: (Contact) -> Unit = {}) {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
+fun ContactItem(
+    contact: Contact,
+    onContactClick: (Contact) -> Unit = {},
+    onDelete: (Contact) -> Unit = {}
+) {
+    val deleteContact = SwipeAction(
+        icon = rememberVectorPainter(image = Icons.TwoTone.Delete),
+        background = Color.Red,
+        onSwipe = { onDelete(contact) }
+    )
+
+    val renameContact = SwipeAction(
+        icon = rememberVectorPainter(image = Icons.TwoTone.Edit),
+        background = Color.Green,
+        onSwipe = {  }
+    )
+
+    Column (
         modifier = Modifier
-            .fillMaxWidth(1f)
-            .background(
-                color = colorResource(if (index % 2 == 0) R.color.deepGray else R.color.lightGray),
-                shape = RoundedCornerShape(5.dp)
-            )
-            .clickable { onContactClick(contact) }
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple()
+            ) { onContactClick(contact) }
     ) {
-        Icon(
-            Icons.Rounded.AccountBox,
-            contentDescription = stringResource(R.string.defaultContactIconCircle),
+        SwipeableActionsBox (
+            endActions = listOf(deleteContact),
+            startActions = listOf(renameContact),
             modifier = Modifier
-                .size(64.dp)
-                .padding(4.dp, 2.dp)
-        )
-        contact.name?.let {
-            Text(it, fontSize = 17.sp, modifier = Modifier.padding(horizontal = 4.dp))
+                .fillMaxWidth()
+                .padding()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .padding(horizontal = 8.dp)
+            ) {
+                Icon(
+                    Icons.Rounded.AccountBox,
+                    contentDescription = stringResource(R.string.defaultContactIconCircle),
+                    modifier = Modifier
+                        .size(64.dp)
+                        .padding(4.dp, 2.dp)
+                )
+                contact.name?.let {
+                    Text(it, fontSize = 17.sp, modifier = Modifier.padding(horizontal = 4.dp))
+                }
+            }
         }
+        Divider()
     }
 }

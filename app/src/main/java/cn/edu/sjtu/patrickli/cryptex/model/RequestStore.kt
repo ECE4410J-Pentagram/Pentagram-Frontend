@@ -39,7 +39,7 @@ class RequestStore {
 
     fun getLoginRequest(
         userViewModel: UserViewModel,
-        onResponse: ((JSONObject) -> Unit)? = null,
+        onResponse: (JSONObject) -> Unit = {},
         onError: ((VolleyError) -> Unit)? = null
     ): JsonObjectRequest {
         val payload = JSONObject(mapOf(
@@ -50,11 +50,11 @@ class RequestStore {
             Request.Method.POST,
             getApi("login/"),
             payload,
-            onResponse ?: {
+            {
                 userViewModel.authorization = it.getString("Authorization")
                 // Print out the authorization string for debug use
                 Log.d("Auth", "Authorization: ${userViewModel.authorization}")
-                Unit
+                onResponse(it)
             },
             onError ?: {}
         )
@@ -223,6 +223,58 @@ class RequestStore {
         return object : JsonObjectRequest(
             Request.Method.POST,
             getApi("invitation/received/reject"),
+            payload,
+            onResponse ?: {},
+            onError ?: {}
+        ) {
+            override fun getHeaders(): Map<String, String> {
+                return mapOf(
+                    "Content-Type" to "application/json",
+                    "Authorization" to (userViewModel.authorization ?: "")
+                )
+            }
+        }
+    }
+
+    fun getFetchContactsRequest(
+        userViewModel: UserViewModel,
+        onResponse: ((JSONArray) -> Unit)? = null,
+        onError: ((VolleyError) -> Unit)? = null
+    ): JsonArrayRequest {
+        val payload = JSONArray()
+        return object : JsonArrayRequest(
+            Request.Method.GET,
+            getApi("friend/"),
+            payload,
+            onResponse ?: {},
+            onError ?: {}
+        ) {
+            override fun getHeaders(): Map<String, String> {
+                return mapOf(
+                    "Content-Type" to "application/json",
+                    "Authorization" to (userViewModel.authorization ?: "")
+                )
+            }
+        }
+    }
+
+    fun getDeleteContactRequest(
+        viewModelProvider: ViewModelProvider,
+        onResponse: ((JSONObject) -> Unit)? = null,
+        onError: ((VolleyError) -> Unit)? = null
+    ): JsonObjectRequest {
+        val userViewModel = viewModelProvider[UserViewModel::class.java]
+        val contactViewModel = viewModelProvider[ContactViewModel::class.java]
+        val contact = contactViewModel.contact
+        val payload = JSONObject(mapOf(
+            "name" to contact?.keyAlias,
+            "pk" to contact?.publicKey,
+            "owner" to mapOf("name" to contact?.name + "@" + contact?.id)
+        ))
+        println(payload)
+        return object : JsonObjectRequest(
+            Request.Method.DELETE,
+            getApi("friend/"),
             payload,
             onResponse ?: {},
             onError ?: {}

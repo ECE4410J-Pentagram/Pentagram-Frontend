@@ -79,7 +79,6 @@ fun EncryptView(
                             fontSize = 16.sp
                         )
                         ContactItem(
-                            index = 0,
                             contact = it,
                             onContactClick = {
                                 navController.popBackStack()

@@ -7,13 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CrueltyFree
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +31,7 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.Contact
 import cn.edu.sjtu.patrickli.cryptex.model.Invitation
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
+import cn.edu.sjtu.patrickli.cryptex.view.media.BlankPageView
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
@@ -109,21 +106,7 @@ fun InvitationListView(
                 onRefresh = { isRefreshing = true }
             ) {
                 if ((invitationViewModel.receivedUnreadCount == 0) && (invitationViewModel.sentUnreadCount == 0)) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp, 4.dp)
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        Icon(
-                            Icons.Outlined.CrueltyFree,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(150.dp),
-                            tint = Color.Gray
-                        )
+                    BlankPageView {
                         Text(
                             text = stringResource(R.string.noInvitations),
                             fontSize = 17.sp,

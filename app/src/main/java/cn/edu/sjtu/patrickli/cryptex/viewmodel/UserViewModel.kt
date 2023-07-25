@@ -3,6 +3,7 @@ package cn.edu.sjtu.patrickli.cryptex.viewmodel
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.Util
@@ -64,13 +65,18 @@ class UserViewModel(
         }
         return loadSuccess
     }
-    fun auth(requestViewModel: RequestViewModel) {
+    fun auth(viewModelProvider: ViewModelProvider) {
+        val requestViewModel = viewModelProvider[RequestViewModel::class.java]
+        val contactViewModel = viewModelProvider[ContactViewModel::class.java]
         viewModelScope.launch {
             val requestQueue = requestViewModel.requestQueue
             val requestStore = requestViewModel.requestStore
             Log.d("Auth", "Logging in for device ${deviceName}@${deviceId}")
             requestQueue.add(requestStore.getLoginRequest(
                 this@UserViewModel,
+                onResponse = {
+                    contactViewModel.updateContactList(viewModelProvider)
+                },
                 onError = {
                     if (it.networkResponse?.statusCode == 401) {
                         Log.d("Auth", "Unregistered device ${deviceName}@${deviceId}")

@@ -53,6 +53,7 @@ fun ConstraintLayoutContent(
             )
             HomeViewButton(text = "Send", navController, "SendView")
             HomeViewButton(text = "Receive", navController, "DecryptView")
+            HomeViewButton(text = "Contacts", navController, "ContactListView")
             HomeViewButton(text = "Keys", navController, "KeyView")
         }
     }

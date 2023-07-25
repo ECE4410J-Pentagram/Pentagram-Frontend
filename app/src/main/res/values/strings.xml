@@ -52,6 +52,9 @@
     <string name="addFriendSuccess">Friend request sent</string>
     <string name="success">Success</string>
     <string name="noInvitations">There\'s nothing here but a sad rabbit. Try inviting your friends to scan your QR Code!</string>
+    <string name="noContacts">There\'s nothing here but a sad rabbit. Try adding new friends!</string>
+    <string name="removeContactWarningTitle">Remove friend \"%1$s\"?</string>
+    <string name="removeContactWarningContent">You will not be able to send new messages to each other anymore. Past message may still be decrypted.</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

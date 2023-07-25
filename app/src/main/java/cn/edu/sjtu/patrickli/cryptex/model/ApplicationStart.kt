@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
-import cn.edu.sjtu.patrickli.cryptex.viewmodel.RequestViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
 import java.security.SecureRandom
 import java.util.UUID
@@ -49,7 +48,7 @@ object ApplicationStart {
     }
 
     private fun authUserDevice(viewModelProvider: ViewModelProvider) {
-        viewModelProvider[UserViewModel::class.java].auth(viewModelProvider[RequestViewModel::class.java])
+        viewModelProvider[UserViewModel::class.java].auth(viewModelProvider)
     }
 
     private fun loadKeys(viewModelProvider: ViewModelProvider, databaseProvider: DatabaseProvider) {
