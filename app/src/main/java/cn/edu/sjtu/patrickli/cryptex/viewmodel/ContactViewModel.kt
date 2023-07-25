@@ -17,7 +17,6 @@ class ContactViewModel: ViewModel() {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
         val userViewModel = viewModelProvider[UserViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getFetchContactsRequest(
-            userViewModel,
             onResponse = {
                 contactList.clear()
                 for (i in 0 until it.length()) {

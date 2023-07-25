@@ -83,7 +83,6 @@ class KeyViewModel: ViewModel() {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getAddKeyRequest(
             key,
-            viewModelProvider[UserViewModel::class.java],
             {
                 onFinished()
             },
@@ -99,7 +98,6 @@ class KeyViewModel: ViewModel() {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getRemoveKeyRequest(
             key,
-            viewModelProvider[UserViewModel::class.java],
             {
                 onFinished()
             },

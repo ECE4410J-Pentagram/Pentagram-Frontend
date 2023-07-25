@@ -19,7 +19,6 @@ class InvitationViewModel: ViewModel() {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
         val userViewModel = viewModelProvider[UserViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getFetchSentInvitationRequest(
-            userViewModel,
             onResponse = {
                 sentInvitations.clear()
                 for (i in 0 until it.length()) {
@@ -35,7 +34,6 @@ class InvitationViewModel: ViewModel() {
             }
         ))
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getFetchReceivedInvitationRequest(
-            userViewModel,
             onResponse = {
                 receivedInvitations.clear()
                 for (i in 0 until it.length()) {

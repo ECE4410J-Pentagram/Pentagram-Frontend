@@ -15,14 +15,15 @@ import org.json.JSONObject
 
 class RequestStore {
     private val apiUrl = "https://cryptex.software/api/"
+    private lateinit var authHeaders: Map<String, String>
     private fun getApi(path: String): String {
         return apiUrl + path
     }
 
     fun getCreateDeviceRequest(
         userViewModel: UserViewModel,
-        onResponse: ((JSONObject) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONObject) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
         val payload = JSONObject(mapOf(
             "name" to "${userViewModel.deviceName}@${userViewModel.deviceId}",
@@ -32,15 +33,15 @@ class RequestStore {
             Request.Method.POST,
             getApi("device/"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
+            onResponse,
+            onError
         )
     }
 
     fun getLoginRequest(
         userViewModel: UserViewModel,
         onResponse: (JSONObject) -> Unit = {},
-        onError: ((VolleyError) -> Unit)? = null
+        onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
         val payload = JSONObject(mapOf(
             "name" to "${userViewModel.deviceName}@${userViewModel.deviceId}",
@@ -52,19 +53,22 @@ class RequestStore {
             payload,
             {
                 userViewModel.authorization = it.getString("Authorization")
+                authHeaders = mapOf(
+                    "Content-Type" to "application/json",
+                    "Authorization" to (userViewModel.authorization ?: "")
+                )
                 // Print out the authorization string for debug use
                 Log.d("Auth", "Authorization: ${userViewModel.authorization}")
                 onResponse(it)
             },
-            onError ?: {}
+            onError
         )
     }
 
     fun getAddKeyRequest(
         key: Key,
-        userViewModel: UserViewModel,
-        onResponse: ((JSONObject) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONObject) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
         val payload = JSONObject(mapOf(
             "name" to key.alias,
@@ -74,47 +78,31 @@ class RequestStore {
             Request.Method.POST,
             getApi("key/"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
     fun getRemoveKeyRequest(
         key: Key,
-        userViewModel: UserViewModel,
-        onResponse: ((JSONObject) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONObject) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
         val payload = JSONObject()
         return object: JsonObjectRequest(
             Request.Method.DELETE,
             getApi("key/${key.alias}"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
     fun getSendInvitationRequest(
         viewModelProvider: ViewModelProvider,
-        onResponse: ((JSONObject) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONObject) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
-        val userViewModel = viewModelProvider[UserViewModel::class.java]
         val fromKeyAlias = viewModelProvider[KeyViewModel::class.java].keyToShare?.alias
         val toDevice = viewModelProvider[ContactViewModel::class.java].contact
         val toDeviceNameId = toDevice?.name + "@" + toDevice?.id
@@ -126,68 +114,44 @@ class RequestStore {
             Request.Method.POST,
             getApi("invitation/sent/"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
     fun getFetchSentInvitationRequest(
-        userViewModel: UserViewModel,
-        onResponse: ((JSONArray) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONArray) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonArrayRequest {
         val payload = JSONArray()
         return object : JsonArrayRequest(
             Request.Method.GET,
             getApi("invitation/sent/"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
     fun getFetchReceivedInvitationRequest(
-        userViewModel: UserViewModel,
-        onResponse: ((JSONArray) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONArray) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonArrayRequest {
         val payload = JSONArray()
         return object : JsonArrayRequest(
             Request.Method.GET,
             getApi("invitation/received/"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
     fun getAcceptInvitationRequest(
         viewModelProvider: ViewModelProvider,
-        onResponse: ((JSONObject) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONObject) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
-        val userViewModel = viewModelProvider[UserViewModel::class.java]
         val invitationViewModel = viewModelProvider[InvitationViewModel::class.java]
         val keyViewModelProvider = viewModelProvider[KeyViewModel::class.java]
         val payload = JSONObject(mapOf(
@@ -198,24 +162,16 @@ class RequestStore {
             Request.Method.POST,
             getApi("invitation/received/accept"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
     fun getDeclineInvitationRequest(
         viewModelProvider: ViewModelProvider,
-        onResponse: ((JSONObject) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONObject) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
-        val userViewModel = viewModelProvider[UserViewModel::class.java]
         val invitationViewModel = viewModelProvider[InvitationViewModel::class.java]
         val payload = JSONObject(mapOf(
             "id" to invitationViewModel.selectedInvitation?.id
@@ -224,46 +180,30 @@ class RequestStore {
             Request.Method.POST,
             getApi("invitation/received/reject"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
     fun getFetchContactsRequest(
-        userViewModel: UserViewModel,
-        onResponse: ((JSONArray) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONArray) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonArrayRequest {
         val payload = JSONArray()
         return object : JsonArrayRequest(
             Request.Method.GET,
             getApi("friend/"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
     fun getDeleteContactRequest(
         viewModelProvider: ViewModelProvider,
-        onResponse: ((JSONObject) -> Unit)? = null,
-        onError: ((VolleyError) -> Unit)? = null
+        onResponse: (JSONObject) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
-        val userViewModel = viewModelProvider[UserViewModel::class.java]
         val contactViewModel = viewModelProvider[ContactViewModel::class.java]
         val contact = contactViewModel.contact
         val payload = JSONObject(mapOf(
@@ -276,16 +216,9 @@ class RequestStore {
             Request.Method.DELETE,
             getApi("friend/"),
             payload,
-            onResponse ?: {},
-            onError ?: {}
-        ) {
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to (userViewModel.authorization ?: "")
-                )
-            }
-        }
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
 }
