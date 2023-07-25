@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,7 +78,7 @@ fun OutputOptionButtons(
         when (encrypterViewModel.mediaType) {
             MediaType.TEXT -> {
                 IconTextButton(
-                    Icons.Outlined.ContentCopy,
+                    Icons.Rounded.ContentCopy,
                     stringResource(R.string.copy),
                     onClick = {
                         clipboardManager.setText(
@@ -89,7 +89,7 @@ fun OutputOptionButtons(
                     }
                 )
                 IconTextButton(
-                    Icons.Outlined.Share,
+                    Icons.Rounded.Share,
                     stringResource(R.string.share),
                     onClick = {
                         Util.shareExternally(
@@ -104,7 +104,7 @@ fun OutputOptionButtons(
             MediaType.IMAGE -> {
                 var showImageShareWarningDialog by remember { mutableStateOf(false) }
                 IconTextButton(
-                    Icons.Outlined.Download,
+                    Icons.Rounded.Download,
                     stringResource(R.string.download),
                     onClick = {
                         FileHandler.saveImgToPublicDownload(
@@ -114,7 +114,7 @@ fun OutputOptionButtons(
                     }
                 )
                 IconTextButton(
-                    Icons.Outlined.Share,
+                    Icons.Rounded.Share,
                     stringResource(R.string.share),
                     onClick = {
                         showImageShareWarningDialog = true
@@ -199,7 +199,7 @@ fun EncryptOutputView(
                         )
                         OutputOptionButtons(context, encrypterViewModel) {
                             IconTextButton(
-                                Icons.Outlined.Home,
+                                Icons.Rounded.Home,
                                 stringResource(R.string.navHome),
                                 onClick = {
                                     navController.navigate("HomeView") { popUpTo(0) }

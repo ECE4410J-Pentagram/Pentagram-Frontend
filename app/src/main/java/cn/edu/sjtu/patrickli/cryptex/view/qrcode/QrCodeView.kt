@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.QrCodeScanner
-import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.QrCodeScanner
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -68,21 +68,21 @@ fun QrCodeView(
                     horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
                 ) {
                     IconTextButton(
-                        Icons.Outlined.QrCodeScanner,
+                        Icons.Rounded.QrCodeScanner,
                         stringResource(R.string.scan),
                         onClick = {
                             navController.navigate("QrCodeScanView")
                         }
                     )
                     IconTextButton(
-                        Icons.Outlined.Download,
+                        Icons.Rounded.Download,
                         stringResource(R.string.download),
                         onClick = {
                             FileHandler.saveImgToPublicDownload(context, userViewModel.qrcodeFile)
                         }
                     )
                     IconTextButton(
-                        Icons.Outlined.Share,
+                        Icons.Rounded.Share,
                         stringResource(R.string.share),
                         onClick = {
                             Util.shareExternally(
