@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -73,6 +74,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         viewModelProvider = viewModelProvider,
                         databaseProvider = databaseProvider,
+                        title = stringResource(R.string.selectKey),
                         onKeyClick = { key ->
                             viewModelProvider[KeyViewModel::class.java].keyToShare = key
                             navController.popBackStack()

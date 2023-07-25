@@ -43,6 +43,7 @@ fun KeyView(
     navController: NavHostController,
     viewModelProvider: ViewModelProvider,
     databaseProvider: DatabaseProvider,
+    title: String = stringResource(R.string.myKeys),
     onKeyClick: (Key) -> Unit = {}
 ) {
     val keyViewModel = viewModelProvider[KeyViewModel::class.java]
@@ -89,7 +90,7 @@ fun KeyView(
 
     Scaffold(
         topBar = {
-            NavBackBar(navController = navController)
+            NavBackBar(navController = navController, title = title)
         },
         content = {
             LazyColumn(

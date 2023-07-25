@@ -39,7 +39,7 @@ fun QrCodeView(
     val userViewModel = viewModelProvider[UserViewModel::class.java]
     Scaffold(
         topBar = {
-            NavBackBar(navController = navController)
+            NavBackBar(navController = navController, title = stringResource(R.string.myqr))
         }
     ) {
         ConstraintLayout (

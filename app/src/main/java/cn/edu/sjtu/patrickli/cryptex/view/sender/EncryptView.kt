@@ -70,6 +70,7 @@ fun EncryptView(
         topBar = {
             NavBackBarWithDone(
                 navController = navController,
+                title = stringResource(R.string.encrypt),
                 onDone = { onInputDone() }
             )
         },

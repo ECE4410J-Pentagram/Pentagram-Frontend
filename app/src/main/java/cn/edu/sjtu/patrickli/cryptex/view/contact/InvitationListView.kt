@@ -93,7 +93,7 @@ fun InvitationListView(
     }
     Scaffold(
         topBar = {
-            NavBackBar(navController = navController)
+            NavBackBar(navController = navController, title = stringResource(R.string.inbox))
         }
     ) {
         ConstraintLayout(

@@ -48,6 +48,7 @@ fun BaseContactView(
     context: Context,
     navController: NavHostController,
     viewModelProvider: ViewModelProvider,
+    title: String = stringResource(R.string.contacts),
     allowNoUser: Boolean = false,
     onContactClick: (Contact) -> Unit
 ) {
@@ -72,7 +73,7 @@ fun BaseContactView(
     }
     Scaffold(
         topBar = {
-            NavBackBar(navController = navController)
+            NavBackBar(navController = navController, title = title)
         },
         content = {
             ConstraintLayout(
