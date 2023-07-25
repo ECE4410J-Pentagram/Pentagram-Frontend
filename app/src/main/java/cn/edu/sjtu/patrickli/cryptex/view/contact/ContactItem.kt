@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.NoAccounts
-import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Edit
 import androidx.compose.material.ripple.rememberRipple
@@ -71,7 +71,7 @@ fun ContactItem(
                     .padding(horizontal = 8.dp)
             ) {
                 Icon(
-                    Icons.Rounded.AccountBox,
+                    Icons.Default.AccountCircle,
                     contentDescription = stringResource(R.string.defaultContactIconCircle),
                     modifier = Modifier
                         .size(64.dp)
