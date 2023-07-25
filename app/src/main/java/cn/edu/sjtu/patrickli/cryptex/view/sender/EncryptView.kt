@@ -1,15 +1,27 @@
 package cn.edu.sjtu.patrickli.cryptex.view.sender
 
 import android.content.Context
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,7 +42,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
-import cn.edu.sjtu.patrickli.cryptex.view.contact.ContactItem
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBarWithDone
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
@@ -78,12 +89,31 @@ fun EncryptView(
                             text = stringResource(R.string.encryptReceiverTitle),
                             fontSize = 16.sp
                         )
-                        ContactItem(
-                            contact = it,
-                            onContactClick = {
-                                navController.popBackStack()
+                        Column(
+                        ) {
+                            Divider()
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp)
+                                    .padding(horizontal = 8.dp)
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberRipple()
+                                    ) { navController.popBackStack() }
+                            ) {
+                                Icon(Icons.Default.AccountCircle, contentDescription = null)
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    text = it.name?:"",
+                                    fontSize = 17.sp
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Icon(Icons.Default.ChevronRight, contentDescription = null)
                             }
-                        )
+                            Divider()
+                        }
                     } ?: let {
                         Text(
                             text = stringResource(R.string.encryptNoReceiverTitle),
