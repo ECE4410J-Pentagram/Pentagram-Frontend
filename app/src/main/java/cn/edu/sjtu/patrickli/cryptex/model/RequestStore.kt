@@ -200,18 +200,13 @@ class RequestStore {
     }
 
     fun getDeleteContactRequest(
-        viewModelProvider: ViewModelProvider,
+        contact: Contact?,
         onResponse: (JSONObject) -> Unit = {},
         onError: (VolleyError) -> Unit = {}
     ): JsonObjectRequest {
-        val contactViewModel = viewModelProvider[ContactViewModel::class.java]
-        val contact = contactViewModel.contact
         val payload = JSONObject(mapOf(
-            "name" to contact?.keyAlias,
-            "pk" to contact?.publicKey,
-            "owner" to mapOf("name" to contact?.name + "@" + contact?.id)
+            "id" to contact?.friendId
         ))
-        println(payload)
         return object : JsonObjectRequest(
             Request.Method.DELETE,
             getApi("friend/"),

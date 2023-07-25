@@ -34,7 +34,7 @@ class ContactViewModel: ViewModel() {
     fun deleteContact(viewModelProvider: ViewModelProvider, onFinished: () -> Unit = {}) {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getDeleteContactRequest(
-            viewModelProvider,
+            contact,
             onResponse = {
                 Log.d("DeleteContact", "Success")
                 onFinished()

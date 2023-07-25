@@ -6,7 +6,8 @@ data class Contact (
     val name: String? = null,
     val id: String? = null,
     val keyAlias: String? = null,
-    val publicKey: String? = null
+    val publicKey: String? = null,
+    val friendId: Int? = null
 ) {
     companion object {
         fun fromInvitation(invitation: Invitation): Contact {
@@ -19,7 +20,8 @@ data class Contact (
                 device.substring(0, atMarkIndex),
                 device.substring(atMarkIndex + 1, device.length),
                 jsonObject.getString("name"),
-                jsonObject.getString("pk")
+                jsonObject.getString("pk"),
+                jsonObject.getInt("id")
             )
         }
     }
