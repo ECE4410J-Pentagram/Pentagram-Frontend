@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
+import cn.edu.sjtu.patrickli.cryptex.model.QrCode
 import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyDecrypter
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ class UserViewModel(
     var deviceId: String? = null
     var deviceName: String = android.os.Build.MODEL
     var deviceKey: String? = null
-    val qrcodeFile: File = FileHandler.getQrCodeFile(context)
+    var qrcodeFile: File? = null
     var authorization: String? = null
     var encryptedDeviceKey: ByteArray? = null
     var encryptedDeviceKeyIv: ByteArray? = null
@@ -51,6 +52,7 @@ class UserViewModel(
                 val deviceObject = jsonObject.getJSONObject("device")
                 deviceId = deviceObject.getString("id")
                 deviceName = deviceObject.getString("name")
+                qrcodeFile = FileHandler.getQrCodeFile(context, deviceName)
                 encryptedDeviceKey = Util.hexStringToByteArray(deviceObject.getString("key"))
                 encryptedDeviceKeyIv = Util.hexStringToByteArray(deviceObject.getString("iv"))
                 val decrypter = KeyDecrypter()
@@ -100,5 +102,33 @@ class UserViewModel(
                 }
             ))
         }
+    }
+    fun updateDeviceName(
+        viewModelProvider: ViewModelProvider,
+        name: String,
+        onSuccess: () -> Unit = {},
+        onFail: () -> Unit = {}
+    ) {
+        val requestViewModel = viewModelProvider[RequestViewModel::class.java]
+        val oldName = deviceName
+        deviceName = name
+        requestViewModel.requestQueue.add(requestViewModel.requestStore.getRenameDeviceRequest(
+            this,
+            {
+                qrcodeFile = FileHandler.getQrCodeFile(context, name)
+                writeToConfigFile(context)
+                QrCode.generateUserCode(this)
+                Log.d("RenameDevice", "Success")
+                auth(viewModelProvider) {
+                    onSuccess()
+                }
+            },
+            {
+                deviceName = oldName
+                Log.e("RenameDevice", "Failed")
+                it.printStackTrace()
+                onFail()
+            }
+        ))
     }
 }

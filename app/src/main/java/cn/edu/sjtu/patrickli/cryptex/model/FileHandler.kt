@@ -34,8 +34,8 @@ object FileHandler {
         fileOutputStream.close()
     }
 
-    fun getQrCodeFile(context: Context): File {
-        val qrcodePath = Paths.get(context.filesDir.toString(), "images", "qrcode", "myqrcode.png")
+    fun getQrCodeFile(context: Context, name: String): File {
+        val qrcodePath = Paths.get(context.filesDir.toString(), "images", "qrcode", "myqrcode-${name}.png")
         Files.createDirectories(qrcodePath.parent)
         return qrcodePath.toFile()
     }

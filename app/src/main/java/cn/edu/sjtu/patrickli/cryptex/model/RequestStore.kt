@@ -221,4 +221,21 @@ class RequestStore {
         ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
     }
 
+    fun getRenameDeviceRequest(
+        userViewModel: UserViewModel,
+        onResponse: (JSONObject) -> Unit = {},
+        onError: (VolleyError) -> Unit = {}
+    ): JsonObjectRequest {
+        val payload = JSONObject(mapOf(
+            "name" to userViewModel.deviceName + "@" + userViewModel.deviceId
+        ))
+        return object : JsonObjectRequest(
+            Request.Method.PUT,
+            getApi("device/"),
+            payload,
+            onResponse,
+            onError
+        ) { override fun getHeaders(): Map<String, String> { return authHeaders } }
+    }
+
 }

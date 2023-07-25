@@ -15,27 +15,37 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import cn.edu.sjtu.patrickli.cryptex.R
-import cn.edu.sjtu.patrickli.cryptex.model.Key
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RenameKeyDialog(
-    key: Key,
+fun RenameDeviceDialog(
+    oldName: String,
     onRename: (String) -> Unit,
     onClose: () -> Unit
 ) {
-    var newName by remember { mutableStateOf(key.name) }
+    var newName by remember { mutableStateOf(oldName) }
+    var confirmButtonEnabled by remember { mutableStateOf(false) }
+    fun isLegalNewName(name: String): Boolean {
+        return (
+            (name != oldName) &&
+            (name.isNotEmpty()) &&
+            (name.length < 32)
+        )
+    }
     AlertDialog(
         onDismissRequest = {
             onClose()
         },
         title = {
-            Text(text = stringResource(R.string.renameKey))
+            Text(text = stringResource(R.string.renameDevice))
         },
         text = {
             TextField(
                 value = newName,
-                onValueChange = { newName = it },
+                onValueChange = {
+                    newName = it.replace("\n", "")
+                    confirmButtonEnabled = isLegalNewName(it)
+                },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     onClose()
@@ -45,6 +55,7 @@ fun RenameKeyDialog(
         },
         confirmButton = {
             TextButton(
+                enabled = confirmButtonEnabled,
                 onClick = {
                     onClose()
                     onRename(newName)

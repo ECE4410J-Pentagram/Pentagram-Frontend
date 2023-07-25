@@ -58,6 +58,8 @@
     <string name="myKeys">My Keys</string>
     <string name="inbox">Inbox</string>
     <string name="newFriend">New Friend</string>
+    <string name="edit">Edit</string>
+    <string name="renameDevice">Rename your device</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>
