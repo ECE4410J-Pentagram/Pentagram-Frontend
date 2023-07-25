@@ -3,9 +3,15 @@ package cn.edu.sjtu.patrickli.cryptex.view.sender
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,7 +38,7 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.model.Util
-import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
+import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
 import cn.edu.sjtu.patrickli.cryptex.view.media.ImageWrapper
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
@@ -62,63 +68,89 @@ fun OutputPreviewLoader(
 @Composable
 fun OutputOptionButtons(
     context: Context,
-    encrypterViewModel: EncrypterViewModel
+    encrypterViewModel: EncrypterViewModel,
+    content: @Composable() () -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
-    when (encrypterViewModel.mediaType) {
-        MediaType.TEXT -> {
-            BaseWideButton(onClick = {
-                clipboardManager.setText(AnnotatedString(encrypterViewModel.cipherText?:""))
-            }) {
-                Text(text = stringResource(R.string.copy))
-            }
-            BaseWideButton(onClick = {
-                Util.shareExternally(context, MediaType.TEXT, text = encrypterViewModel.cipherText?:"")
-            }) {
-                Text(text = stringResource(R.string.share))
-            }
-        }
-        MediaType.IMAGE -> {
-            var showImageShareWarningDialog by remember { mutableStateOf(false) }
-            BaseWideButton(onClick = {
-                FileHandler.saveImgToPublicDownload(context, encrypterViewModel.cipherImgFile)
-            }) {
-                Text(text = stringResource(R.string.download))
-            }
-            if (showImageShareWarningDialog) {
-                AlertDialog(
-                    onDismissRequest = { showImageShareWarningDialog = false },
-                    title = {
-                        Text(text = stringResource(R.string.shareImgWarningTitle))
-                    },
-                    text = {
-                        Text(text = stringResource(R.string.shareImgWarningContent))
-                    },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            showImageShareWarningDialog = false
-                            Util.shareExternally(
-                                context,
-                                MediaType.IMAGE,
-                                file = encrypterViewModel.cipherImgFile
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
+    ) {
+        when (encrypterViewModel.mediaType) {
+            MediaType.TEXT -> {
+                IconTextButton(
+                    Icons.Outlined.ContentCopy,
+                    stringResource(R.string.copy),
+                    onClick = {
+                        clipboardManager.setText(
+                            AnnotatedString(
+                                encrypterViewModel.cipherText ?: ""
                             )
-                        }) {
-                            Text(text = stringResource(R.string.ok).uppercase())
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { showImageShareWarningDialog = false }) {
-                            Text(text = stringResource(R.string.cancel).uppercase())
-                        }
+                        )
+                    }
+                )
+                IconTextButton(
+                    Icons.Outlined.Share,
+                    stringResource(R.string.share),
+                    onClick = {
+                        Util.shareExternally(
+                            context,
+                            MediaType.TEXT,
+                            text = encrypterViewModel.cipherText ?: ""
+                        )
                     }
                 )
             }
-            BaseWideButton(onClick = {
-                showImageShareWarningDialog = true
-            }) {
-                Text(text = stringResource(R.string.share))
+
+            MediaType.IMAGE -> {
+                var showImageShareWarningDialog by remember { mutableStateOf(false) }
+                IconTextButton(
+                    Icons.Outlined.Download,
+                    stringResource(R.string.download),
+                    onClick = {
+                        FileHandler.saveImgToPublicDownload(
+                            context,
+                            encrypterViewModel.cipherImgFile
+                        )
+                    }
+                )
+                IconTextButton(
+                    Icons.Outlined.Share,
+                    stringResource(R.string.share),
+                    onClick = {
+                        showImageShareWarningDialog = true
+                    }
+                )
+                if (showImageShareWarningDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showImageShareWarningDialog = false },
+                        title = {
+                            Text(text = stringResource(R.string.shareImgWarningTitle))
+                        },
+                        text = {
+                            Text(text = stringResource(R.string.shareImgWarningContent))
+                        },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                showImageShareWarningDialog = false
+                                Util.shareExternally(
+                                    context,
+                                    MediaType.IMAGE,
+                                    file = encrypterViewModel.cipherImgFile
+                                )
+                            }) {
+                                Text(text = stringResource(R.string.ok).uppercase())
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showImageShareWarningDialog = false }) {
+                                Text(text = stringResource(R.string.cancel).uppercase())
+                            }
+                        }
+                    )
+                }
             }
         }
+        content()
     }
 }
 
@@ -165,11 +197,14 @@ fun EncryptOutputView(
                             modifier = Modifier
                                 .padding(16.dp, 10.dp)
                         )
-                        OutputOptionButtons(context, encrypterViewModel)
-                        BaseWideButton(onClick = {
-                            navController.navigate("HomeView") { popUpTo(0) }
-                        }) {
-                            Text(text = stringResource(R.string.navHome))
+                        OutputOptionButtons(context, encrypterViewModel) {
+                            IconTextButton(
+                                Icons.Outlined.Home,
+                                stringResource(R.string.navHome),
+                                onClick = {
+                                    navController.navigate("HomeView") { popUpTo(0) }
+                                }
+                            )
                         }
                     }
                 }

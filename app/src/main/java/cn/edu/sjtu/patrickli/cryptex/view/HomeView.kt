@@ -2,11 +2,18 @@ package cn.edu.sjtu.patrickli.cryptex.view
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FileDownload
+import androidx.compose.material.icons.outlined.FileUpload
+import androidx.compose.material.icons.outlined.Group
+import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -49,12 +56,50 @@ fun ConstraintLayoutContent(
                 painter = painterResource(id = R.drawable.cryptex),
                 contentDescription = stringResource(id = R.string.logo_name),
                 contentScale = ContentScale.Fit,
-                modifier = imageModifier.padding(bottom = 50.dp)
+                modifier = imageModifier.padding(bottom = 70.dp)
             )
-            HomeViewButton(text = "Send", navController, "SelectContactView")
-            HomeViewButton(text = "Receive", navController, "DecryptView")
-            HomeViewButton(text = "Contacts", navController, "ContactListView")
-            HomeViewButton(text = "Keys", navController, "KeyView")
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(50.dp, Alignment.CenterVertically),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(50.dp, Alignment.CenterHorizontally),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    HomeViewButton(
+                        Icons.Outlined.FileUpload,
+                        "Send",
+                        navController,
+                        "SelectContactView"
+                    )
+                    HomeViewButton(
+                        Icons.Outlined.FileDownload,
+                        "Receive",
+                        navController,
+                        "DecryptView"
+                    )
+                }
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(50.dp, Alignment.CenterHorizontally),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    HomeViewButton(
+                        Icons.Outlined.Group,
+                        "Contacts",
+                        navController,
+                        "ContactListView"
+                    )
+                    HomeViewButton(
+                        Icons.Outlined.Key,
+                        "Keys",
+                        navController,
+                        "KeyView"
+                    )
+                }
+            }
         }
     }
 }

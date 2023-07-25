@@ -14,7 +14,7 @@
     <string name="done">Done</string>
     <string name="defaultImage">Default Image</string>
     <string name="share">Share</string>
-    <string name="navHome">Back to Home</string>
+    <string name="navHome">Home</string>
     <string name="encryptDone">Your message is successfully encrypted.</string>
     <string name="encryptOutputShareTo">You can share this encrypted message to %1$s.</string>
     <string name="encryptOutputShareAny">Anyone can read the shared message.</string>
@@ -32,7 +32,7 @@
     <string name="removeKeyWarningTitle">Remove key \"%1$s\"?</string>
     <string name="removeKeyWarningContent">Once removed, messages encrypted with this key cannot be read anymore.</string>
     <string name="noKey">You have not created any keys yet. Try adding a new one.</string>
-    <string name="scanQr">Scan QR Code</string>
+    <string name="scan">Scan</string>
     <string name="noCameraWarningTitle">Camera unavailable</string>
     <string name="noCameraWarningContent">Please grant us camera permission in your system settings, so that we can scan QR Codes.</string>
     <string name="badQrCodeWarningTitle">Bad QR Code</string>
