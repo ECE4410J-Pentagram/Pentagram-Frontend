@@ -15,7 +15,7 @@ import java.io.BufferedReader
 import java.io.File
 
 class UserViewModel(
-    val context: Context
+    private val context: Context
 ): ViewModel() {
     var deviceId: String? = null
     var deviceName: String = android.os.Build.MODEL

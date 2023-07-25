@@ -7,7 +7,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.RequestStore
 import com.android.volley.toolbox.Volley
 
 class RequestViewModel(
-    val context: Context
+    private val context: Context
 ): ViewModel() {
     val requestStore = RequestStore()
     val requestQueue = Volley.newRequestQueue(context, CustomHurlStack())

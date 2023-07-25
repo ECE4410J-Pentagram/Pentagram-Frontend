@@ -1,5 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper

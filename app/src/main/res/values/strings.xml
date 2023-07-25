@@ -60,6 +60,13 @@
     <string name="newFriend">New Friend</string>
     <string name="edit">Edit</string>
     <string name="renameDevice">Rename your device</string>
+    <string name="mainNotificationChannelId">cryptexNotification</string>
+    <string name="newInvitationNotificationTitle">New friend request</string>
+    <string name="newInvitationNotificationContent">Open the app to process the invitation request</string>
+    <string name="newContactNotificationTitle">New Contact</string>
+    <string name="newContactNotificationContent">A new friend is added to your contact list!</string>
+    <string name="mainNotificationChannelTitle">Friends</string>
+    <string name="mainNotificationChannelDescription">New friend or request notification</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

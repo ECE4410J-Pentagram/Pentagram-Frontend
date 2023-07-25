@@ -31,11 +31,11 @@ class MainViewModelFactory(
             }
 
             ContactViewModel::class.java -> {
-                ContactViewModel() as T
+                ContactViewModel(context) as T
             }
 
             InvitationViewModel::class.java -> {
-                InvitationViewModel() as T
+                InvitationViewModel(context) as T
             }
 
             else -> {

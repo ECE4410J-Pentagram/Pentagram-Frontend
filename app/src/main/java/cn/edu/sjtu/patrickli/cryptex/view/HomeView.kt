@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -33,6 +34,9 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.view.button.HomeViewButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.HomeTopBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,13 +121,19 @@ fun ConstraintLayoutContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeView(
     context: Context,
     navController: NavHostController,
     viewModelProvider: ViewModelProvider
 ) {
+    val notificationPermissionState = rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+    LaunchedEffect(Unit) {
+        if (!notificationPermissionState.status.isGranted) {
+            notificationPermissionState.launchPermissionRequest()
+        }
+    }
     Scaffold(
         topBar = {
             HomeTopBar(navController, viewModelProvider)
