@@ -24,7 +24,6 @@ import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
-import cn.edu.sjtu.patrickli.cryptex.view.sender.SelectReceiverView
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.MainViewModelFactory
@@ -78,13 +77,6 @@ class MainActivity : ComponentActivity() {
                             viewModelProvider[KeyViewModel::class.java].keyToShare = key
                             navController.popBackStack()
                         }
-                    )
-                }
-                composable("SendView") {
-                    SelectReceiverView(
-                        context = this@MainActivity,
-                        navController = navController,
-                        viewModelProvider = viewModelProvider
                     )
                 }
                 composable("ContactListView") {

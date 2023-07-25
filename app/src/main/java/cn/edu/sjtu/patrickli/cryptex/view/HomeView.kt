@@ -51,7 +51,7 @@ fun ConstraintLayoutContent(
                 contentScale = ContentScale.Fit,
                 modifier = imageModifier.padding(bottom = 50.dp)
             )
-            HomeViewButton(text = "Send", navController, "SendView")
+            HomeViewButton(text = "Send", navController, "SelectContactView")
             HomeViewButton(text = "Receive", navController, "DecryptView")
             HomeViewButton(text = "Contacts", navController, "ContactListView")
             HomeViewButton(text = "Keys", navController, "KeyView")

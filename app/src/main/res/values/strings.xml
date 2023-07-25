@@ -2,10 +2,6 @@
     <string name="app_name">Cryptex</string>
     <string name="logo_name">Cryptex</string>
     <string name="addKey">Add Key</string>
-    <string name="chooseReceiver">Choose Receiver</string>
-    <string name="importReceiver">Import</string>
-    <string name="contact">Contact</string>
-    <string name="noneReceiver">None</string>
     <string name="addContact">Add Contact</string>
     <string name="defaultContactIconCircle">Default Contact Icon</string>
     <string name="noReceiverWarningTitle">Continue without receiver</string>
@@ -55,6 +51,7 @@
     <string name="noContacts">There\'s nothing here but a sad rabbit. Try adding new friends!</string>
     <string name="removeContactWarningTitle">Remove friend \"%1$s\"?</string>
     <string name="removeContactWarningContent">You will not be able to send new messages to each other anymore. Past message may still be decrypted.</string>
+    <string name="noAccount">Any user</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.NoAccounts
 import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Edit
@@ -56,12 +57,11 @@ fun ContactItem(
                 indication = rememberRipple()
             ) { onContactClick(contact) }
     ) {
-        SwipeableActionsBox (
+        if (contact.name != null) SwipeableActionsBox (
             endActions = listOf(deleteContact),
             startActions = listOf(renameContact),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding()
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -77,10 +77,33 @@ fun ContactItem(
                         .size(64.dp)
                         .padding(4.dp, 2.dp)
                 )
-                contact.name?.let {
-                    Text(it, fontSize = 17.sp, modifier = Modifier.padding(horizontal = 4.dp))
-                }
+                Text(
+                    text = contact.name,
+                    fontSize = 17.sp,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
             }
+        } else Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .padding(horizontal = 8.dp)
+        ) {
+            Icon(
+                Icons.Default.NoAccounts,
+                contentDescription = stringResource(R.string.noAccount),
+                tint = Color.Gray,
+                modifier = Modifier
+                    .size(64.dp)
+                    .padding(4.dp, 2.dp)
+            )
+            Text(
+                text = stringResource(R.string.noAccount),
+                fontSize = 17.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
         }
         Divider()
     }

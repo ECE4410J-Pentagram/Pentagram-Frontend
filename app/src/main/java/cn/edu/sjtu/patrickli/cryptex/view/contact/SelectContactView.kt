@@ -17,6 +17,7 @@ fun SelectContactView(
         context = context,
         navController = navController,
         viewModelProvider = viewModelProvider,
+        allowNoUser = true,
         onContactClick = { contact ->
             encrypterViewModel.contact = contact
             navController.navigate("EncryptView")

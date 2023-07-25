@@ -32,10 +32,12 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.Contact
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.NoReceiverDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.RemoveContactDialog
 import cn.edu.sjtu.patrickli.cryptex.view.media.BlankPageView
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
@@ -46,14 +48,17 @@ fun BaseContactView(
     context: Context,
     navController: NavHostController,
     viewModelProvider: ViewModelProvider,
+    allowNoUser: Boolean = false,
     onContactClick: (Contact) -> Unit
 ) {
     val contactViewModel = viewModelProvider[ContactViewModel::class.java]
+    val encrypterViewModel = viewModelProvider[EncrypterViewModel::class.java]
     val contacts = contactViewModel.contactList
     var isRefreshing by remember { mutableStateOf(false) }
     var showRemoveContactWarningDialog by remember { mutableStateOf(false) }
     var showLoadingDialog by remember { mutableStateOf(false) }
     var selectedContact by remember { mutableStateOf(Contact()) }
+    var showNoReceiverWarningDialog by remember { mutableStateOf(false) }
     LaunchedEffect(isRefreshing) {
         if (isRefreshing) {
             contactViewModel.updateContactList(viewModelProvider)
@@ -79,7 +84,7 @@ fun BaseContactView(
                     state = rememberSwipeRefreshState(isRefreshing),
                     onRefresh = { isRefreshing = true }
                 ) {
-                    if (contactViewModel.contactCount == 0) {
+                    if ((contactViewModel.contactCount == 0) && (!allowNoUser)) {
                         BlankPageView {
                             Text(
                                 text = stringResource(R.string.noContacts),
@@ -96,6 +101,10 @@ fun BaseContactView(
                                 .fillMaxSize()
                                 .verticalScroll(rememberScrollState())
                         ) {
+                            if (allowNoUser) ContactItem(
+                                contact = Contact(),
+                                onContactClick = { showNoReceiverWarningDialog = true }
+                            )
                             contacts.map { contact ->
                                 ContactItem(
                                     contact = contact,
@@ -125,6 +134,17 @@ fun BaseContactView(
                     onClose = {
                         showRemoveContactWarningDialog = false
                     }
+                )
+            }
+            if (showNoReceiverWarningDialog) {
+                NoReceiverDialog(
+                    onConfirm = {
+                        showNoReceiverWarningDialog = false
+                        encrypterViewModel.contact = null
+                        showNoReceiverWarningDialog = false
+                        navController.navigate("EncryptView")
+                    },
+                    onClose = { showNoReceiverWarningDialog = false }
                 )
             }
         },
