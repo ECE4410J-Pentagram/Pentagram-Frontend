@@ -51,6 +51,7 @@ class KeyViewModel: ViewModel() {
         val userViewModel = viewModelProvider[UserViewModel::class.java]
         val query = "SELECT name, privateKeyAlias FROM [key] WHERE deviceId=?"
         val cur = databaseProvider.userDatabase.rawQuery(query, arrayOf(userViewModel.deviceId))
+        myKeys.clear()
         if (cur.moveToFirst()) {
             do {
                 myKeys.add(Key(cur.getString(0), cur.getString(1)))
