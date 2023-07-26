@@ -2,6 +2,7 @@ package cn.edu.sjtu.patrickli.cryptex.view.qrcode
 
 import android.content.Context
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -42,6 +43,7 @@ fun QrCodeScanView(
     var showBadQrCodeDialog by remember { mutableStateOf(false) }
     val contactViewModel = viewModelProvider[ContactViewModel::class.java]
     var scanState by remember { mutableStateOf(QrCodeScanState.PEND) }
+    var codeScanner: CodeScanner? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
         if (!cameraPermissionState.status.isGranted) {
             if (cameraPermissionState.status.shouldShowRationale) {
@@ -50,6 +52,10 @@ fun QrCodeScanView(
                 cameraPermissionState.launchPermissionRequest()
             }
         }
+    }
+    BackHandler {
+        codeScanner?.releaseResources()
+        navController.popBackStack()
     }
     if (showNoCameraPermissionDialog) {
         NoCameraPermissionDialog {
@@ -87,7 +93,7 @@ fun QrCodeScanView(
                 modifier = Modifier,
                 factory = {
                     CodeScannerView(it).apply {
-                        val codeScanner = CodeScanner(it, this).apply {
+                        codeScanner = CodeScanner(it, this).apply {
                             isAutoFocusEnabled = true
                             isAutoFocusButtonVisible = false
                             scanMode = ScanMode.SINGLE
@@ -107,7 +113,7 @@ fun QrCodeScanView(
                                 onScanFailure()
                             }
                         }
-                        codeScanner.startPreview()
+                        codeScanner?.startPreview()
                     }
                 }
             )
