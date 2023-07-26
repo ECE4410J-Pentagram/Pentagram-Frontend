@@ -11,15 +11,23 @@ import java.nio.file.Paths
 
 object FileHandler {
 
-    fun saveImgToPublicDownload(context: Context, file: File?) {
-        val dlPath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Cryptex")
+    fun saveFileToPublicDownload(context: Context, file: File?) {
+        val dlPath = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "Cryptex"
+        )
         dlPath.mkdirs()
         val targetFile = file?.name?.let { File(dlPath, it) }
         if (targetFile != null) {
             file.copyTo(targetFile, overwrite = true)
-            Toast.makeText(context, context.getString(R.string.downloadedTo, targetFile.absolutePath), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.downloadedTo, targetFile.absolutePath),
+                Toast.LENGTH_SHORT
+            ).show()
         } else {
-            Toast.makeText(context, context.getString(R.string.unknownError), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.unknownError), Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -34,8 +42,8 @@ object FileHandler {
         fileOutputStream.close()
     }
 
-    fun getQrCodeFile(context: Context): File {
-        val qrcodePath = Paths.get(context.filesDir.toString(), "images", "qrcode", "myqrcode.png")
+    fun getQrCodeFile(context: Context, name: String): File {
+        val qrcodePath = Paths.get(context.filesDir.toString(), "images", "qrcode", "myqrcode-${name}.png")
         Files.createDirectories(qrcodePath.parent)
         return qrcodePath.toFile()
     }

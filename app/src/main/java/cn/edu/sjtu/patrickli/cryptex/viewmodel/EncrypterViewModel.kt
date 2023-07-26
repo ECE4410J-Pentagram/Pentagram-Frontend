@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.model.viewmodel
+package cn.edu.sjtu.patrickli.cryptex.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.getValue

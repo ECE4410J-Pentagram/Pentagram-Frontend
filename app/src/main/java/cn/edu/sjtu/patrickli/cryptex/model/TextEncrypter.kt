@@ -1,7 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
 import cn.edu.sjtu.patrickli.cryptex.R
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.EncrypterViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
 
 class TextEncrypter(
     val encrypterViewModel: EncrypterViewModel

@@ -1,24 +1,28 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
-import androidx.compose.runtime.mutableStateListOf
+import org.json.JSONObject
 
-class Contact (
+data class Contact (
     val name: String? = null,
-    val publicKey: String? = null
-) {}
-
-val testContacts = mutableStateListOf<Contact>(
-    Contact(name = "Contact 0"),
-    Contact(name = "Contact 1"),
-    Contact(name = "Contact 2"),
-    Contact(name = "Contact 3"),
-    Contact(name = "Contact 4"),
-    Contact(name = "Contact 5"),
-    Contact(name = "Contact 6"),
-    Contact(name = "Contact 7"),
-    Contact(name = "Contact 8"),
-    Contact(name = "Contact 9"),
-    Contact(name = "Contact 10"),
-    Contact(name = "Contact 11"),
-    Contact(name = "Contact 12"),
-)
+    val id: String? = null,
+    val keyAlias: String? = null,
+    val publicKey: String? = null,
+    val friendId: Int? = null
+) {
+    companion object {
+        fun fromInvitation(invitation: Invitation): Contact {
+            return Contact(invitation.fromDeviceName, invitation.fromDeviceId)
+        }
+        fun fromJson(jsonObject: JSONObject): Contact {
+            val device = jsonObject.getJSONObject("owner").getString("name")
+            val atMarkIndex = device.lastIndexOf("@")
+            return Contact(
+                device.substring(0, atMarkIndex),
+                device.substring(atMarkIndex + 1, device.length),
+                jsonObject.getString("name"),
+                jsonObject.getString("pk"),
+                jsonObject.getInt("id")
+            )
+        }
+    }
+}

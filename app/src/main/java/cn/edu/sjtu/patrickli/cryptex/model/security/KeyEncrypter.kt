@@ -10,13 +10,17 @@ class KeyEncrypter {
     private val transformation = "AES/GCM/NoPadding"
     private val androidKeyStore = "AndroidKeyStore"
 
-    fun doFinal(alias: String, text: String): Pair<ByteArray, ByteArray> {
+    fun doFinal(alias: String, data: ByteArray): Pair<ByteArray, ByteArray> {
         val cipher = Cipher.getInstance(transformation)
         cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(alias))
         return Pair(
-            cipher.doFinal(text.toByteArray(Charsets.UTF_8)),
+            cipher.doFinal(data),
             cipher.iv
         )
+    }
+
+    fun doFinal(alias: String, text: String): Pair<ByteArray, ByteArray> {
+        return doFinal(alias, text.toByteArray(Charsets.UTF_8))
     }
 
     private fun getSecretKey(alias: String): SecretKey {

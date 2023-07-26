@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.model.viewmodel
+package cn.edu.sjtu.patrickli.cryptex.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -24,6 +24,18 @@ class MainViewModelFactory(
 
             RequestViewModel::class.java -> {
                 RequestViewModel(context) as T
+            }
+
+            KeyViewModel::class.java -> {
+                KeyViewModel() as T
+            }
+
+            ContactViewModel::class.java -> {
+                ContactViewModel(context) as T
+            }
+
+            InvitationViewModel::class.java -> {
+                InvitationViewModel(context) as T
             }
 
             else -> {

@@ -8,15 +8,11 @@ class UserDatabaseOpenHelper internal constructor(context: Context?) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            SQL_CREATE_ENTRIES
-        )
+        SQL_CREATE_ENTRIES.forEach { db.execSQL(it) }
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL(
-            SQL_DELETE_ENTRIES
-        )
+        SQL_DELETE_ENTRIES.forEach { db.execSQL(it) }
         onCreate(db)
     }
 
@@ -27,8 +23,24 @@ class UserDatabaseOpenHelper internal constructor(context: Context?) :
     companion object {
         private const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "user.db"
-        private const val SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS INFO(field TEXT, value TEXT)"
-        private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS info"
+        private val SQL_CREATE_ENTRIES = arrayOf(
+            "CREATE TABLE IF NOT EXISTS info(field TEXT, value TEXT)",
+            """
+                CREATE TABLE IF NOT EXISTS key(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    name TEXT,
+                    deviceId TEXT,
+                    publicKey BLOB,
+                    privateKeyAlias TEXT,
+                    encryptedPrivateKey BLOB,
+                    encryptedPrivateKeyIv BLOB
+                )
+            """.trimIndent()
+        )
+        private val SQL_DELETE_ENTRIES = arrayOf(
+            "DROP TABLE IF EXISTS info",
+            "DROP TABLE IF EXISTS key"
+        )
     }
 
 }

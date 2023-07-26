@@ -1,60 +1,112 @@
 package cn.edu.sjtu.patrickli.cryptex.view.receiver
 
 import android.content.Context
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import cn.edu.sjtu.patrickli.cryptex.model.viewmodel.DecrypterViewModel
+import cn.edu.sjtu.patrickli.cryptex.R
+import cn.edu.sjtu.patrickli.cryptex.model.MediaType
+import cn.edu.sjtu.patrickli.cryptex.model.Util
+import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
-
-// TODO: implement this
-fun decrypt(decryptState: DecrypterViewModel): String {
-    return "not able to decrypt now"
-}
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.DecrypterViewModel
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DecryptOutputView(
-    context: Context, navController: NavHostController,
+    context: Context,
+    navController: NavHostController,
     viewModelProvider: ViewModelProvider
 ) {
     val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
-    val inputText: String by remember {
-        mutableStateOf(decrypterViewModel.text ?: (decrypterViewModel.fileUri?.toString() ?: ""))
+    var plainText by remember { mutableStateOf("") }
+    var showLoadingDialog by remember { mutableStateOf(false) }
+    val clipboardManager = LocalClipboardManager.current
+
+    LaunchedEffect(Unit) {
+        showLoadingDialog = true
+        decrypterViewModel.doDecrypt {
+            plainText = it
+        }
+        delay(1000L)
+        showLoadingDialog = false
     }
-    val privateKey = decrypterViewModel.privateKey
-    val decryptedText = decrypt(decrypterViewModel)
 
-    // clear state
-    decrypterViewModel.fileUri = null
-    decrypterViewModel.text = null
-    decrypterViewModel.privateKey = null
-
-    // compose
-    Scaffold(topBar = { NavBackBar(navController = navController) }, content = { paddingValues ->
+    Scaffold(
+        topBar = {
+            NavBackBar(navController = navController, title = stringResource(R.string.decrypt))
+         }
+    ) {
         ConstraintLayout(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(it)
                 .fillMaxSize()
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                Text(text = "Input: ")
-                Text(text = inputText)
-                Text(text = "Output: ")
-                Text(text = decryptedText)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
+                OutlinedTextField(
+                    readOnly = true,
+                    value = plainText,
+                    onValueChange = {},
+                    modifier = Modifier
+                        .size(300.dp)
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(50.dp, Alignment.CenterHorizontally)
+                ) {
+                    IconTextButton(
+                        Icons.Rounded.ContentCopy,
+                        stringResource(R.string.copy),
+                        onClick = { clipboardManager.setText(AnnotatedString(plainText)) }
+                    )
+                    IconTextButton(
+                        Icons.Rounded.Share,
+                        stringResource(R.string.share),
+                        onClick = {
+                            Util.shareExternally(
+                                context,
+                                MediaType.TEXT,
+                                text = plainText
+                            )
+                        }
+                    )
+                }
             }
         }
-    })
+        if (showLoadingDialog) {
+            LoadingDialog()
+        }
+    }
 
 }

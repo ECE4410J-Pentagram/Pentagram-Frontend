@@ -14,11 +14,11 @@ class KeyDecrypter {
         keyStore.load(null)
     }
 
-    fun doFinal(alias: String, data: ByteArray, iv: ByteArray): String {
+    fun doFinal(alias: String, data: ByteArray, iv: ByteArray): ByteArray {
         val cipher = Cipher.getInstance(transformation)
         val spec = GCMParameterSpec(128, iv)
         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(alias), spec)
-        return cipher.doFinal(data).toString(Charsets.UTF_8)
+        return cipher.doFinal(data)
     }
 
     private fun getSecretKey(alias: String): SecretKey {
