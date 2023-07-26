@@ -6,6 +6,8 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.ui.res.stringResource
@@ -26,9 +28,11 @@ import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeView
 import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
+import cn.edu.sjtu.patrickli.cryptex.view.tool.SettingView
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.MainViewModelFactory
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -57,21 +61,25 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             val navController = rememberAnimatedNavController()
-            AppTheme {
+            val animationSpec = tween<IntOffset>(
+                durationMillis = 200,
+                easing = FastOutSlowInEasing
+            )
+            AppTheme(viewModelProvider[UserViewModel::class.java]) {
                 AnimatedNavHost(
                     navController,
                     startDestination = "HomeView",
                     enterTransition = {
-                        slideIn { fullSize -> IntOffset(fullSize.width, 0) }
+                        slideIn(animationSpec) { fullSize -> IntOffset(fullSize.width, 0) }
                     },
                     popEnterTransition = {
-                        slideIn { fullSize -> IntOffset(-fullSize.width, 0) }
+                        slideIn(animationSpec) { fullSize -> IntOffset(-fullSize.width, 0) }
                     },
                     exitTransition = {
-                        slideOut { fullSize -> IntOffset(-fullSize.width, 0) }
+                        slideOut(animationSpec) { fullSize -> IntOffset(-fullSize.width, 0) }
                     },
                     popExitTransition = {
-                        slideOut { fullSize -> IntOffset(fullSize.width, 0) }
+                        slideOut(animationSpec) { fullSize -> IntOffset(fullSize.width, 0) }
                     }
                 ) {
                     composable("HomeView") {
@@ -167,6 +175,13 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("InvitationView") {
                         InvitationListView(
+                            context = this@MainActivity,
+                            navController = navController,
+                            viewModelProvider = viewModelProvider
+                        )
+                    }
+                    composable("SettingView") {
+                        SettingView(
                             context = this@MainActivity,
                             navController = navController,
                             viewModelProvider = viewModelProvider
