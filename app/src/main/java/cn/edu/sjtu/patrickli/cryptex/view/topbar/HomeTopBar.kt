@@ -26,9 +26,7 @@ fun HomeTopBar(navController: NavController, viewModelProvider: ViewModelProvide
     val invitationViewModel = viewModelProvider[InvitationViewModel::class.java]
     val invitationUnreadCount = invitationViewModel.receivedUnreadCount
     TopAppBar(
-        title = {
-            BarImgComponent()
-        },
+        title = {},
         actions = {
             BadgedBox(badge = {
                 if (invitationUnreadCount > 0) Badge(
