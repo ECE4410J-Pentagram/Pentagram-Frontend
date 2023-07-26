@@ -5,11 +5,12 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import cn.edu.sjtu.patrickli.cryptex.model.ApplicationStart
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.ui.theme.AppTheme
@@ -28,6 +29,9 @@ import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.MainViewModelFactory
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModelProvider: ViewModelProvider
@@ -40,6 +44,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModelProvider = ViewModelProvider(
@@ -51,9 +56,24 @@ class MainActivity : ComponentActivity() {
             mainHandler!!.post(updateInvitationListTask)
         }
         setContent {
-            val navController = rememberNavController()
+            val navController = rememberAnimatedNavController()
             AppTheme {
-                NavHost(navController, startDestination = "HomeView") {
+                AnimatedNavHost(
+                    navController,
+                    startDestination = "HomeView",
+                    enterTransition = {
+                        slideIn { fullSize -> IntOffset(fullSize.width, 0) }
+                    },
+                    popEnterTransition = {
+                        slideIn { fullSize -> IntOffset(-fullSize.width, 0) }
+                    },
+                    exitTransition = {
+                        slideOut { fullSize -> IntOffset(-fullSize.width, 0) }
+                    },
+                    popExitTransition = {
+                        slideOut { fullSize -> IntOffset(fullSize.width, 0) }
+                    }
+                ) {
                     composable("HomeView") {
                         HomeView(
                             context = this@MainActivity,
