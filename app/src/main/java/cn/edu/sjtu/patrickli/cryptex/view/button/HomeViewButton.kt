@@ -10,16 +10,18 @@ import androidx.navigation.NavHostController
 fun HomeViewButton(
     imageVector: ImageVector,
     text: String,
-    navController: NavHostController,
-    targetActivity: String,
+    navController: NavHostController? = null,
+    targetActivity: String? = null,
+    onClick: (() -> Unit)? = null,
     badge: @Composable() (BoxScope.() -> Unit) = {}
 ) {
     IconTextButton(
         imageVector,
         text,
         iconSize = 70.dp,
-        onClick = {
-            navController.navigate(targetActivity)
+        onClick = onClick ?: {
+            targetActivity?.let { navController?.navigate(it) }
+            Unit
         },
         badge = badge
     )

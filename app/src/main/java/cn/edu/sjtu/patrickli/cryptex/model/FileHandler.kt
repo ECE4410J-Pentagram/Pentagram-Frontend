@@ -11,15 +11,23 @@ import java.nio.file.Paths
 
 object FileHandler {
 
-    fun saveImgToPublicDownload(context: Context, file: File?) {
-        val dlPath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Cryptex")
+    fun saveFileToPublicDownload(context: Context, file: File?) {
+        val dlPath = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "Cryptex"
+        )
         dlPath.mkdirs()
         val targetFile = file?.name?.let { File(dlPath, it) }
         if (targetFile != null) {
             file.copyTo(targetFile, overwrite = true)
-            Toast.makeText(context, context.getString(R.string.downloadedTo, targetFile.absolutePath), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.downloadedTo, targetFile.absolutePath),
+                Toast.LENGTH_SHORT
+            ).show()
         } else {
-            Toast.makeText(context, context.getString(R.string.unknownError), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.unknownError), Toast.LENGTH_SHORT)
+                .show()
         }
     }
 

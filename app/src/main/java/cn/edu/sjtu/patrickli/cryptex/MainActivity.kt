@@ -1,7 +1,5 @@
 package cn.edu.sjtu.patrickli.cryptex
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,7 +22,6 @@ import cn.edu.sjtu.patrickli.cryptex.view.key.KeyView
 import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeScanView
 import cn.edu.sjtu.patrickli.cryptex.view.qrcode.QrCodeView
 import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptOutputView
-import cn.edu.sjtu.patrickli.cryptex.view.receiver.DecryptView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptOutputView
 import cn.edu.sjtu.patrickli.cryptex.view.sender.EncryptView
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
@@ -106,13 +103,6 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("EncryptOutputView") {
                     EncryptOutputView(
-                        context = this@MainActivity,
-                        navController = navController,
-                        viewModelProvider = viewModelProvider
-                    )
-                }
-                composable("DecryptView") {
-                    DecryptView(
                         context = this@MainActivity,
                         navController = navController,
                         viewModelProvider = viewModelProvider

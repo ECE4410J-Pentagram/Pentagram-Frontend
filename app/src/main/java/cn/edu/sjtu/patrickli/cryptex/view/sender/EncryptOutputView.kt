@@ -12,13 +12,10 @@ import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +36,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.ImageShareDialog
 import cn.edu.sjtu.patrickli.cryptex.view.media.ImageWrapper
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
@@ -73,7 +71,7 @@ fun OutputOptionButtons(
 ) {
     val clipboardManager = LocalClipboardManager.current
     Row(
-        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
+        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
     ) {
         when (encrypterViewModel.mediaType) {
             MediaType.TEXT -> {
@@ -107,7 +105,7 @@ fun OutputOptionButtons(
                     Icons.Rounded.Download,
                     stringResource(R.string.download),
                     onClick = {
-                        FileHandler.saveImgToPublicDownload(
+                        FileHandler.saveFileToPublicDownload(
                             context,
                             encrypterViewModel.cipherImgFile
                         )
@@ -121,31 +119,15 @@ fun OutputOptionButtons(
                     }
                 )
                 if (showImageShareWarningDialog) {
-                    AlertDialog(
-                        onDismissRequest = { showImageShareWarningDialog = false },
-                        title = {
-                            Text(text = stringResource(R.string.shareImgWarningTitle))
+                    ImageShareDialog(
+                        onConfirm = {
+                            Util.shareExternally(
+                                context,
+                                MediaType.IMAGE,
+                                file = encrypterViewModel.cipherImgFile
+                            )
                         },
-                        text = {
-                            Text(text = stringResource(R.string.shareImgWarningContent))
-                        },
-                        confirmButton = {
-                            TextButton(onClick = {
-                                showImageShareWarningDialog = false
-                                Util.shareExternally(
-                                    context,
-                                    MediaType.IMAGE,
-                                    file = encrypterViewModel.cipherImgFile
-                                )
-                            }) {
-                                Text(text = stringResource(R.string.ok).uppercase())
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = { showImageShareWarningDialog = false }) {
-                                Text(text = stringResource(R.string.cancel).uppercase())
-                            }
-                        }
+                        onClose = { showImageShareWarningDialog = false }
                     )
                 }
             }
@@ -166,49 +148,44 @@ fun EncryptOutputView(
         topBar = {
             NavBackBar(navController = navController)
         },
-        content = { paddingValues ->
-            ConstraintLayout (
+    ) {
+        ConstraintLayout(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .padding(paddingValues)
                     .fillMaxSize()
+                    .padding(8.dp)
             ) {
-                if (encrypterViewModel.isEncrypting) {
-                    CircularProgressIndicator()
-                } else {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp)
-                    ) {
-                        OutputPreviewLoader(context, encrypterViewModel)
-                        Text(
-                            text = stringResource(R.string.encryptDone) + " " + (
-                                    encrypterViewModel.contact
-                                        ?.let {
-                                            stringResource(
-                                                R.string.encryptOutputShareTo,
-                                                it.name ?: { "noname" })
-                                        }
-                                        ?: let { stringResource(R.string.encryptOutputShareAny) }
-                                    ),
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .padding(16.dp, 10.dp)
-                        )
-                        OutputOptionButtons(context, encrypterViewModel) {
-                            IconTextButton(
-                                Icons.Rounded.Home,
-                                stringResource(R.string.navHome),
-                                onClick = {
-                                    navController.navigate("HomeView") { popUpTo(0) }
+                OutputPreviewLoader(context, encrypterViewModel)
+                Text(
+                    text = stringResource(R.string.encryptDone) + " " + (
+                            encrypterViewModel.contact
+                                ?.let { contact ->
+                                    stringResource(
+                                        R.string.encryptOutputShareTo,
+                                        contact.name ?: { "noname" })
                                 }
-                            )
+                                ?: let { stringResource(R.string.encryptOutputShareAny) }
+                            ),
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .padding(16.dp, 10.dp)
+                )
+                OutputOptionButtons(context, encrypterViewModel) {
+                    IconTextButton(
+                        Icons.Rounded.Home,
+                        stringResource(R.string.navHome),
+                        onClick = {
+                            navController.navigate("HomeView") { popUpTo(0) }
                         }
-                    }
+                    )
                 }
             }
         }
-    )
+    }
 }

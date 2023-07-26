@@ -67,6 +67,7 @@
     <string name="newContactNotificationContent">A new friend is added to your contact list!</string>
     <string name="mainNotificationChannelTitle">Friends</string>
     <string name="mainNotificationChannelDescription">New friend or request notification</string>
+    <string name="decrypt">Decrypt</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

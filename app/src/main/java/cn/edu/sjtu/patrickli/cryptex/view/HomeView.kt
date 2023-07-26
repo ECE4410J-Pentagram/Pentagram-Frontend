@@ -1,6 +1,9 @@
 package cn.edu.sjtu.patrickli.cryptex.view
 
 import android.content.Context
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,6 +37,7 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.view.button.HomeViewButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.HomeTopBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.DecrypterViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -45,6 +49,8 @@ fun ConstraintLayoutContent(
     navController: NavHostController,
     viewModelProvider: ViewModelProvider
 ) {
+    val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
+    val contactViewModel = viewModelProvider[ContactViewModel::class.java]
     ConstraintLayout (
         modifier = Modifier
             .padding(paddingValues)
@@ -87,8 +93,11 @@ fun ConstraintLayoutContent(
                     HomeViewButton(
                         Icons.Outlined.FileDownload,
                         "Receive",
-                        navController,
-                        "DecryptView"
+                        onClick = {
+                            decrypterViewModel.pickImageLauncher?.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
                     )
                 }
                 Row (
@@ -102,7 +111,7 @@ fun ConstraintLayoutContent(
                         navController,
                         "ContactListView",
                         badge = {
-                            if (viewModelProvider[ContactViewModel::class.java].hasNewContact) {
+                            if (contactViewModel.hasNewContact) {
                                 Badge(
                                     modifier = Modifier.offset((-15).dp, 15.dp)
                                 ) { Text(text = "") }
@@ -129,6 +138,17 @@ fun HomeView(
     viewModelProvider: ViewModelProvider
 ) {
     val notificationPermissionState = rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+    val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
+    decrypterViewModel.pickImageLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) {
+        if (it != null) {
+            context.contentResolver.openInputStream(it).use { stream ->
+                decrypterViewModel.cipherByteArray = stream?.readBytes()
+            }
+            navController.navigate("DecryptOutputView")
+        }
+    }
     LaunchedEffect(Unit) {
         if (!notificationPermissionState.status.isGranted) {
             notificationPermissionState.launchPermissionRequest()

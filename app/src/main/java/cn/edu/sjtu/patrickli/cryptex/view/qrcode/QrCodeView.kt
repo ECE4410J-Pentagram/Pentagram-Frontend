@@ -134,7 +134,7 @@ fun QrCodeView(
                         Icons.Rounded.Download,
                         stringResource(R.string.download),
                         onClick = {
-                            FileHandler.saveImgToPublicDownload(context, userViewModel.qrcodeFile)
+                            FileHandler.saveFileToPublicDownload(context, userViewModel.qrcodeFile)
                         }
                     )
                     IconTextButton(
