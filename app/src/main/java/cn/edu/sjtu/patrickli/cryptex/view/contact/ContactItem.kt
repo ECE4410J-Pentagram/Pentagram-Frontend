@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.NoAccounts
 import androidx.compose.material.icons.twotone.Delete
-import androidx.compose.material.icons.twotone.Edit
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -43,12 +42,6 @@ fun ContactItem(
         onSwipe = { onDelete(contact) }
     )
 
-    val renameContact = SwipeAction(
-        icon = rememberVectorPainter(image = Icons.TwoTone.Edit),
-        background = Color.Green,
-        onSwipe = {  }
-    )
-
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -59,7 +52,7 @@ fun ContactItem(
     ) {
         if (contact.name != null) SwipeableActionsBox (
             endActions = listOf(deleteContact),
-            startActions = listOf(renameContact),
+            startActions = listOf(deleteContact),
             modifier = Modifier
                 .fillMaxWidth()
         ) {
