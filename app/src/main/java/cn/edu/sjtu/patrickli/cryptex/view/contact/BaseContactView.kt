@@ -34,7 +34,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.Contact
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.NoReceiverDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.RemoveContactDialog
-import cn.edu.sjtu.patrickli.cryptex.view.media.BlankPageView
+import cn.edu.sjtu.patrickli.cryptex.view.tool.BlankPageView
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel

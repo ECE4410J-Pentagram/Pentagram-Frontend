@@ -68,6 +68,16 @@
     <string name="mainNotificationChannelTitle">Friends</string>
     <string name="mainNotificationChannelDescription">New friend or request notification</string>
     <string name="decrypt">Decrypt</string>
+    <string name="setting">Settings</string>
+    <string name="theme">Theme</string>
+    <string name="auto">Auto</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="about">About</string>
+    <string name="teamGithubLink">https://github.com/ECE4410J-Pentagram</string>
+    <string name="github">Github</string>
+    <string name="teamName">Pentagram</string>
+    <string name="appVersion">Ver 0.1</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

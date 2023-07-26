@@ -37,7 +37,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.ImageShareDialog
-import cn.edu.sjtu.patrickli.cryptex.view.media.ImageWrapper
+import cn.edu.sjtu.patrickli.cryptex.view.tool.ImageWrapper
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
 

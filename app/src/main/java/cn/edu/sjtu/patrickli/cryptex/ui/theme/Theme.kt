@@ -5,6 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import cn.edu.sjtu.patrickli.cryptex.model.ThemePreference
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
 
 
 private val LightColors = lightColorScheme(
@@ -74,17 +76,22 @@ private val DarkColors = darkColorScheme(
 
 @Composable
 fun AppTheme(
-  useDarkTheme: Boolean = isSystemInDarkTheme(),
-  content: @Composable() () -> Unit
+    userViewModel: UserViewModel,
+    content: @Composable() () -> Unit
 ) {
-  val colors = if (!useDarkTheme) {
-    LightColors
-  } else {
-    DarkColors
-  }
+    val useDarkTheme = when (userViewModel.themePreference) {
+        ThemePreference.AUTO -> isSystemInDarkTheme()
+        ThemePreference.LIGHT -> false
+        ThemePreference.DARK -> true
+    }
+    val colors = if (!useDarkTheme) {
+        LightColors
+    } else {
+        DarkColors
+    }
 
-  MaterialTheme(
-    colorScheme = colors,
-    content = content
-  )
+    MaterialTheme(
+        colorScheme = colors,
+        content = content
+    )
 }

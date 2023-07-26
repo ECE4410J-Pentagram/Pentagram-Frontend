@@ -2,11 +2,15 @@ package cn.edu.sjtu.patrickli.cryptex.viewmodel
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.QrCode
+import cn.edu.sjtu.patrickli.cryptex.model.ThemePreference
 import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyDecrypter
 import kotlinx.coroutines.launch
@@ -24,6 +28,7 @@ class UserViewModel(
     var authorization: String? = null
     var encryptedDeviceKey: ByteArray? = null
     var encryptedDeviceKeyIv: ByteArray? = null
+    var themePreference by mutableStateOf(ThemePreference.AUTO)
     fun toJson(): JSONObject {
         return JSONObject(
             mapOf(
@@ -31,8 +36,9 @@ class UserViewModel(
                     "id" to deviceId,
                     "name" to deviceName,
                     "key" to Util.byteArrayToHexString(encryptedDeviceKey),
-                    "iv" to Util.byteArrayToHexString(encryptedDeviceKeyIv),
-                )
+                    "iv" to Util.byteArrayToHexString(encryptedDeviceKeyIv)
+                ),
+                "theme" to themePreference.value
             )
         )
     }
@@ -53,6 +59,7 @@ class UserViewModel(
                 deviceId = deviceObject.getString("id")
                 deviceName = deviceObject.getString("name")
                 qrcodeFile = FileHandler.getQrCodeFile(context, deviceName)
+                themePreference = ThemePreference.fromOrdinal(jsonObject.getInt("theme"))
                 encryptedDeviceKey = Util.hexStringToByteArray(deviceObject.getString("key"))
                 encryptedDeviceKeyIv = Util.hexStringToByteArray(deviceObject.getString("iv"))
                 val decrypter = KeyDecrypter()

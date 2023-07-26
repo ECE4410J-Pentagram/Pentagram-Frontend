@@ -44,7 +44,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.RenameDeviceDialog
-import cn.edu.sjtu.patrickli.cryptex.view.media.ImageWrapper
+import cn.edu.sjtu.patrickli.cryptex.view.tool.ImageWrapper
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
 

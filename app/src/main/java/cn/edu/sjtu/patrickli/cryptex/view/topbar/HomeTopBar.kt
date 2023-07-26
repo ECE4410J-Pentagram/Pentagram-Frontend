@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +27,14 @@ fun HomeTopBar(navController: NavController, viewModelProvider: ViewModelProvide
     val invitationViewModel = viewModelProvider[InvitationViewModel::class.java]
     val invitationUnreadCount = invitationViewModel.receivedUnreadCount
     TopAppBar(
-        title = {},
+        title = {
+            IconButton(onClick = { navController.navigate("SettingView") }) {
+                Icon(
+                    Icons.Outlined.Settings,
+                    contentDescription = stringResource(R.string.setting)
+                )
+            }
+        },
         actions = {
             BadgedBox(badge = {
                 if (invitationUnreadCount > 0) Badge(

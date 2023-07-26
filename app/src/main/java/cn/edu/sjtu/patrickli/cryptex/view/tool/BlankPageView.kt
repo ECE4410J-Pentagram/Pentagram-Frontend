@@ -1,4 +1,4 @@
-package cn.edu.sjtu.patrickli.cryptex.view.media
+package cn.edu.sjtu.patrickli.cryptex.view.tool
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
