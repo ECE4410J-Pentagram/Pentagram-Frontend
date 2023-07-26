@@ -1,6 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.util.Log
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
@@ -40,7 +41,8 @@ object QrCode {
         }
     }
 
-    fun read(bitmap: Bitmap): String {
+    fun read(byteArray: ByteArray): String {
+        val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
         val width = bitmap.width
         val height = bitmap.height
         val pixels = IntArray(width * height) { 0 }

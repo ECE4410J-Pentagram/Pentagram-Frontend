@@ -78,6 +78,8 @@
     <string name="github">Github</string>
     <string name="teamName">Pentagram</string>
     <string name="appVersion">Ver 0.1</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

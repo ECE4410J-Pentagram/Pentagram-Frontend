@@ -155,7 +155,7 @@ fun BaseContactView(
             FloatingActionButton(
                 modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 8.dp),
                 onClick = {
-                    navController.navigate("QrCodeScanView")
+                    navController.navigate("QrCodeView")
                 }
             ) {
                 Icon(Icons.Default.Add, stringResource(R.string.addContact))
