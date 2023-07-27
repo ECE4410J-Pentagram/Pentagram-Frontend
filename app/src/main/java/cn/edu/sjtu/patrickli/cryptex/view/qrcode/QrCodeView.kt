@@ -159,7 +159,7 @@ fun QrCodeView(
                         .padding(horizontal = 30.dp)
                 ) {
                     Text(
-                        text = userViewModel.deviceName,
+                        text = userViewModel.deviceName?:"",
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 2,
@@ -218,7 +218,7 @@ fun QrCodeView(
         }
         if (showRenameDeviceDialog) {
             RenameDeviceDialog(
-                oldName = userViewModel.deviceName,
+                oldName = userViewModel.deviceName?:"",
                 onRename = ::onDeviceRename,
                 onClose = { showRenameDeviceDialog = false }
             )

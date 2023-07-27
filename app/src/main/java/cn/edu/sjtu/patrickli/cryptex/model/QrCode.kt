@@ -20,7 +20,7 @@ object QrCode {
 
     fun generateUserCode(userViewModel: UserViewModel) {
         val contentString =
-            Base64.getEncoder().encodeToString(userViewModel.deviceName.toByteArray(Charsets.UTF_8)) +
+            Base64.getEncoder().encodeToString(userViewModel.deviceName?.toByteArray(Charsets.UTF_8)) +
                     ":" + Base64.getEncoder().encodeToString(userViewModel.deviceId?.toByteArray(Charsets.UTF_8))
         val width = 400
         val height = 400
