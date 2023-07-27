@@ -128,6 +128,9 @@ class KeyViewModel(
                         }
                     }
                 }
+                if (key.alias == keyToShare?.alias) {
+                    keyToShare = null
+                }
                 removeKeyFromDatabase(key, databaseProvider)
                 onSuccess()
             },
