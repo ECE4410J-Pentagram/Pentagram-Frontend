@@ -22,7 +22,7 @@ class KeyViewModel(
     private val defaultKeyAliasStoreKey = stringPreferencesKey("defaultKeyAlias")
     var defaultKeyAlias: String? by mutableStateOf(null)
 
-    fun saveKeyToDatabase(
+    private fun saveKeyToDatabase(
         key: Key,
         viewModelProvider: ViewModelProvider,
         databaseProvider: DatabaseProvider
@@ -41,7 +41,7 @@ class KeyViewModel(
         databaseProvider.userDatabase.insert("key", null, values)
     }
 
-    fun removeKeyFromDatabase(
+    private fun removeKeyFromDatabase(
         key: Key,
         databaseProvider: DatabaseProvider
     ) {
@@ -88,11 +88,12 @@ class KeyViewModel(
         cur.close()
     }
 
-    fun pushKeyToRemote(
+    private fun pushKeyToRemote(
         key: Key,
         viewModelProvider: ViewModelProvider,
         databaseProvider: DatabaseProvider,
-        onFinished: () -> Unit = {}
+        onSuccess: () -> Unit = {},
+        onFail: () -> Unit = {}
     ) {
         if (!key.publicKeyIsInitialized()) {
             loadPublicKey(key, databaseProvider)
@@ -100,25 +101,75 @@ class KeyViewModel(
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getAddKeyRequest(
             key,
-            {
-                onFinished()
-            },
-            { onFinished() }
+            { onSuccess() },
+            { onFail() }
         ))
     }
 
-    fun removeKeyFromRemote(
+    fun removeKey(
         key: Key,
         viewModelProvider: ViewModelProvider,
-        onFinished: () -> Unit = {}
+        databaseProvider: DatabaseProvider,
+        onSuccess: () -> Unit = {},
+        onFail: () -> Unit = {}
+    ) {
+        removeKeyFromRemote(
+            key,
+            viewModelProvider,
+            onSuccess = {
+                myKeys.remove(key)
+                if (key.alias == defaultKeyAlias) {
+                    if (myKeys.isNotEmpty()) {
+                        defaultKeyAlias = myKeys[0].alias
+                    } else {
+                        defaultKeyAlias = null
+                        viewModelScope.launch {
+                            writeToDataStore(defaultKeyAliasStoreKey, null)
+                        }
+                    }
+                }
+                removeKeyFromDatabase(key, databaseProvider)
+                onSuccess()
+            },
+            onFail = onFail
+        )
+    }
+
+    fun addKey(
+        key: Key,
+        viewModelProvider: ViewModelProvider,
+        databaseProvider: DatabaseProvider,
+        onSuccess: () -> Unit = {},
+        onFail: () -> Unit = {}
+    ) {
+        pushKeyToRemote(
+            key,
+            viewModelProvider,
+            databaseProvider,
+            onSuccess = {
+                if (myKeys.isEmpty()) {
+                    defaultKeyAlias = key.alias
+                    viewModelScope.launch { writeToDataStore(defaultKeyAliasStoreKey, defaultKeyAlias) }
+                }
+                myKeys.add(key)
+                saveKeyToDatabase(key, viewModelProvider, databaseProvider)
+                onSuccess()
+            },
+            onFail = { onFail() }
+        )
+    }
+
+    private fun removeKeyFromRemote(
+        key: Key,
+        viewModelProvider: ViewModelProvider,
+        onSuccess: () -> Unit = {},
+        onFail: () -> Unit = {},
     ) {
         val requestViewModel = viewModelProvider[RequestViewModel::class.java]
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getRemoveKeyRequest(
             key,
-            {
-                onFinished()
-            },
-            { onFinished() }
+            { onSuccess() },
+            { onFail() }
         ))
     }
 

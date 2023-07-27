@@ -82,6 +82,10 @@
     <string name="gallery">Gallery</string>
     <string name="setDefault">Set as default</string>
     <string name="cancelDefault">Cancel default</string>
+    <string name="removeKeyFailTitle">Remove key failed</string>
+    <string name="removeKeyFailContent">This key cannot be removed without removing your friend who is using it.</string>
+    <string name="addKeyFailTitle">Add key failed</string>
+    <string name="contactMaintainer">Please contact maintainer</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>
