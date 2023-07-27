@@ -80,6 +80,8 @@
     <string name="appVersion">Ver 0.1</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
+    <string name="setDefault">Set as default</string>
+    <string name="cancelDefault">Cancel default</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

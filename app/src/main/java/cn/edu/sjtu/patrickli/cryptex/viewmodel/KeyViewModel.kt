@@ -1,16 +1,26 @@
 package cn.edu.sjtu.patrickli.cryptex.viewmodel
 
 import android.content.ContentValues
+import android.content.Context
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import cn.edu.sjtu.patrickli.cryptex.model.Key
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
+import kotlinx.coroutines.launch
 
-class KeyViewModel: ViewModel() {
+class KeyViewModel(
+    private val context: Context
+): DataStoreViewModel(context, "keysetting") {
     val myKeys = mutableStateListOf<Key>()
     var keyToShare: Key? = null
+    private val defaultKeyAliasStoreKey = stringPreferencesKey("defaultKeyAlias")
+    var defaultKeyAlias: String? by mutableStateOf(null)
 
     fun saveKeyToDatabase(
         key: Key,
@@ -58,6 +68,12 @@ class KeyViewModel: ViewModel() {
             } while (cur.moveToNext())
         }
         cur.close()
+        viewModelScope.launch {
+            defaultKeyAlias = loadFromDataStore(defaultKeyAliasStoreKey)
+            if ((defaultKeyAlias == null) && (myKeys.isNotEmpty())) {
+                defaultKeyAlias = myKeys[0].alias
+            }
+        }
     }
 
     fun loadPublicKey(
@@ -104,6 +120,13 @@ class KeyViewModel: ViewModel() {
             },
             { onFinished() }
         ))
+    }
+
+    fun updateDefaultKey(key: Key) {
+        viewModelScope.launch {
+            defaultKeyAlias = key.alias
+            writeToDataStore(defaultKeyAliasStoreKey, defaultKeyAlias)
+        }
     }
 
 }

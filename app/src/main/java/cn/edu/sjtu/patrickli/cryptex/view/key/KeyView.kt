@@ -99,18 +99,21 @@ fun KeyView(
                     .padding(it)
             ) {
                 items(count = keyList.size) { index ->
-                    KeyItemWithDiv(
-                        keyList[index],
-                        {
-                            selectedKey = keyList[index]
+                    val key = keyList[index]
+                    KeyItem(
+                        key,
+                        onRemove = {
+                            selectedKey = key
                             showRemoveKeyWarningDialog = true
                         },
                         onRename = ::onRenameDialogOpen,
-                        onClick = { onKeyClick(keyList[index]) }
+                        onClick = { onKeyClick(key) },
+                        isDefault = (key.alias == keyViewModel.defaultKeyAlias),
+                        onSetDefault = { keyViewModel.updateDefaultKey(key) }
                     )
                 }
             }
-            if (keyList.size == 0) {
+            if (keyList.isEmpty()) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,

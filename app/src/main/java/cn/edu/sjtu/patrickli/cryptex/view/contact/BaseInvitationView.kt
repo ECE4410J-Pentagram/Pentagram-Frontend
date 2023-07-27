@@ -47,8 +47,9 @@ fun BaseInvitationView(
 ) {
     val contactViewModel = viewModelProvider[ContactViewModel::class.java]
     val keyViewModel = viewModelProvider[KeyViewModel::class.java]
-    if ((keyViewModel.myKeys.size > 0) && (keyViewModel.keyToShare == null)) {
-        keyViewModel.keyToShare = keyViewModel.myKeys[0]
+    if (keyViewModel.keyToShare == null) {
+        keyViewModel.keyToShare =
+            keyViewModel.myKeys.find { it.alias == keyViewModel.defaultKeyAlias }
     }
     Scaffold(
         topBar = {

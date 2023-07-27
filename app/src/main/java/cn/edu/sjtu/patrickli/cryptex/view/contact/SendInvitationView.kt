@@ -20,6 +20,7 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.RequestViewModel
 
 @Composable
@@ -42,6 +43,7 @@ fun SendInvitationView(
                 viewModelProvider,
                 onResponse = {
                     viewModelProvider[InvitationViewModel::class.java].updateInvitationList(viewModelProvider)
+                    viewModelProvider[KeyViewModel::class.java].keyToShare = null
                     Log.d("FriendRequest", "Success")
                     Toast.makeText(context, context.getString(R.string.addFriendSuccess), Toast.LENGTH_SHORT).show()
                     showLoadingDialog = false
