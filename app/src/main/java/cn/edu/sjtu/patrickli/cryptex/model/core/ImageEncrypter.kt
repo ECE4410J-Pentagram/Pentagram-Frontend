@@ -24,15 +24,23 @@ object ImageEncrypter {
         }
     }
 
-    fun doFinal(textBytes: ByteArray, imgBytes: ByteArray, keyAlias: String): Bitmap {
+    fun doFinal(
+        textBytes: ByteArray,
+        imgBytes: ByteArray,
+        keyAlias: String = "",
+        isAnonymous: Boolean = false
+    ): Bitmap {
         var dataArray = intArrayOf()
-        val keyAliasBytes = keyAlias.toByteArray()
-        for ( i in 15 downTo 0) {
-            dataArray += (keyAliasBytes.size shr (i * 2)) and 0x03
-        }
-        for (byte in keyAliasBytes) {
-            for (i in 3 downTo 0) {
-                dataArray += (byte.toInt() shr (i * 2)) and 0x03
+        dataArray += if (isAnonymous) 0x01 else 0x00
+        if (!isAnonymous) {
+            val keyAliasBytes = keyAlias.toByteArray()
+            for (i in 15 downTo 0) {
+                dataArray += (keyAliasBytes.size shr (i * 2)) and 0x03
+            }
+            for (byte in keyAliasBytes) {
+                for (i in 3 downTo 0) {
+                    dataArray += (byte.toInt() shr (i * 2)) and 0x03
+                }
             }
         }
         for (i in 15 downTo 0) {

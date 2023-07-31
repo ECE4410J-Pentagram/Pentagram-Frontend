@@ -25,13 +25,13 @@ object ImageDecrypter {
         return bytes
     }
 
-    private fun decodeFragmentAsLength(bitmap: Bitmap, offset: Int, length: Int): Int {
+    private fun decodeFragmentAsValue(bitmap: Bitmap, offset: Int, length: Int): Int {
         val bytes = decodeFragment(bitmap, offset, length)
-        var size = 0
-        for (i in 0 until 16) {
-            size += bytes[i] shl ((15 - i) shl 1)
+        var value = 0
+        for (i in 0 until length) {
+            value += bytes[i] shl ((length - i - 1) shl 1)
         }
-        return size
+        return value
     }
 
     private fun mergeFragment(fragment: IntArray): ByteArray {
@@ -46,13 +46,21 @@ object ImageDecrypter {
         return bytes
     }
 
-    fun doFinal(cipherBytes: ByteArray): Pair<ByteArray, ByteArray> {
+    fun doFinal(cipherBytes: ByteArray): Pair<ByteArray, ByteArray?> {
         val bitmap = BitmapFactory.decodeByteArray(cipherBytes, 0, cipherBytes.size)
-        val keyAliasSize = decodeFragmentAsLength(bitmap, 0, 16)
-        val keyAliasArray = decodeFragment(bitmap, 16, (keyAliasSize * 4))
-        val dataSize = decodeFragmentAsLength(bitmap, (16 + keyAliasSize * 4), 16)
-        val dataArray = decodeFragment(bitmap, (32 + keyAliasSize * 4), (dataSize * 4))
-        return Pair(mergeFragment(dataArray), mergeFragment(keyAliasArray))
+        val isAnonymous = (decodeFragmentAsValue(bitmap, 0, 1) == 1)
+        var keyAliasArray: IntArray? = null
+        val dataArray: IntArray
+        if (!isAnonymous) {
+            val keyAliasSize = decodeFragmentAsValue(bitmap, 1, 16)
+            keyAliasArray = decodeFragment(bitmap, 17, (keyAliasSize * 4))
+            val dataSize = decodeFragmentAsValue(bitmap, (17 + keyAliasSize * 4), 16)
+            dataArray = decodeFragment(bitmap, (33 + keyAliasSize * 4), (dataSize * 4))
+        } else {
+            val dataSize = decodeFragmentAsValue(bitmap, 1, 16)
+            dataArray = decodeFragment(bitmap, 17, (dataSize * 4))
+        }
+        return Pair(mergeFragment(dataArray), keyAliasArray?.let { mergeFragment(it) })
     }
 
 }
