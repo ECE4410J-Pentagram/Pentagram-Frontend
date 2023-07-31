@@ -47,8 +47,7 @@ fun ThemeSelectionRow(
     themePreference: ThemePreference
 ) {
     fun onClick() {
-        userViewModel.themePreference = themePreference
-        userViewModel.writeToConfigFile(context)
+        userViewModel.updateThemePreference(themePreference)
     }
     Row(
         verticalAlignment = Alignment.CenterVertically,

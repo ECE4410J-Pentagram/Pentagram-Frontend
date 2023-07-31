@@ -1,20 +1,63 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.util.Log
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.UserViewModel
-import io.github.g0dkar.qrcode.QRCode
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.EncodeHintType
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
+import com.google.zxing.qrcode.QRCodeReader
+import com.google.zxing.qrcode.QRCodeWriter
+import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 import java.util.Base64
 
 object QrCode {
+
     fun generateUserCode(userViewModel: UserViewModel) {
         val contentString =
-            Base64.getEncoder().encodeToString(userViewModel.deviceName.toByteArray(Charsets.UTF_8)) +
+            Base64.getEncoder().encodeToString(userViewModel.deviceName?.toByteArray(Charsets.UTF_8)) +
                     ":" + Base64.getEncoder().encodeToString(userViewModel.deviceId?.toByteArray(Charsets.UTF_8))
+        val width = 400
+        val height = 400
+        val matrix = QRCodeWriter().encode(
+            contentString, BarcodeFormat.QR_CODE, width, height,
+            mapOf(EncodeHintType.MARGIN to 1, EncodeHintType.CHARACTER_SET to "UTF-8")
+        )
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        for (i in 0 until width) {
+            for (j in 0 until height) {
+                bitmap.setPixel(i, j, if (matrix.get(i, j)) Color.BLACK else Color.WHITE)
+            }
+        }
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream)
         FileOutputStream(userViewModel.qrcodeFile).use {
-            QRCode(contentString).render(margin = 25).writeImage(it)
+            it.write(byteArrayOutputStream.toByteArray())
         }
     }
+
+    fun read(byteArray: ByteArray): String {
+        val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        val width = bitmap.width
+        val height = bitmap.height
+        val pixels = IntArray(width * height) { 0 }
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+        return try {
+            val rgbLuminanceSource = RGBLuminanceSource(width, height, pixels)
+            val binaryBitmap = BinaryBitmap(HybridBinarizer(rgbLuminanceSource))
+            QRCodeReader().decode(binaryBitmap).text
+        } catch (err: Exception) {
+            Log.e("ReadQrCode", "Decode failure")
+            err.printStackTrace()
+            ""
+        }
+    }
+
     fun getContactFromCode(code: String): Contact? {
         return try {
             val splits =
@@ -25,4 +68,5 @@ object QrCode {
             null
         }
     }
+
 }
