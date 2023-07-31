@@ -1,6 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex.viewmodel
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,14 +10,12 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.QrCode
 import cn.edu.sjtu.patrickli.cryptex.model.ThemePreference
 import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyDecrypter
 import cn.edu.sjtu.patrickli.cryptex.model.security.KeyEncrypter
 import kotlinx.coroutines.launch
-import java.io.File
 import java.security.SecureRandom
 import java.util.UUID
 
@@ -31,7 +30,7 @@ class UserViewModel(
     var deviceId: String? = null
     var deviceName: String? = null
     var deviceKey: String? = null
-    var qrcodeFile: File? = null
+    var qrcode: Bitmap? = null
     var authorization: String? = null
     var encryptedDeviceKey: ByteArray? = null
     var encryptedDeviceKeyIv: ByteArray? = null
@@ -73,8 +72,7 @@ class UserViewModel(
                     .doFinal("deviceKey", encryptedDeviceKey!!, encryptedDeviceKeyIv!!)
                     .toString(Charsets.UTF_8)
             }
-            qrcodeFile = FileHandler.getQrCodeFile(context, deviceName!!)
-            QrCode.generateUserCode(this@UserViewModel)
+            qrcode = QrCode.generateUserCode(this@UserViewModel)
             onFinished()
         }
     }
@@ -128,8 +126,7 @@ class UserViewModel(
         requestViewModel.requestQueue.add(requestViewModel.requestStore.getRenameDeviceRequest(
             this,
             {
-                qrcodeFile = FileHandler.getQrCodeFile(context, name)
-                QrCode.generateUserCode(this)
+                qrcode = QrCode.generateUserCode(this)
                 viewModelScope.launch {
                     writeToDataStore(deviceNameStoreKey, deviceName)
                 }

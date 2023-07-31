@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -36,9 +35,7 @@ import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.DecrypterViewModel
-import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DecryptOutputView(
     context: Context,
@@ -95,11 +92,7 @@ fun DecryptOutputView(
                         Icons.Rounded.Share,
                         stringResource(R.string.share),
                         onClick = {
-                            Util.shareExternally(
-                                context,
-                                MediaType.TEXT,
-                                text = plainText
-                            )
+                            Util.shareExternally(context, MediaType.TEXT, text = plainText)
                         }
                     )
                 }

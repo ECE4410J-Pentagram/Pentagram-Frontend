@@ -180,7 +180,7 @@ fun QrCodeView(
                     }
                 }
                 Spacer(modifier = Modifier.height(30.dp))
-                ImageWrapper(context = context, file = userViewModel.qrcodeFile)
+                ImageWrapper(bitmap = userViewModel.qrcode)
                 Spacer(modifier = Modifier.height(30.dp))
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(
@@ -199,18 +199,21 @@ fun QrCodeView(
                         Icons.Rounded.Download,
                         stringResource(R.string.download),
                         onClick = {
-                            FileHandler.saveFileToPublicDownload(context, userViewModel.qrcodeFile)
+                            userViewModel.qrcode?.let { bitmap ->
+                                val uri = FileHandler.saveImageToPublicPicture(context, bitmap)
+                                Toast.makeText(
+                                    context,
+                                    context.getString(uri?.let { R.string.success } ?: let { R.string.unknownError }),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     )
                     IconTextButton(
                         Icons.Rounded.Share,
                         stringResource(R.string.share),
                         onClick = {
-                            Util.shareExternally(
-                                context,
-                                MediaType.IMAGE,
-                                file = userViewModel.qrcodeFile
-                            )
+                            Util.shareExternally(context, MediaType.IMAGE, bitmap = userViewModel.qrcode)
                         }
                     )
                 }

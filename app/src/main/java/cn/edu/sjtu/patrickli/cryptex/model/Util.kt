@@ -3,9 +3,9 @@ package cn.edu.sjtu.patrickli.cryptex.model
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import java.io.File
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.util.Base64
@@ -16,9 +16,9 @@ object Util {
      * Share a piece of text or an image externally
      * @param type Media type
      * @param text Text content. Must be set if type is text
-     * @param file Image file. Must be set if type is image
+     * @param bitmap Image bitmap. Must be set if type is image
      */
-    fun shareExternally(context: Context, type: MediaType, text: String? = null, file: File? = null) {
+    fun shareExternally(context: Context, type: MediaType, text: String? = null, bitmap: Bitmap? = null) {
         val intent = Intent(Intent.ACTION_SEND)
         val shareWith = "ShareWith"
         when (type) {
@@ -29,11 +29,12 @@ object Util {
                 }
             }
             MediaType.IMAGE -> {
-                if (file != null) {
+                if (bitmap != null) {
+                    val file = FileHandler.saveImageToCache(bitmap)
                     val uri = FileProvider.getUriForFile(
                         context, context.packageName + ".provider", file
                     )
-                    intent.type = "image/jpeg"
+                    intent.type = "image/png"
                     intent.clipData = ClipData.newRawUri("", uri)
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     intent.putExtra(Intent.EXTRA_STREAM, uri)
