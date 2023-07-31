@@ -24,6 +24,24 @@ object ImageEncrypter {
         }
     }
 
+    private fun addTextBytes(bytes: ByteArray): IntArray {
+        var dataArray = intArrayOf()
+        for (byte in bytes) {
+            for (i in 3 downTo 0) {
+                dataArray += (byte.toInt() shr (i * 2)) and 0x03
+            }
+        }
+        return dataArray
+    }
+
+    private fun addValue(value: Int): IntArray {
+        var dataArray = intArrayOf()
+        for (i in 15 downTo 0) {
+            dataArray += (value shr (i * 2)) and 0x03
+        }
+        return dataArray
+    }
+
     fun doFinal(
         textBytes: ByteArray,
         imgBytes: ByteArray,
@@ -34,23 +52,11 @@ object ImageEncrypter {
         dataArray += if (isAnonymous) 0x01 else 0x00
         if (!isAnonymous) {
             val keyAliasBytes = keyAlias.toByteArray()
-            for (i in 15 downTo 0) {
-                dataArray += (keyAliasBytes.size shr (i * 2)) and 0x03
-            }
-            for (byte in keyAliasBytes) {
-                for (i in 3 downTo 0) {
-                    dataArray += (byte.toInt() shr (i * 2)) and 0x03
-                }
-            }
+            dataArray += addValue(keyAliasBytes.size)
+            dataArray += addTextBytes(keyAliasBytes)
         }
-        for (i in 15 downTo 0) {
-            dataArray += (textBytes.size shr (i * 2)) and 0x03
-        }
-        for (byte in textBytes) {
-            for (i in 3 downTo 0) {
-                dataArray += (byte.toInt() shr (i * 2)) and 0x03
-            }
-        }
+        dataArray += addValue(textBytes.size)
+        dataArray += addTextBytes(textBytes)
         val bitmapOptions = BitmapFactory.Options()
         bitmapOptions.inMutable = true
         val bitmap = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.size, bitmapOptions)

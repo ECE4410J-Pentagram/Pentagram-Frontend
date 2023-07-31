@@ -1,6 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex.view.receiver
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.DecryptFailDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.DecrypterViewModel
@@ -46,14 +48,22 @@ fun DecryptOutputView(
     val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
     var plainText by remember { mutableStateOf("") }
     var showLoadingDialog by remember { mutableStateOf(false) }
+    var showFailDialog by remember { mutableStateOf(false) }
     val clipboardManager = LocalClipboardManager.current
 
     LaunchedEffect(Unit) {
         showLoadingDialog = true
-        decrypterViewModel.doDecrypt(databaseProvider) {
-            plainText = it
+        try {
+            decrypterViewModel.doDecrypt(databaseProvider) {
+                plainText = it
+            }
+        } catch (err: Exception) {
+            Log.e("Decrypter", "Fail to decrypt image")
+            err.printStackTrace()
+            showFailDialog = true
+        } finally {
+            showLoadingDialog = false
         }
-        showLoadingDialog = false
     }
 
     Scaffold(
@@ -100,6 +110,12 @@ fun DecryptOutputView(
         }
         if (showLoadingDialog) {
             LoadingDialog()
+        }
+        if (showFailDialog) {
+            DecryptFailDialog {
+                showFailDialog = false
+                navController.popBackStack()
+            }
         }
     }
 
