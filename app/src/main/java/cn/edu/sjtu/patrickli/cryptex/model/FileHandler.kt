@@ -1,9 +1,11 @@
 package cn.edu.sjtu.patrickli.cryptex.model
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Environment
 import android.widget.Toast
 import cn.edu.sjtu.patrickli.cryptex.R
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.file.Files
@@ -46,6 +48,15 @@ object FileHandler {
         val qrcodePath = Paths.get(context.filesDir.toString(), "images", "qrcode", "myqrcode-${name}.png")
         Files.createDirectories(qrcodePath.parent)
         return qrcodePath.toFile()
+    }
+
+    fun saveBitmapToFile(bitmap: Bitmap, file: File): File {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream)
+        FileOutputStream(file).use {
+            it.write(byteArrayOutputStream.toByteArray())
+        }
+        return file
     }
 
 }

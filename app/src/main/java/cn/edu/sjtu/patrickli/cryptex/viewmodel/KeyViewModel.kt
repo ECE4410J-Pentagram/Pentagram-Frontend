@@ -84,7 +84,7 @@ class KeyViewModel(
             "SELECT publicKey FROM [key] WHERE privateKeyAlias=?", arrayOf(key.alias)
         )
         cur.moveToFirst()
-        key.setPublicKey(cur.getBlob(0))
+        key.publicKey = Key.getPublicKey(cur.getBlob(0))
         cur.close()
     }
 

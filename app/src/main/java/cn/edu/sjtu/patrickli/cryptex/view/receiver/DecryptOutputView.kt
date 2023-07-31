@@ -31,6 +31,7 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.model.Util
+import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
@@ -42,7 +43,8 @@ import kotlinx.coroutines.delay
 fun DecryptOutputView(
     context: Context,
     navController: NavHostController,
-    viewModelProvider: ViewModelProvider
+    viewModelProvider: ViewModelProvider,
+    databaseProvider: DatabaseProvider
 ) {
     val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
     var plainText by remember { mutableStateOf("") }
@@ -51,10 +53,9 @@ fun DecryptOutputView(
 
     LaunchedEffect(Unit) {
         showLoadingDialog = true
-        decrypterViewModel.doDecrypt {
+        decrypterViewModel.doDecrypt(databaseProvider) {
             plainText = it
         }
-        delay(1000L)
         showLoadingDialog = false
     }
 

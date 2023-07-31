@@ -64,4 +64,8 @@ object Util {
         return Base64.getEncoder().encode(publicKey.encoded).toString(Charsets.UTF_8)
     }
 
+    fun base64ToByteArray(data: String): ByteArray {
+        return Base64.getDecoder().decode(data)
+    }
+
 }
