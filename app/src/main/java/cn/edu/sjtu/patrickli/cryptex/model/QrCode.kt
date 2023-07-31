@@ -12,13 +12,11 @@ import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
-import java.io.ByteArrayOutputStream
-import java.io.FileOutputStream
 import java.util.Base64
 
 object QrCode {
 
-    fun generateUserCode(userViewModel: UserViewModel) {
+    fun generateUserCode(userViewModel: UserViewModel): Bitmap {
         val contentString =
             Base64.getEncoder().encodeToString(userViewModel.deviceName?.toByteArray(Charsets.UTF_8)) +
                     ":" + Base64.getEncoder().encodeToString(userViewModel.deviceId?.toByteArray(Charsets.UTF_8))
@@ -34,11 +32,7 @@ object QrCode {
                 bitmap.setPixel(i, j, if (matrix.get(i, j)) Color.BLACK else Color.WHITE)
             }
         }
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream)
-        FileOutputStream(userViewModel.qrcodeFile).use {
-            it.write(byteArrayOutputStream.toByteArray())
-        }
+        return bitmap
     }
 
     fun read(byteArray: ByteArray): String {

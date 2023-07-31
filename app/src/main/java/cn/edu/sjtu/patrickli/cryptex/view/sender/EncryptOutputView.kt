@@ -1,6 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex.view.sender
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,10 +50,14 @@ fun OutputOptionButtons(
             Icons.Rounded.Download,
             stringResource(R.string.download),
             onClick = {
-                FileHandler.saveFileToPublicDownload(
-                    context,
-                    encrypterViewModel.cipherImgFile
-                )
+                encrypterViewModel.cipherImg?.let {
+                    val uri = FileHandler.saveImageToPublicPicture(context, it)
+                    Toast.makeText(
+                        context,
+                        context.getString(uri?.let { R.string.success } ?: let { R.string.unknownError }),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         )
         IconTextButton(
@@ -65,11 +70,9 @@ fun OutputOptionButtons(
         if (showImageShareWarningDialog) {
             ImageShareDialog(
                 onConfirm = {
-                    Util.shareExternally(
-                        context,
-                        MediaType.IMAGE,
-                        file = encrypterViewModel.cipherImgFile
-                    )
+                    encrypterViewModel.cipherImg?.let {
+                        Util.shareExternally(context, MediaType.IMAGE, bitmap = it)
+                    }
                 },
                 onClose = { showImageShareWarningDialog = false }
             )
@@ -102,7 +105,7 @@ fun EncryptOutputView(
                     .fillMaxSize()
                     .padding(8.dp)
             ) {
-                ImageWrapper(context = context, file = encrypterViewModel.cipherImgFile)
+                ImageWrapper(bitmap = encrypterViewModel.cipherImg)
                 Text(
                     text = stringResource(R.string.encryptDone) + " " + (
                             encrypterViewModel.contact
