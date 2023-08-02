@@ -13,7 +13,9 @@ import cn.edu.sjtu.patrickli.cryptex.model.Contact
 import cn.edu.sjtu.patrickli.cryptex.model.Key
 import cn.edu.sjtu.patrickli.cryptex.model.Util
 import cn.edu.sjtu.patrickli.cryptex.model.core.ImageEncrypter
+import cn.edu.sjtu.patrickli.cryptex.model.core.ShuffleSeedEncoder
 import cn.edu.sjtu.patrickli.cryptex.model.core.TextEncrypter
+import java.util.Random
 
 class EncrypterViewModel(
     val context: Context
@@ -30,10 +32,12 @@ class EncrypterViewModel(
         if (contact != null) {
             val publicKey = Key.getPublicKey(Util.base64ToByteArray(contact!!.publicKey!!))
             val cipherByteArray = TextEncrypter.doFinal(plainText!!, publicKey)
+            val shuffleSeed = Random().nextInt(32767)
+            val shuffleSeedArray = ShuffleSeedEncoder.doFinal(shuffleSeed, publicKey)
             cipherImg =
-                ImageEncrypter.doFinal(cipherByteArray, imgByteArray!!, contact!!.keyAlias!!)
+                ImageEncrypter.doFinal(cipherByteArray, shuffleSeed, shuffleSeedArray, imgByteArray!!, contact!!.keyAlias!!)
         } else {
-            cipherImg = ImageEncrypter.doFinal(plainText!!.toByteArray(), imgByteArray!!, isAnonymous = true)
+            cipherImg = ImageEncrypter.doFinal(plainText!!.toByteArray(), -1, byteArrayOf(), imgByteArray!!, isAnonymous = true)
         }
         isEncrypting = false
         onFinished()
