@@ -27,9 +27,14 @@ class EncrypterViewModel(
 
     fun doEncrypt(onFinished: () -> Unit) {
         isEncrypting = true
-        val publicKey = Key.getPublicKey(Util.base64ToByteArray(contact!!.publicKey!!))
-        val cipherByteArray = TextEncrypter.doFinal(plainText!!, publicKey)
-        cipherImg = ImageEncrypter.doFinal(cipherByteArray, imgByteArray!!, contact!!.keyAlias!!)
+        if (contact != null) {
+            val publicKey = Key.getPublicKey(Util.base64ToByteArray(contact!!.publicKey!!))
+            val cipherByteArray = TextEncrypter.doFinal(plainText!!, publicKey)
+            cipherImg =
+                ImageEncrypter.doFinal(cipherByteArray, imgByteArray!!, contact!!.keyAlias!!)
+        } else {
+            cipherImg = ImageEncrypter.doFinal(plainText!!.toByteArray(), imgByteArray!!, isAnonymous = true)
+        }
         isEncrypting = false
         onFinished()
     }

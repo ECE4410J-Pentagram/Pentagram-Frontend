@@ -31,7 +31,22 @@ class ImageStegTest {
         val (plainByteArray, keyAliasByteArray) = ImageDecrypter.doFinal(cipherFileBytes)
         val plainText = plainByteArray.toString(Charsets.UTF_8)
         assertEquals(plainText, "Hello world")
-        assertEquals(keyAlias, keyAliasByteArray.toString(Charsets.UTF_8))
+        assertEquals(keyAlias, keyAliasByteArray?.toString(Charsets.UTF_8))
+    }
+    @Test
+    fun stegAnonymousTest() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val plainFile = Paths.get(context.filesDir.toString(), "images", "test.jpg").toFile()
+        assertEquals(plainFile.exists(), true)
+        val plainFileBytes = plainFile.readBytes()
+        val bitmap = ImageEncrypter.doFinal("Hello world".toByteArray(), plainFileBytes, isAnonymous = true)
+        val cipherFile = FileHandler.saveImageToCache(bitmap, "test")
+        assertEquals(cipherFile.exists(), true)
+        val cipherFileBytes = cipherFile.readBytes()
+        val (plainByteArray, keyAliasByteArray) = ImageDecrypter.doFinal(cipherFileBytes)
+        val plainText = plainByteArray.toString(Charsets.UTF_8)
+        assertEquals(plainText, "Hello world")
+        assertEquals(keyAliasByteArray, null)
     }
     @Test
     fun rsaTest() {
@@ -49,6 +64,7 @@ class ImageStegTest {
     }
     @Test
     fun wholeTest() {
+        stegAnonymousTest()
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val keyGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA)
         keyGenerator.initialize(2048, SecureRandom())
@@ -69,6 +85,6 @@ class ImageStegTest {
         val (plainByteArray, keyAliasByteArray) = ImageDecrypter.doFinal(cipherFileBytes)
         val plainText = TextDecrypter.doFinal(plainByteArray, privateKey)
         assertEquals(content, plainText)
-        assertEquals(keyAlias, keyAliasByteArray.toString(Charsets.UTF_8))
+        assertEquals(keyAlias, keyAliasByteArray?.toString(Charsets.UTF_8))
     }
 }

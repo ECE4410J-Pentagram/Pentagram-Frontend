@@ -85,6 +85,8 @@
     <string name="removeKeyFailContent">This key cannot be removed without removing your friend who is using it.</string>
     <string name="addKeyFailTitle">Add key failed</string>
     <string name="contactMaintainer">Please contact maintainer</string>
+    <string name="decryptFailTitle">Fail to decrypt this image</string>
+    <string name="decryptFailContent">File is corrupted or you do not have the right permissions to read it</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

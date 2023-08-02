@@ -27,9 +27,13 @@ class DecrypterViewModel: ViewModel() {
     }
     fun doDecrypt(databaseProvider: DatabaseProvider, onFinished: (String) -> Unit = {}) {
         val (textByteArray, keyAliasByteArray) = ImageDecrypter.doFinal(cipherByteArray!!)
-        val privateKeyAlias = keyAliasByteArray.toString(Charsets.UTF_8)
-        val privateKey = getPrivateKey(databaseProvider, privateKeyAlias)
-        val plainText = TextDecrypter.doFinal(textByteArray, privateKey)
-        onFinished(plainText)
+        if (keyAliasByteArray != null) {
+            val privateKeyAlias = keyAliasByteArray.toString(Charsets.UTF_8)
+            val privateKey = getPrivateKey(databaseProvider, privateKeyAlias)
+            val plainText = TextDecrypter.doFinal(textByteArray, privateKey)
+            onFinished(plainText)
+        } else {
+            onFinished(textByteArray.toString(Charsets.UTF_8))
+        }
     }
 }
