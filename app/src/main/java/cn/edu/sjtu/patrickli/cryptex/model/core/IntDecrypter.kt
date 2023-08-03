@@ -1,10 +1,9 @@
 package cn.edu.sjtu.patrickli.cryptex.model.core
 
-import cn.edu.sjtu.patrickli.cryptex.ui.theme.seed
 import java.security.PrivateKey
 import javax.crypto.Cipher
 
-object ShuffleSeedDecoder {
+object IntDecrypter {
 
     private fun read4Bytes(seedByteArray: ByteArray): Int {
         return (seedByteArray[3].toInt() shl 24) or

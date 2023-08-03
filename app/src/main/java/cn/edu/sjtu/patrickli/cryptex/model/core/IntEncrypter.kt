@@ -4,8 +4,7 @@ package cn.edu.sjtu.patrickli.cryptex.model.core
 import java.security.PublicKey
 import javax.crypto.Cipher
 
-object ShuffleSeedEncoder {
-
+object IntEncrypter {
 
     fun doFinal(seed: Int, publicKey: PublicKey): ByteArray {
         val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")

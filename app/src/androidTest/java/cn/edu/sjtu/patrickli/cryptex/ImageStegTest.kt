@@ -6,7 +6,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import cn.edu.sjtu.patrickli.cryptex.model.FileHandler
 import cn.edu.sjtu.patrickli.cryptex.model.core.ImageDecrypter
 import cn.edu.sjtu.patrickli.cryptex.model.core.ImageEncrypter
-import cn.edu.sjtu.patrickli.cryptex.model.core.ShuffleSeedEncoder
+import cn.edu.sjtu.patrickli.cryptex.model.core.IntEncrypter
 import cn.edu.sjtu.patrickli.cryptex.model.core.TextDecrypter
 import cn.edu.sjtu.patrickli.cryptex.model.core.TextEncrypter
 import org.junit.Assert.assertEquals
@@ -15,7 +15,6 @@ import org.junit.runner.RunWith
 import java.nio.file.Paths
 import java.security.KeyPairGenerator
 import java.security.SecureRandom
-import java.util.Random
 
 @RunWith(AndroidJUnit4::class)
 class ImageStegTest {
@@ -36,8 +35,8 @@ class ImageStegTest {
         assertEquals(plainFile.exists(), true)
         val plainFileBytes = plainFile.readBytes()
         val shuffleSeed = 3289
-        val shuffleSeedArray = ShuffleSeedEncoder.doFinal(shuffleSeed, publicKey)
-        val cipherByteSizeArray = ShuffleSeedEncoder.doFinal(cipherByteArray.size, publicKey)
+        val shuffleSeedArray = IntEncrypter.doFinal(shuffleSeed, publicKey)
+        val cipherByteSizeArray = IntEncrypter.doFinal(cipherByteArray.size, publicKey)
         val bitmap = ImageEncrypter.doFinal(cipherByteArray, cipherByteSizeArray, shuffleSeed, shuffleSeedArray, plainFileBytes, keyAlias)
         val cipherFile = FileHandler.saveImageToCache(bitmap, "test")
         assertEquals(cipherFile.exists(), true)

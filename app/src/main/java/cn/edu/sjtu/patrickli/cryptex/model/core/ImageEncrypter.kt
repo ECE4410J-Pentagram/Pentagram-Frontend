@@ -3,8 +3,6 @@ package cn.edu.sjtu.patrickli.cryptex.model.core
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import java.util.Random
-import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 
@@ -14,8 +12,12 @@ object ImageEncrypter {
         return (((pixel * 255).roundToInt() and 0b11111100) or data) / 255f
     }
 
-    private fun encodeFragment(data: IntArray, bitmap: Bitmap, offset: Int, length: Int) {
-//            encode in order
+//  Encode data in order
+//  data:           Data need to be encoded
+//  bitmap:         Image data
+//  offset:         Starting position in the image for encoding
+    private fun encode(data: IntArray, bitmap: Bitmap, offset: Int) {
+            val length = data.size
             for (i in offset until (offset + length) step 3) {
                 val x = (i / 3) % bitmap.width
                 val y = i / (3 * bitmap.width)
@@ -26,22 +28,16 @@ object ImageEncrypter {
                 val result = Color.valueOf(r, g, b, color.alpha(), color.colorSpace)
                 bitmap.setPixel(x, y, result.toArgb())
             }
-
     }
 
-    private fun encodeFragmentWithShuffle(data: IntArray, bitmap: Bitmap, offset: Int, length: Int, shuffleSeed: Int) {
-        //            encode in shuffle
-        val rng = Random()
-        rng.setSeed(shuffleSeed.toLong())
-
-// Note: use LinkedHashSet to maintain insertion order
-        val shuffleSeq: MutableSet<Int> = LinkedHashSet()
-//           can be improved
-        while (shuffleSeq.size < length) {
-            val next = rng.nextInt(bitmap.width * bitmap.height * 3 - offset)
-            // As we're adding to a set, this will automatically do a containment check
-            shuffleSeq.add(next + offset)
-        }
+//  Encode data in the order of shuffle (w.r.t. the seed)
+//  data:           Data need to be encoded
+//  bitmap:         Image data
+//  offset:         Starting position in the image for encoding
+//  shuffleSeed:    seed for random shuffle order
+    private fun encodeWithShuffle(data: IntArray, bitmap: Bitmap, offset: Int, shuffleSeed: Int) {
+        val length = data.size
+        val shuffleSeq = Shuffle.doFinal(length, bitmap.width * bitmap.height * 3, offset, shuffleSeed)
 
         for ((i, position) in shuffleSeq.withIndex()) {
             val x = (position / 3) % bitmap.width
@@ -106,18 +102,18 @@ object ImageEncrypter {
             offset += keyAliasBytes.size * 8 / 2
             dataArray += addTextBytes(shuffleSeedBytes) // 256 bytes
             offset += 256 * 8 / 2
-            encodeFragment(dataArray, bitmap, 0, dataArray.size)
+            encode(dataArray, bitmap, 0)
         }
 
         dataArray = intArrayOf()
         dataArray += addTextBytes(textSizeBytes)
-        encodeFragment(dataArray, bitmap, offset, dataArray.size)
+        encode(dataArray, bitmap, offset)
         offset += 256 * 8 / 2
 
         dataArray = intArrayOf()
         dataArray += addTextBytes(textBytes)
 
-        encodeFragmentWithShuffle(dataArray, bitmap, offset, dataArray.size, shuffleSeed)
+        encodeWithShuffle(dataArray, bitmap, offset, shuffleSeed)
         return bitmap
     }
 

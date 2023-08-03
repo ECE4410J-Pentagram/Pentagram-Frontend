@@ -25,6 +25,7 @@ class DecrypterViewModel: ViewModel() {
         val privateKeyBytes = keyDecrypter.doFinal(alias, encryptedPrivateKey, encryptedPrivateKeyIv)
         return Key.getPrivateKey(privateKeyBytes)
     }
+
     fun doDecrypt(databaseProvider: DatabaseProvider, onFinished: (String) -> Unit = {}) {
         val keyAliasByteArray = ImageDecrypter.extractKeyAlias(cipherByteArray!!)
         if (keyAliasByteArray != null) {
