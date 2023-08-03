@@ -9,4 +9,10 @@
     <external-path
         name="download"
         path="Download/" />
+    <cache-path
+        name="cache-root"
+        path="." />
+    <cache-path
+        name="cache"
+        path="cache/" />
 </paths>

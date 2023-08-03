@@ -1,6 +1,7 @@
 package cn.edu.sjtu.patrickli.cryptex.view.receiver
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -31,31 +31,39 @@ import androidx.navigation.NavHostController
 import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.MediaType
 import cn.edu.sjtu.patrickli.cryptex.model.Util
+import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.view.button.IconTextButton
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.DecryptFailDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.DecrypterViewModel
-import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DecryptOutputView(
     context: Context,
     navController: NavHostController,
-    viewModelProvider: ViewModelProvider
+    viewModelProvider: ViewModelProvider,
+    databaseProvider: DatabaseProvider
 ) {
     val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
     var plainText by remember { mutableStateOf("") }
     var showLoadingDialog by remember { mutableStateOf(false) }
+    var showFailDialog by remember { mutableStateOf(false) }
     val clipboardManager = LocalClipboardManager.current
 
     LaunchedEffect(Unit) {
         showLoadingDialog = true
-        decrypterViewModel.doDecrypt {
-            plainText = it
+        try {
+            decrypterViewModel.doDecrypt(databaseProvider) {
+                plainText = it
+            }
+        } catch (err: Exception) {
+            Log.e("Decrypter", "Fail to decrypt image")
+            err.printStackTrace()
+            showFailDialog = true
+        } finally {
+            showLoadingDialog = false
         }
-        delay(1000L)
-        showLoadingDialog = false
     }
 
     Scaffold(
@@ -94,11 +102,7 @@ fun DecryptOutputView(
                         Icons.Rounded.Share,
                         stringResource(R.string.share),
                         onClick = {
-                            Util.shareExternally(
-                                context,
-                                MediaType.TEXT,
-                                text = plainText
-                            )
+                            Util.shareExternally(context, MediaType.TEXT, text = plainText)
                         }
                     )
                 }
@@ -106,6 +110,12 @@ fun DecryptOutputView(
         }
         if (showLoadingDialog) {
             LoadingDialog()
+        }
+        if (showFailDialog) {
+            DecryptFailDialog {
+                showFailDialog = false
+                navController.popBackStack()
+            }
         }
     }
 

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -30,13 +29,14 @@ import cn.edu.sjtu.patrickli.cryptex.R
 import cn.edu.sjtu.patrickli.cryptex.model.Key
 import cn.edu.sjtu.patrickli.cryptex.model.database.DatabaseProvider
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.AddKeyDialog
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.AddKeyFailDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.RemoveKeyDialog
+import cn.edu.sjtu.patrickli.cryptex.view.dialog.RemoveKeyFailDialog
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.RenameKeyDialog
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.NavBackBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KeyView(
     context: Context,
@@ -53,14 +53,23 @@ fun KeyView(
     var selectedKey by remember { mutableStateOf(Key()) }
     var showRemoveKeyWarningDialog by remember { mutableStateOf(false) }
     var showKeyOperationLoadingDialog by remember { mutableStateOf(false) }
+    var showKeyAddFailDialog by remember { mutableStateOf(false) }
+    var showKeyRemoveFailDialog by remember { mutableStateOf(false) }
 
     fun onRemove(key: Key) {
         showKeyOperationLoadingDialog = true
-        keyList.remove(key)
-        keyViewModel.removeKeyFromDatabase(key, databaseProvider)
-        keyViewModel.removeKeyFromRemote(key, viewModelProvider) {
-            showKeyOperationLoadingDialog = false
-        }
+        keyViewModel.removeKey(
+            key,
+            viewModelProvider,
+            databaseProvider,
+            onSuccess = {
+                showKeyOperationLoadingDialog = false
+            },
+            onFail = {
+                showKeyOperationLoadingDialog = false
+                showKeyRemoveFailDialog = true
+            }
+        )
     }
 
     fun onRenameDialogOpen(key: Key) {
@@ -81,11 +90,18 @@ fun KeyView(
         showKeyOperationLoadingDialog = true
         val newKey = Key(name)
         newKey.init()
-        keyList.add(newKey)
-        keyViewModel.saveKeyToDatabase(newKey, viewModelProvider, databaseProvider)
-        keyViewModel.pushKeyToRemote(newKey, viewModelProvider, databaseProvider) {
-            showKeyOperationLoadingDialog = false
-        }
+        keyViewModel.addKey(
+            newKey,
+            viewModelProvider,
+            databaseProvider,
+            onSuccess = {
+                showKeyOperationLoadingDialog = false
+            },
+            onFail = {
+                showKeyOperationLoadingDialog = false
+                showKeyAddFailDialog = true
+            }
+        )
     }
 
     Scaffold(
@@ -99,18 +115,21 @@ fun KeyView(
                     .padding(it)
             ) {
                 items(count = keyList.size) { index ->
-                    KeyItemWithDiv(
-                        keyList[index],
-                        {
-                            selectedKey = keyList[index]
+                    val key = keyList[index]
+                    KeyItem(
+                        key,
+                        onRemove = {
+                            selectedKey = key
                             showRemoveKeyWarningDialog = true
                         },
                         onRename = ::onRenameDialogOpen,
-                        onClick = { onKeyClick(keyList[index]) }
+                        onClick = { onKeyClick(key) },
+                        isDefault = (key.alias == keyViewModel.defaultKeyAlias),
+                        onSetDefault = { keyViewModel.updateDefaultKey(key) }
                     )
                 }
             }
-            if (keyList.size == 0) {
+            if (keyList.isEmpty()) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -148,6 +167,16 @@ fun KeyView(
             }
             if (showKeyOperationLoadingDialog) {
                 LoadingDialog()
+            }
+            if (showKeyRemoveFailDialog) {
+                RemoveKeyFailDialog {
+                    showKeyRemoveFailDialog = false
+                }
+            }
+            if (showKeyAddFailDialog) {
+                AddKeyFailDialog {
+                    showKeyAddFailDialog = false
+                }
             }
         },
         floatingActionButton = {

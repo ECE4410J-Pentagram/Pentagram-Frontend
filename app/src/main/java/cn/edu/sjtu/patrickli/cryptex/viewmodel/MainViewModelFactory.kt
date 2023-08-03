@@ -27,7 +27,7 @@ class MainViewModelFactory(
             }
 
             KeyViewModel::class.java -> {
-                KeyViewModel() as T
+                KeyViewModel(context) as T
             }
 
             ContactViewModel::class.java -> {

@@ -38,6 +38,7 @@ import cn.edu.sjtu.patrickli.cryptex.view.button.HomeViewButton
 import cn.edu.sjtu.patrickli.cryptex.view.topbar.HomeTopBar
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.DecrypterViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.EncrypterViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -49,6 +50,7 @@ fun ConstraintLayoutContent(
     navController: NavHostController,
     viewModelProvider: ViewModelProvider
 ) {
+    val encrypterViewModel = viewModelProvider[EncrypterViewModel::class.java]
     val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
     val contactViewModel = viewModelProvider[ContactViewModel::class.java]
     ConstraintLayout (
@@ -87,8 +89,11 @@ fun ConstraintLayoutContent(
                     HomeViewButton(
                         Icons.Outlined.FileUpload,
                         "Send",
-                        navController,
-                        "SelectContactView"
+                        onClick = {
+                            encrypterViewModel.pickImageLauncher?.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
                     )
                     HomeViewButton(
                         Icons.Outlined.FileDownload,
@@ -138,7 +143,18 @@ fun HomeView(
     viewModelProvider: ViewModelProvider
 ) {
     val notificationPermissionState = rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+    val encrypterViewModel = viewModelProvider[EncrypterViewModel::class.java]
     val decrypterViewModel = viewModelProvider[DecrypterViewModel::class.java]
+    encrypterViewModel.pickImageLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) {
+        if (it != null) {
+            context.contentResolver.openInputStream(it).use { stream ->
+                encrypterViewModel.imgByteArray = stream?.readBytes()
+            }
+            navController.navigate("SelectContactView")
+        }
+    }
     decrypterViewModel.pickImageLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) {

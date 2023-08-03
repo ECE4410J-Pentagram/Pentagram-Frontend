@@ -21,7 +21,6 @@
     <string name="download">Download</string>
     <string name="wait">Please wait...</string>
     <string name="unknownError">Something went wrong</string>
-    <string name="downloadedTo">Downloaded to %1$s</string>
     <string name="outputFormat">Output Format</string>
     <string name="lipsum">\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"</string>
     <string name="copy">Copy</string>
@@ -78,6 +77,16 @@
     <string name="github">Github</string>
     <string name="teamName">Pentagram</string>
     <string name="appVersion">Ver 0.1</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="setDefault">Set as default</string>
+    <string name="cancelDefault">Cancel default</string>
+    <string name="removeKeyFailTitle">Remove key failed</string>
+    <string name="removeKeyFailContent">This key cannot be removed without removing your friend who is using it.</string>
+    <string name="addKeyFailTitle">Add key failed</string>
+    <string name="contactMaintainer">Please contact maintainer</string>
+    <string name="decryptFailTitle">Fail to decrypt this image</string>
+    <string name="decryptFailContent">File is corrupted or you do not have the right permissions to read it</string>
     <string-array name="mediaTypes">
         <item>Text</item>
         <item>Image</item>

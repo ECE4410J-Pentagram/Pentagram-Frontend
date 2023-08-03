@@ -9,6 +9,7 @@ import java.security.SecureRandom
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.UUID
+import java.util.Random;
 
 class Key(
     var name: String,
@@ -24,15 +25,17 @@ class Key(
         publicKey = keyPair.public
         privateKey = keyPair.private
     }
-    fun setPublicKey(publicKeyByteArray: ByteArray) {
-        val keyFactory = KeyFactory.getInstance("RSA")
-        publicKey = keyFactory.generatePublic(X509EncodedKeySpec(publicKeyByteArray))
-    }
-    fun setPrivateKey(privateKeyByteArray: ByteArray) {
-        val keyFactory = KeyFactory.getInstance("RSA")
-        privateKey = keyFactory.generatePrivate(PKCS8EncodedKeySpec(privateKeyByteArray))
-    }
     fun publicKeyIsInitialized(): Boolean {
         return ::publicKey.isInitialized
+    }
+    companion object {
+        fun getPublicKey(publicKeyByteArray: ByteArray): PublicKey {
+            val keyFactory = KeyFactory.getInstance("RSA")
+            return keyFactory.generatePublic(X509EncodedKeySpec(publicKeyByteArray))
+        }
+        fun getPrivateKey(privateKeyByteArray: ByteArray): PrivateKey {
+            val keyFactory = KeyFactory.getInstance("RSA")
+            return keyFactory.generatePrivate(PKCS8EncodedKeySpec(privateKeyByteArray))
+        }
     }
 }

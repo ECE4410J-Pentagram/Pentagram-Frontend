@@ -21,6 +21,7 @@ import cn.edu.sjtu.patrickli.cryptex.view.button.BaseWideButton
 import cn.edu.sjtu.patrickli.cryptex.view.dialog.LoadingDialog
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.ContactViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.InvitationViewModel
+import cn.edu.sjtu.patrickli.cryptex.viewmodel.KeyViewModel
 import cn.edu.sjtu.patrickli.cryptex.viewmodel.RequestViewModel
 
 @Composable
@@ -30,34 +31,42 @@ fun AcceptInvitationView(
     navController: NavHostController
 ) {
     val requestViewModel = viewModelProvider[RequestViewModel::class.java]
+    val keyViewModel = viewModelProvider[KeyViewModel::class.java]
     var showLoadingDialog by remember { mutableStateOf(false) }
+    val keyIsNotNull by remember { mutableStateOf(
+        (keyViewModel.keyToShare != null) || (keyViewModel.defaultKeyAlias != null)
+    ) }
     BaseInvitationView(
         context = context,
         viewModelProvider = viewModelProvider,
         navController = navController
     ) {
         Spacer(modifier = Modifier.height(70.dp))
-        BaseWideButton(onClick = {
-            showLoadingDialog = true
-            requestViewModel.requestQueue.add(requestViewModel.requestStore.getAcceptInvitationRequest(
-                viewModelProvider,
-                onResponse = {
-                    Log.d("AcceptInvitation", "Success")
-                    viewModelProvider[InvitationViewModel::class.java].updateInvitationList(viewModelProvider)
-                    viewModelProvider[ContactViewModel::class.java].updateContactList(viewModelProvider)
-                    Toast.makeText(context, context.getString(R.string.success), Toast.LENGTH_SHORT).show()
-                    showLoadingDialog = false
-                    navController.navigate("HomeView") { popUpTo(0) }
-                },
-                onError = {
-                    Log.e("AcceptInvitation", "Failed")
-                    it.printStackTrace()
-                    Toast.makeText(context, context.getString(R.string.unknownError), Toast.LENGTH_SHORT).show()
-                    showLoadingDialog = false
-                    navController.navigate("HomeView") { popUpTo(0) }
-                }
-            ))
-        }) {
+        BaseWideButton(
+            enabled = keyIsNotNull,
+            onClick = {
+                showLoadingDialog = true
+                requestViewModel.requestQueue.add(requestViewModel.requestStore.getAcceptInvitationRequest(
+                    viewModelProvider,
+                    onResponse = {
+                        Log.d("AcceptInvitation", "Success")
+                        viewModelProvider[InvitationViewModel::class.java].updateInvitationList(viewModelProvider)
+                        viewModelProvider[ContactViewModel::class.java].updateContactList(viewModelProvider)
+                        keyViewModel.keyToShare = null
+                        Toast.makeText(context, context.getString(R.string.success), Toast.LENGTH_SHORT).show()
+                        showLoadingDialog = false
+                        navController.navigate("HomeView") { popUpTo(0) }
+                    },
+                    onError = {
+                        Log.e("AcceptInvitation", "Failed")
+                        it.printStackTrace()
+                        Toast.makeText(context, context.getString(R.string.unknownError), Toast.LENGTH_SHORT).show()
+                        showLoadingDialog = false
+                        navController.navigate("HomeView") { popUpTo(0) }
+                    }
+                ))
+            }
+        ) {
             Text(text = stringResource(R.string.acceptFriend))
         }
         if (showLoadingDialog) {

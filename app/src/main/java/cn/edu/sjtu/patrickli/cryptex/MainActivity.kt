@@ -142,7 +142,8 @@ class MainActivity : ComponentActivity() {
                         DecryptOutputView(
                             context = this@MainActivity,
                             navController = navController,
-                            viewModelProvider = viewModelProvider
+                            viewModelProvider = viewModelProvider,
+                            databaseProvider = databaseProvider
                         )
                     }
                     composable("QrCodeView") {
