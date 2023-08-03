@@ -32,12 +32,13 @@ class EncrypterViewModel(
         if (contact != null) {
             val publicKey = Key.getPublicKey(Util.base64ToByteArray(contact!!.publicKey!!))
             val cipherByteArray = TextEncrypter.doFinal(plainText!!, publicKey)
+            val cipherByteSizeArray = ShuffleSeedEncoder.doFinal(cipherByteArray.size, publicKey) // fix
             val shuffleSeed = Random().nextInt(32767)
             val shuffleSeedArray = ShuffleSeedEncoder.doFinal(shuffleSeed, publicKey)
             cipherImg =
-                ImageEncrypter.doFinal(cipherByteArray, shuffleSeed, shuffleSeedArray, imgByteArray!!, contact!!.keyAlias!!)
+                ImageEncrypter.doFinal(cipherByteArray, cipherByteSizeArray, shuffleSeed, shuffleSeedArray, imgByteArray!!, contact!!.keyAlias!!)
         } else {
-            cipherImg = ImageEncrypter.doFinal(plainText!!.toByteArray(), -1, byteArrayOf(), imgByteArray!!, isAnonymous = true)
+            cipherImg = ImageEncrypter.doFinal(plainText!!.toByteArray(), byteArrayOf(), -1, byteArrayOf(), imgByteArray!!, isAnonymous = true)
         }
         isEncrypting = false
         onFinished()
