@@ -31,11 +31,11 @@ class DecrypterViewModel: ViewModel() {
         if (keyAliasByteArray != null) {
             val privateKeyAlias = keyAliasByteArray.toString(Charsets.UTF_8)
             val privateKey = getPrivateKey(databaseProvider, privateKeyAlias)
-            val textByteArray = ImageDecrypter.doFinal(cipherByteArray!!, keyAliasByteArray.size, privateKey)
+            val textByteArray = ImageDecrypter.doFinal(cipherByteArray!!, privateKey)
             val plainText = TextDecrypter.doFinal(textByteArray, privateKey)
             onFinished(plainText)
         } else {
-            val textByteArray = ImageDecrypter.doFinal(cipherByteArray!!, 0, null)
+            val textByteArray = ImageDecrypter.doFinal(cipherByteArray!!)
             onFinished(textByteArray.toString(Charsets.UTF_8))
         }
     }
