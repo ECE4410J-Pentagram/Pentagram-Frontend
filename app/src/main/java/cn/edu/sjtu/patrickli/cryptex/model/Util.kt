@@ -69,4 +69,43 @@ object Util {
         return Base64.getDecoder().decode(data)
     }
 
+    fun splitByteArrayToFragment(bytes: ByteArray): IntArray {
+        var dataArray = intArrayOf()
+        for (byte in bytes) {
+            for (i in 3 downTo 0) {
+                dataArray += (byte.toInt() shr (i * 2)) and 0x03
+            }
+        }
+        return dataArray
+    }
+
+    fun splitIntegerToFragment(value: Int): IntArray {
+        var dataArray = intArrayOf()
+        for (i in 15 downTo 0) {
+            dataArray += (value shr (i * 2)) and 0x03
+        }
+        return dataArray
+    }
+
+    fun mergeFragmentToInteger(fragment: IntArray): Int {
+        val length = fragment.size
+        var result = 0
+        for (i in fragment.indices) {
+            result += fragment[i] shl ((length - i - 1) shl 1)
+        }
+        return result
+    }
+
+    fun mergeFragmentToByteArray(fragment: IntArray): ByteArray {
+        var bytes = byteArrayOf()
+        for (i in 0 until fragment.size / 4) {
+            var byte = 0
+            for (j in 0..3) {
+                byte += fragment[4 * i + j] shl (2 * (3 - j))
+            }
+            bytes += byte.toByte()
+        }
+        return bytes
+    }
+
 }
